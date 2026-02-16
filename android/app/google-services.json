@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "1040222158994-u30jat0lldsvq1fnumr4d56plg7e1ei1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.agripal",
+            "certificate_hash": "0da9baba2f40ad9d4da75a35d2185a1961d5e8c6"
+          }
+        },
+        {
           "client_id": "1040222158994-gkjr3k3m8qfeulpt9mdk7j8n9e6aeqgc.apps.googleusercontent.com",
           "client_type": 3
         }
