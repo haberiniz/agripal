@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1040222158994",
+    "project_id": "agripal-4191e",
+    "storage_bucket": "agripal-4191e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1040222158994:android:bad6c6c4d9e73b70ee264b",
+        "android_client_info": {
+          "package_name": "com.example.agripal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1040222158994-3c86va0897aajie628ebihr9mlfnc8ns.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.agripal",
+            "certificate_hash": "4331a8f40b6d0269353d6b97eafaa08ea8db5e62"
+          }
+        },
+        {
+          "client_id": "1040222158994-gkjr3k3m8qfeulpt9mdk7j8n9e6aeqgc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNtSfQgZfjecLjxp6MDZE1cYKAYmGCVuI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1040222158994-gkjr3k3m8qfeulpt9mdk7j8n9e6aeqgc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
