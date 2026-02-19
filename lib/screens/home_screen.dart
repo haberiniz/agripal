@@ -40,14 +40,14 @@ class _HomeScreenState extends State<HomeScreen> {
         alignment: Alignment.center,
         children: [
           Transform.translate(
-            offset: const Offset(0, 6),
-            child: Icon(icon, size: 24, color: AppColors.accent),
+            offset: const Offset(0, 14),
+            child: Icon(icon, size: 26, color: AppColors.backgroundSoft),
           ),
           Transform.translate(
             offset: const Offset(0, 28),
             child: Text(
               text,
-              style: const TextStyle(color: AppColors.accent, fontSize: 12),
+              style: const TextStyle(color: AppColors.backgroundSoft, fontSize: 12),
             ),
           ),
         ],
@@ -56,8 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
         alignment: Alignment.center,
         children: [
           Transform.translate(
-            offset: const Offset(0, 6),
-            child: Icon(activeIcon, size: 24, color: AppColors.backgroundSoft),
+            offset: const Offset(0, 14),
+            child: Icon(activeIcon, size: 26, color: AppColors.backgroundSoft),
           ),
           Transform.translate(
             offset: const Offset(0, 28),
@@ -78,14 +78,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFE3EED4),
       body: _screens[_selectedIndex],
       bottomNavigationBar: Container(
         margin: const EdgeInsets.fromLTRB(16, 16, 16, 40),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(40),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.3),
+              color: Colors.grey.withOpacity(0.3),
               spreadRadius: 1,
               blurRadius: 15,
               offset: const Offset(0, 5),
@@ -93,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(40),
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             backgroundColor: AppColors.primary,
@@ -104,22 +105,22 @@ class _HomeScreenState extends State<HomeScreen> {
               navItem(
                 icon: Icons.home_outlined,
                 activeIcon: Icons.home,
-                text: 'Home',
+                text: '',
               ),
               navItem(
                 icon: Icons.add_circle_outline,
                 activeIcon: Icons.add_circle,
-                text: 'Add',
+                text: '',
               ),
               navItem(
                 icon: Icons.chat_bubble_outline,
                 activeIcon: Icons.chat_bubble,
-                text: 'Chatbot',
+                text: '',
               ),
               navItem(
                 icon: Icons.settings_outlined,
                 activeIcon: Icons.settings,
-                text: 'Settings',
+                text: '',
               ),
             ],
           ),
@@ -129,69 +130,115 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class _HomeContent extends StatelessWidget {
-  const _HomeContent();
+class _HomeContent extends StatefulWidget {
+  const _HomeContent({super.key});
+
+  @override
+  State<_HomeContent> createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<_HomeContent>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.elasticOut));
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final User? user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
+      backgroundColor: const Color(0xFFE3EED4),
       appBar: AppBar(
-        title: const Text('AgriPal'),
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
-        
-        // ✅ أيقونة البروفايل في أقصى اليمين مع صورة المستخدم (إذا كانت موجودة)
+        backgroundColor: const Color(0xFFE3EED4),
+        elevation: 0,
+        title: ScaleTransition(
+          scale: _scaleAnimation,
+          child: RichText(
+            text: const TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Agri',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28,
+                    color: Color(0xFF7C9473),
+                    shadows: [
+                      Shadow(
+                        color: Colors.black26,
+                        offset: Offset(2, 2),
+                        blurRadius: 3,
+                      ),
+                    ],
+                  ),
+                ),
+                TextSpan(
+                  text: 'Pal',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28,
+                    color: Color(0xFF8B5E3C),
+                    shadows: [
+                      Shadow(
+                        color: Colors.black26,
+                        offset: Offset(2, 2),
+                        blurRadius: 3,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: GestureDetector(
-              onTap: () {
-                final User? user = FirebaseAuth.instance.currentUser;
-                if (user != null) {
+          if (user != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: GestureDetector(
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ProfileScreen(user: user),
                     ),
                   );
-                }
-              },
-              child: CircleAvatar(
-                radius: 18,
-                backgroundColor: Colors.white,
-                // ✅ إذا كانت الصورة موجودة، نعرضها
-                backgroundImage: (FirebaseAuth.instance.currentUser?.photoURL != null)
-                    ? NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!)
-                    : null,
-                // ✅ إذا كانت الصورة غير موجودة، نعرض الأيقونة
-                child: (FirebaseAuth.instance.currentUser?.photoURL == null)
-                    ? const Icon(
-                        Icons.person,
-                        size: 20,
-                        color: AppColors.primary,
-                      )
-                    : null,
+                },
+                child: CircleAvatar(
+                  radius: 18,
+                  backgroundColor: Colors.white,
+                  backgroundImage: user.photoURL != null
+                      ? NetworkImage(user.photoURL!)
+                      : null,
+                  child: user.photoURL == null
+                      ? const Icon(
+                          Icons.person,
+                          size: 20,
+                          color: AppColors.primary,
+                        )
+                      : null,
+                ),
               ),
             ),
-          ),
         ],
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('🌱', style: TextStyle(fontSize: 80)),
-            SizedBox(height: 20),
-            Text(
-              'أهلاً بك في AgriPal',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primary,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
