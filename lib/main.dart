@@ -1,30 +1,127 @@
 import 'package:flutter/material.dart';
-import 'package:agripal/screens/splash_screens.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:agripal/core/constants/app_colors.dart'; // ✅ لازم يكون هنا في الأول
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:agripal/screens/splash_screens.dart'; // شاشات Onboarding
+import 'package:agripal/screens/home_screen.dart';
+import 'package:agripal/screens/signin_screen.dart';
+
+enum AppTheme { light, dark, system }
+
+// InheritedWidget لتوفير دوال الثيم
+class AppThemeProvider extends InheritedWidget {
+  final Function(AppTheme) onThemeChanged;
+  final AppTheme currentTheme;
+
+  const AppThemeProvider({
+    super.key,
+    required this.onThemeChanged,
+    required this.currentTheme,
+    required super.child,
+  });
+
+  static AppThemeProvider? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<AppThemeProvider>();
+  }
+
+  @override
+  bool updateShouldNotify(AppThemeProvider old) {
+    return currentTheme != old.currentTheme;
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // تهيئة Firebase
   await Firebase.initializeApp();
-  runApp(const AgripalApp());
+
+  final prefs = await SharedPreferences.getInstance();
+  final themeIndex = prefs.getInt('themeMode') ?? 0;
+  runApp(MyApp(initialTheme: AppTheme.values[themeIndex]));
 }
 
-class AgripalApp extends StatelessWidget {
-  const AgripalApp({super.key});
+class MyApp extends StatefulWidget {
+  final AppTheme initialTheme;
+  const MyApp({super.key, required this.initialTheme});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late AppTheme _currentTheme;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentTheme = widget.initialTheme;
+  }
+
+  void changeTheme(AppTheme theme) async {
+    setState(() => _currentTheme = theme);
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt('themeMode', theme.index);
+  }
+
+  ThemeMode _getThemeMode() {
+    switch (_currentTheme) {
+      case AppTheme.light:
+        return ThemeMode.light;
+      case AppTheme.dark:
+        return ThemeMode.dark;
+      case AppTheme.system:
+        return ThemeMode.system;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Agripal',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.light(
-          primary: AppColors.primary,
-          secondary: AppColors.secondary,
+    return AppThemeProvider(
+      onThemeChanged: changeTheme,
+      currentTheme: _currentTheme,
+      child: MaterialApp(
+        title: 'AgriPal',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          brightness: Brightness.light,
+          primaryColor: const Color(0xFF7C9473),
+          colorScheme: const ColorScheme.light(
+            primary: Color(0xFF7C9473),
+            secondary: Color(0xFFBC9F8B),
+          ),
+          fontFamily: 'Cairo',
+        ),
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          primaryColor: const Color(0xFF9CCC8C),
+          colorScheme: const ColorScheme.dark(
+            primary: Color(0xFF9CCC8C),
+            secondary: Color(0xFFD9B8A4),
+          ),
+          scaffoldBackgroundColor: const Color(0xFF121212),
+          appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF1F1F1F)),
+        ),
+        themeMode: _getThemeMode(),
+        home: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.active) {
+              // إذا كان المستخدم مسجلاً، انتقل إلى HomeScreen
+              if (snapshot.hasData) {
+                return const HomeScreen();
+              } else {
+                // إذا لم يكن مسجلاً، اعرض شاشات Onboarding ثم SignInScreen
+                // لكن نبدأ بـ SplashScreens والتي ستقود لاحقاً إلى SignInScreen
+                return const SplashScreens();
+              }
+            }
+            // أثناء التحميل، عرض شاشة تحميل بسيطة
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          },
         ),
       ),
-      home: const SplashScreens(),
     );
   }
 }
