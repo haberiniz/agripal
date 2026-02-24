@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:agripal/screens/splash_screens.dart'; // شاشات Onboarding
+import 'package:agripal/screens/splash_screens.dart';
 import 'package:agripal/screens/home_screen.dart';
 import 'package:agripal/screens/signin_screen.dart';
 
 enum AppTheme { light, dark, system }
 
-// InheritedWidget لتوفير دوال الثيم
 class AppThemeProvider extends InheritedWidget {
   final Function(AppTheme) onThemeChanged;
   final AppTheme currentTheme;
@@ -32,9 +31,7 @@ class AppThemeProvider extends InheritedWidget {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // تهيئة Firebase
   await Firebase.initializeApp();
-
   final prefs = await SharedPreferences.getInstance();
   final themeIndex = prefs.getInt('themeMode') ?? 0;
   runApp(MyApp(initialTheme: AppTheme.values[themeIndex]));
@@ -89,7 +86,6 @@ class _MyAppState extends State<MyApp> {
             primary: Color(0xFF7C9473),
             secondary: Color(0xFFBC9F8B),
           ),
-          fontFamily: 'Cairo',
         ),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
@@ -106,16 +102,12 @@ class _MyAppState extends State<MyApp> {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
-              // إذا كان المستخدم مسجلاً، انتقل إلى HomeScreen
               if (snapshot.hasData) {
                 return const HomeScreen();
               } else {
-                // إذا لم يكن مسجلاً، اعرض شاشات Onboarding ثم SignInScreen
-                // لكن نبدأ بـ SplashScreens والتي ستقود لاحقاً إلى SignInScreen
                 return const SplashScreens();
               }
             }
-            // أثناء التحميل، عرض شاشة تحميل بسيطة
             return const Scaffold(
               body: Center(child: CircularProgressIndicator()),
             );

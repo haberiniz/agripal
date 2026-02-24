@@ -4,7 +4,7 @@ import 'package:agripal/screens/chatbot_screen.dart';
 import 'package:agripal/screens/settings_screen.dart';
 import 'package:agripal/screens/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:agripal/main.dart'; // لاستيراد AppThemeProvider
+import 'package:agripal/main.dart'; // for AppThemeProvider
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -55,24 +55,38 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(30),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: isDark ? Colors.grey.shade900 : Colors.grey.withOpacity(0.3),
+          backgroundColor: isDark
+              ? Colors.grey.shade900
+              : Colors.grey.withOpacity(0.3),
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
           elevation: 0,
           items: [
             _buildNavItem(Icons.home_outlined, Icons.home, 'Home'),
             _buildNavItem(Icons.add_circle_outline, Icons.add_circle, 'Add'),
-            _buildNavItem(Icons.chat_bubble_outline, Icons.chat_bubble, 'Chatbot'),
+            _buildNavItem(
+              Icons.chat_bubble_outline,
+              Icons.chat_bubble,
+              'Chatbot',
+            ),
           ],
         ),
       ),
     );
   }
 
-  BottomNavigationBarItem _buildNavItem(IconData icon, IconData activeIcon, String label) {
+  BottomNavigationBarItem _buildNavItem(
+    IconData icon,
+    IconData activeIcon,
+    String label,
+  ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final inactiveColor = isDark ? Colors.grey.shade400 : const Color(0xFF7C9473).withOpacity(0.6);
-    final activeColor = isDark ? Colors.amber.shade200 : const Color(0xFF7C9473);
+    final inactiveColor = isDark
+        ? Colors.grey.shade400
+        : const Color(0xFF7C9473).withOpacity(0.6);
+    final activeColor = isDark
+        ? Colors.amber.shade200
+        : const Color(0xFF7C9473);
     return BottomNavigationBarItem(
       icon: Icon(icon, color: inactiveColor),
       activeIcon: Icon(activeIcon, color: activeColor),
@@ -94,7 +108,9 @@ class _HomeContent extends StatelessWidget {
       appBar: AppBar(
         title: const Text('AgriPal'),
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        foregroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.white : null,
+        foregroundColor: Theme.of(context).brightness == Brightness.dark
+            ? Colors.white
+            : null,
         leading: Builder(
           builder: (context) => IconButton(
             icon: const Icon(Icons.menu),
@@ -127,7 +143,10 @@ class _HomeContent extends StatelessWidget {
                     ? NetworkImage(user!.photoURL!)
                     : null,
                 child: (user?.photoURL == null)
-                    ? Icon(Icons.person, color: Theme.of(context).colorScheme.primary)
+                    ? Icon(
+                        Icons.person,
+                        color: Theme.of(context).colorScheme.primary,
+                      )
                     : null,
               ),
               decoration: BoxDecoration(
@@ -135,7 +154,10 @@ class _HomeContent extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.person_outline, color: Theme.of(context).iconTheme.color),
+              leading: Icon(
+                Icons.person_outline,
+                color: Theme.of(context).iconTheme.color,
+              ),
               title: const Text('البروفايل'),
               onTap: () {
                 Navigator.pop(context);
@@ -154,7 +176,10 @@ class _HomeContent extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings_outlined, color: Theme.of(context).iconTheme.color),
+              leading: Icon(
+                Icons.settings_outlined,
+                color: Theme.of(context).iconTheme.color,
+              ),
               title: const Text('الإعدادات'),
               onTap: () {
                 Navigator.pop(context);
@@ -162,7 +187,6 @@ class _HomeContent extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => SettingsScreen(
-                      // نحصل على الدوال من الـ provider
                       onThemeChanged: themeProvider.onThemeChanged,
                       currentTheme: themeProvider.currentTheme,
                     ),
@@ -172,7 +196,10 @@ class _HomeContent extends StatelessWidget {
             ),
             const Divider(),
             ListTile(
-              leading: Icon(Icons.info_outline, color: Theme.of(context).iconTheme.color),
+              leading: Icon(
+                Icons.info_outline,
+                color: Theme.of(context).iconTheme.color,
+              ),
               title: const Text('حول التطبيق'),
               onTap: () {
                 Navigator.pop(context);
@@ -182,7 +209,10 @@ class _HomeContent extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.share_outlined, color: Theme.of(context).iconTheme.color),
+              leading: Icon(
+                Icons.share_outlined,
+                color: Theme.of(context).iconTheme.color,
+              ),
               title: const Text('مشاركة التطبيق'),
               onTap: () {
                 Navigator.pop(context);
@@ -209,18 +239,18 @@ class _HomeContent extends StatelessWidget {
           ],
         ),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('🌱', style: TextStyle(fontSize: 80, color: Theme.of(context).textTheme.bodyLarge?.color)),
-            const SizedBox(height: 20),
+            Text('🌱', style: TextStyle(fontSize: 80)),
+            SizedBox(height: 20),
             Text(
               'أهلاً بك في AgriPal',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary,
+                color: Color(0xFF7C9473),
               ),
             ),
           ],
