@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:agripal/screens/signin_screen.dart';
+import 'package:agripal/core/constants/app_colors.dart';
 
 class SplashScreens extends StatefulWidget {
   const SplashScreens({super.key});
@@ -10,58 +11,85 @@ class SplashScreens extends StatefulWidget {
 
 class _SplashScreensState extends State<SplashScreens>
     with TickerProviderStateMixin {
-  late PageController _pageController;
+  final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  final Color primaryGreen = const Color(0xFF7C9473);
-  final Color lightGreen = const Color(0xFFCFDACB);
-  final Color warmBrown = const Color(0xFFBC9F8B);
-  final Color mintGreen = const Color(0xFFB5CFB7);
-  final Color softGreen = const Color(0xFFCADABF);
+  late AnimationController _textController;
+  late AnimationController _buttonController;
+  late Animation<double> _textFade;
+  late Animation<Offset> _textSlide;
+  late Animation<double> _buttonScale;
+  late Animation<double> _buttonGlow;
 
-  final List<Map<String, dynamic>> _pages = [
+  final List<Map<String, String>> pages = [
     {
-      "title": "Monitor Your Land",
-      "description": "Track your plants' health with satellites",
-      "icon": Icons.agriculture,
+      'title': 'Smart Farming',
+      'desc': 'Predict your harvest with AI insights',
+      'image': 'assets/images/farm1.jpg',
     },
     {
-      "title": "Ask the AI Assistant",
-      "description": "Instant answers in Darija to all your questions",
-      "icon": Icons.smart_toy,
+      'title': 'Water & Fertilizer',
+      'desc': 'Optimize resources with precision',
+      'image': 'assets/images/farm2.jpg',
     },
     {
-      "title": "Predict Your Harvest",
-      "description": "Plan a better future with accurate forecasts",
-      "icon": Icons.analytics,
+      'title': 'AI Assistant',
+      'desc': 'Ask anything about your crops',
+      'image': 'assets/images/farm3.jpg',
     },
   ];
-
-  late List<AnimationController> _iconControllers;
-  late List<Animation<double>> _iconAnimations;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(viewportFraction: 0.9);
-    _iconControllers = List.generate(_pages.length, (index) {
-      return AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 800),
-      )..forward();
-    });
-    _iconAnimations = _iconControllers.map((controller) {
-      return Tween<double>(
-        begin: 0.8,
-        end: 1.0,
-      ).animate(CurvedAnimation(parent: controller, curve: Curves.elasticOut));
-    }).toList();
+    _initTextAnimation();
+    _initButtonAnimation();
+  }
+
+  void _initTextAnimation() {
+    _textController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    )..forward();
+
+    _textFade = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _textController, curve: Curves.easeOut),
+    );
+
+    _textSlide = Tween<Offset>(
+      begin: const Offset(0, 0.25),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(parent: _textController, curve: Curves.easeOut),
+    );
+  }
+
+  void _initButtonAnimation() {
+    _buttonController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
+
+    _buttonScale = Tween<double>(begin: 1.0, end: 1.03).animate(
+      CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut),
+    );
+
+    _buttonGlow = Tween<double>(begin: 0.3, end: 0.6).animate(
+      CurvedAnimation(parent: _buttonController, curve: Curves.easeInOut),
+    );
+  }
+
+  void _onPageChanged(int index) {
+    setState(() => _currentPage = index);
+    _textController.reset();
+    _textController.forward();
   }
 
   @override
   void dispose() {
+    _textController.dispose();
+    _buttonController.dispose();
     _pageController.dispose();
-    for (var c in _iconControllers) c.dispose();
     super.dispose();
   }
 
@@ -70,37 +98,90 @@ class _SplashScreensState extends State<SplashScreens>
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [lightGreen, softGreen],
-              ),
-            ),
-          ),
+          // ── PageView ──
           PageView.builder(
             controller: _pageController,
-            itemCount: _pages.length,
-            onPageChanged: (page) {
-              setState(() => _currentPage = page);
-              _iconControllers[page].forward(from: 0.0);
-            },
-            itemBuilder: (context, index) {
-              return AnimatedBuilder(
-                animation: _pageController,
-                builder: (context, child) {
-                  double value = 1.0;
-                  if (_pageController.position.haveDimensions) {
-                    value = _pageController.page! - index;
-                    value = (1 - (value.abs() * 0.3)).clamp(0.7, 1.0);
-                  }
-                  return Transform.scale(scale: value, child: child);
-                },
-                child: _buildPage(index),
+            itemCount: pages.length,
+            onPageChanged: _onPageChanged,
+            itemBuilder: (_, index) {
+              return Stack(
+                fit: StackFit.expand,
+                children: [
+                  // ── Background Image ──
+                  Image.asset(
+                    pages[index]['image']!,
+                    fit: BoxFit.cover,
+                  ),
+
+                  // ── Gradient Overlay ──
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withOpacity(0.3),
+                          const Color(0xFF2A3A1F).withOpacity(0.92),
+                        ],
+                        stops: const [0.0, 0.5, 1.0],
+                      ),
+                    ),
+                  ),
+
+                  // ── Text Content ──
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 80),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // ── Title ──
+                        FadeTransition(
+                          opacity: _textFade,
+                          child: SlideTransition(
+                            position: _textSlide,
+                            child: Text(
+                              pages[index]['title']!,
+                              style: const TextStyle(
+                                color: Color(0xFFE3EED4),
+                                fontSize: 34,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 15),
+
+                        // ── Description ──
+                        FadeTransition(
+                          opacity: _textFade,
+                          child: SlideTransition(
+                            position: _textSlide,
+                            child: Text(
+                              pages[index]['desc']!,
+                              style: const TextStyle(
+                                color: Color(0xFFE1D4C2),
+                                fontSize: 16,
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 140),
+                      ],
+                    ),
+                  ),
+                ],
               );
             },
           ),
+
+          // ── Dots ──
           Positioned(
             bottom: 120,
             left: 0,
@@ -108,153 +189,151 @@ class _SplashScreensState extends State<SplashScreens>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
-                _pages.length,
-                (index) => GestureDetector(
-                  onTap: () {
-                    _pageController.animateToPage(
-                      index,
-                      duration: const Duration(milliseconds: 400),
-                      curve: Curves.easeInOut,
-                    );
-                  },
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    margin: const EdgeInsets.symmetric(horizontal: 6),
-                    width: _currentPage == index ? 30 : 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: _currentPage == index
-                          ? warmBrown
-                          : warmBrown.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: _currentPage == index
-                          ? [
-                              BoxShadow(
-                                color: warmBrown.withOpacity(0.5),
-                                blurRadius: 8,
-                                spreadRadius: 2,
-                              ),
-                            ]
-                          : null,
-                    ),
+                pages.length,
+                (i) => AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  margin: const EdgeInsets.symmetric(horizontal: 6),
+                  width: _currentPage == i ? 24 : 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: _currentPage == i
+                        ? const Color(0xFF7C9473)
+                        : const Color(0xFFE1D4C2),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),
             ),
           ),
+
+          // ── Button ──
           Positioned(
             bottom: 40,
-            left: 20,
-            right: 20,
-            child: _currentPage == _pages.length - 1
+            left: 30,
+            right: 30,
+            child: _currentPage == pages.length - 1
                 ? _buildGetStartedButton()
-                : _buildNextButton(),
+                : _buildContinueButton(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildPage(int index) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          AnimatedBuilder(
-            animation: _iconAnimations[index],
-            builder: (context, child) {
-              return Transform.scale(
-                scale: _iconAnimations[index].value,
-                child: Container(
-                  width: 140,
-                  height: 140,
-                  decoration: BoxDecoration(
-                    color: mintGreen.withOpacity(0.4),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: warmBrown.withOpacity(0.3),
-                        blurRadius: 20,
-                        spreadRadius: 5,
-                      ),
-                    ],
+  // ── Continue Button ──
+  Widget _buildContinueButton() {
+    return AnimatedBuilder(
+      animation: _buttonController,
+      builder: (context, child) {
+        return Transform.scale(
+          scale: _buttonScale.value,
+          child: GestureDetector(
+            onTap: () {
+              _pageController.nextPage(
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInOut,
+              );
+            },
+            child: Container(
+              height: 55,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(
+                  color: const Color(0xFF7C9473).withOpacity(0.6),
+                  width: 1.5,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF7C9473)
+                        .withOpacity(_buttonGlow.value * 0.5),
+                    blurRadius: 20,
+                    spreadRadius: 1,
+                    offset: const Offset(0, 4),
                   ),
-                  child: Icon(
-                    _pages[index]["icon"],
-                    size: 70,
-                    color: primaryGreen,
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  SizedBox(width: 10),
+                  Text(
+                    'Continue →',
+                    style: TextStyle(
+                      color: Color(0xFFE3EED4),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                    ),
                   ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // ── Get Started Button ──
+  Widget _buildGetStartedButton() {
+    return AnimatedBuilder(
+      animation: _buttonController,
+      builder: (context, child) {
+        return Transform.scale(
+          scale: _buttonScale.value,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => const SignInScreen(),
+                  transitionsBuilder: (_, animation, __, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+                  transitionDuration: const Duration(milliseconds: 500),
                 ),
               );
             },
-          ),
-          const SizedBox(height: 40),
-          Text(
-            _pages[index]["title"],
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: primaryGreen,
-              letterSpacing: 1.2,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Text(
-              _pages[index]["description"],
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                color: warmBrown,
-                height: 1.5,
-                fontWeight: FontWeight.w500,
+            child: Container(
+              height: 55,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF7C9473),
+                    Color(0xFF55833D),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary
+                        .withOpacity(_buttonGlow.value),
+                    blurRadius: 24,
+                    spreadRadius: 2,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  SizedBox(width: 10),
+                  Text(
+                    'Get Started',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNextButton() {
-    return ElevatedButton(
-      onPressed: () {
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
         );
       },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: primaryGreen,
-        foregroundColor: Colors.white,
-        minimumSize: const Size(double.infinity, 60),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 10,
-        shadowColor: primaryGreen.withOpacity(0.5),
-      ),
-      child: const Text('Next', style: TextStyle(fontSize: 18)),
-    );
-  }
-
-  Widget _buildGetStartedButton() {
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const SignInScreen()),
-        );
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: warmBrown,
-        foregroundColor: Colors.white,
-        minimumSize: const Size(double.infinity, 60),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 10,
-        shadowColor: warmBrown.withOpacity(0.5),
-      ),
-      child: const Text('Get Started', style: TextStyle(fontSize: 18)),
     );
   }
 }

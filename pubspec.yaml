@@ -4,58 +4,62 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.10.8    # ✅ هاد هو الحل
+  sdk: ^3.10.8
 
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: ^2.2.2
-  
-  # Firebase - إصدارات ثابتة
+
+  # Firebase
   firebase_core: 3.13.0
   firebase_auth: 5.5.1
   google_sign_in: 6.3.0
-  
+
   # باقي الباكاجات
   flutter_svg: ^2.0.17
   provider: ^6.1.2
   cupertino_icons: ^1.0.8
+  hive_flutter: ^1.1.0
+
+  # ── الجدد ──
+  google_maps_flutter: ^2.9.0
+  geolocator: ^13.0.1
+  shared_preferences: ^2.3.2   # ← مرة وحدة فقط (حذفنا ^2.2.2)
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  flutter_launcher_icons: ^0.14.4 
+  flutter_launcher_icons: ^0.14.4
   flutter_native_splash: ^2.4.4
 
 flutter_launcher_icons:
   android: true
   ios: true
-
-  image_path: "assets/images/icon.png"
-
-  adaptive_icon_background: "#E3EED4"
-  adaptive_icon_foreground: "assets/images/icon.png"
-
+  image_path: "assets/images/app_icon.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/app_icon.png"
   min_sdk_android: 23
 
-flutter_native_splash: 
-  color: "#E3EED4"
-  image: assets/images/iconnn.png
-
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/images/app_icon_fixed.png
   android: true
   ios: true
   fullscreen: true
-
-  android_12: 
-    color: "#E3EED4"
-    image: assets/images/iconnn.png
-    icon_background_color: "#E3EED4"
-
-
+  image_dark: assets/images/app_icon_fixed.png
+  color_dark: "#FFFFFF"
+  android_gravity: center
+  ios_content_mode: center
+  android_12:
+    color: "#FFFFFF"
+    image: assets/images/app_icon_fixed.png
+    icon_background_color: "#FFFFFF"
+    image_dark: assets/images/app_icon_fixed.png
+    color_dark: "#FFFFFF"
 
 flutter:
   uses-material-design: true
-
   assets:
     - assets/images/

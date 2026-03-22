@@ -1,112 +1,431 @@
 import 'package:flutter/material.dart';
 import 'package:agripal/core/constants/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart'; // ✅ مهم لتسجيل الخروج
+import 'package:google_sign_in/google_sign_in.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   final User user;
 
   const ProfileScreen({super.key, required this.user});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen>
+    with TickerProviderStateMixin {
+  late AnimationController _fadeController;
+  late AnimationController _slideController;
+  late Animation<double> _fadeIn;
+  late Animation<Offset> _slideUp;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    )..forward();
+
+    _slideController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    )..forward();
+
+    _fadeIn = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _fadeController, curve: Curves.easeOut),
+    );
+
+    _slideUp = Tween<Offset>(
+      begin: const Offset(0, 0.12),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(parent: _slideController, curve: Curves.easeOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    _slideController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('الملف الشخصي'),
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // ✅ صورة المستخدم
-            CircleAvatar(
-              radius: 50,
-              backgroundColor: AppColors.primary,
-              backgroundImage: user.photoURL != null 
-                ? NetworkImage(user.photoURL!) 
-                : null,
-              child: user.photoURL == null
-                ? const Icon(Icons.person, size: 50, color: Colors.white)
-                : null,
-            ),
-            const SizedBox(height: 20),
-            
-            // ✅ اسم المستخدم
-            Text(
-              user.displayName ?? 'اسم المستخدم',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textDark,
-              ),
-            ),
-            const SizedBox(height: 8),
-            
-            // ✅ إيميل المستخدم
-            Text(
-              user.email ?? 'user@example.com',
-              style: TextStyle(
-                fontSize: 16,
-                color: AppColors.accent,
-              ),
-            ),
-            const SizedBox(height: 40),
-            
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  _buildMenuItem(
-                    Icons.settings, 
-                    'الإعدادات', 
-                    context, // ✅ تمرير context
+      backgroundColor:
+          isDark ? const Color(0xFF0F1A0F) : const Color(0xFFF5F9F0),
+      body: FadeTransition(
+        opacity: _fadeIn,
+        child: SlideTransition(
+          position: _slideUp,
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              // ── Header ────────────────────────────────────────────
+              SliverAppBar(
+                expandedHeight: 240,
+                pinned: true,
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Stack(
+                    children: [
+                      // Gradient background
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              AppColors.primary,
+                              const Color(0xFF7C9473),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // Decorative circle
+                      Positioned(
+                        top: -40,
+                        right: -40,
+                        child: Container(
+                          width: 180,
+                          height: 180,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withValues(alpha: 0.06),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: -20,
+                        left: -20,
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withValues(alpha: 0.05),
+                          ),
+                        ),
+                      ),
+                      // Content
+                      SafeArea(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 16),
+                            // Avatar
+                            Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border:
+                                    Border.all(color: Colors.white, width: 2.5),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        Colors.black.withValues(alpha: 0.18),
+                                    blurRadius: 16,
+                                    offset: const Offset(0, 6),
+                                  ),
+                                ],
+                              ),
+                              child: CircleAvatar(
+                                radius: 44,
+                                backgroundColor:
+                                    Colors.white.withValues(alpha: 0.2),
+                                backgroundImage: widget.user.photoURL != null
+                                    ? NetworkImage(widget.user.photoURL!)
+                                    : null,
+                                child: widget.user.photoURL == null
+                                    ? Icon(Icons.person_rounded,
+                                        size: 44, color: Colors.white)
+                                    : null,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              widget.user.displayName ?? 'مستخدم AgriPal',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.mail_outline_rounded,
+                                    size: 12,
+                                    color:
+                                        Colors.white.withValues(alpha: 0.75)),
+                                const SizedBox(width: 4),
+                                Text(
+                                  widget.user.email ?? '',
+                                  style: TextStyle(
+                                    color:
+                                        Colors.white.withValues(alpha: 0.82),
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  const Divider(),
-                  _buildMenuItem(
-                    Icons.logout, 
-                    'تسجيل الخروج', 
-                    context,
-                    color: Colors.red,
-                  ),
-                ],
+                ),
               ),
-            ),
-          ],
+
+              // ── Content ───────────────────────────────────────────
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 1, 18, 1),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      
+                      const SizedBox(height: 26),
+
+                      // ── Account Info ──
+                      _buildSectionTitle('معلومات الحساب', isDark),
+                      const SizedBox(height: 12),
+
+                      _buildInfoCard(
+                        icon: Icons.person_outline_rounded,
+                        label: 'الاسم الكامل',
+                        value: widget.user.displayName ?? '—',
+                        iconBg: const Color(0xFFE8F5E9),
+                        iconColor: const Color(0xFF55833D),
+                        isDark: isDark,
+                      ),
+                      const SizedBox(height: 10),
+                      _buildInfoCard(
+                        icon: Icons.email_outlined,
+                        label: 'البريد الإلكتروني',
+                        value: widget.user.email ?? '—',
+                        iconBg: const Color(0xFFE3F2FD),
+                        iconColor: const Color(0xFF2E7D9A),
+                        isDark: isDark,
+                      ),
+
+                      const SizedBox(height: 26),
+
+                      // ── Account Actions ──
+                      _buildSectionTitle('الحساب', isDark),
+                      const SizedBox(height: 12),
+
+                      _buildLogoutButton(context, isDark),
+
+                      const SizedBox(height: 100),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // ✅ دالة مساعدة لبناء عناصر القائمة مع تمرير context
-  Widget _buildMenuItem(IconData icon, String title, BuildContext context, {Color color = AppColors.textDark}) {
-    return ListTile(
-      leading: Icon(icon, color: color),
-      title: Text(title, style: TextStyle(color: color)),
+  // ── Helpers ───────────────────────────────────────────────────────
+
+  Widget _buildSectionTitle(String title, bool isDark) {
+    return Row(
+      children: [
+        Container(
+          width: 3,
+          height: 16,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColors.primary, const Color(0xFF7C9473)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            color: isDark ? Colors.white70 : const Color(0xFF2A3A2A),
+            letterSpacing: 0.3,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatCard(
+      String emoji, String value, String label, Color color) {
+    return Expanded(
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0.0, end: 1.0),
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeOutBack,
+        builder: (_, v, child) =>
+            Transform.scale(scale: v.clamp(0.0, 1.0), child: child),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: color.withValues(alpha: 0.1),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+            border: Border.all(color: color.withValues(alpha: 0.12)),
+          ),
+          child: Column(
+            children: [
+              Text(emoji, style: const TextStyle(fontSize: 22)),
+              const SizedBox(height: 5),
+              Text(
+                value,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
+              Text(
+                label,
+                style: TextStyle(fontSize: 10, color: Colors.grey.shade500),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoCard({
+    required IconData icon,
+    required String label,
+    required String value,
+    required Color iconBg,
+    required Color iconColor,
+    required bool isDark,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1A2A1A) : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(9),
+            decoration: BoxDecoration(
+              color: isDark ? iconColor.withValues(alpha: 0.15) : iconBg,
+              borderRadius: BorderRadius.circular(11),
+            ),
+            child: Icon(icon, size: 19, color: iconColor),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.grey.shade500,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? Colors.white : const Color(0xFF2A3A2A),
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLogoutButton(BuildContext context, bool isDark) {
+    return GestureDetector(
       onTap: () async {
-        if (title == 'تسجيل الخروج') {
-          // ✅ تسجيل الخروج من Firebase و Google
-          await FirebaseAuth.instance.signOut();
-          await GoogleSignIn().signOut();
-          
-          if (context.mounted) {
-            // ✅ الرجوع لصفحة البداية
-            Navigator.pushReplacementNamed(context, '/');
-          }
-        } else {
-          // ✅ إجراءات أخرى (مثل الإعدادات)
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('$title قريباً')),
-          );
+        await FirebaseAuth.instance.signOut();
+        await GoogleSignIn().signOut();
+        if (context.mounted) {
+          Navigator.pushReplacementNamed(context, '/');
         }
       },
+      child: Container(
+        padding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+        decoration: BoxDecoration(
+          color: isDark
+              ? Colors.red.withValues(alpha: 0.08)
+              : Colors.red.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(16),
+          border:
+              Border.all(color: Colors.red.withValues(alpha: 0.18)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(9),
+              decoration: BoxDecoration(
+                color: Colors.red.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(11),
+              ),
+              child: const Icon(Icons.logout_rounded,
+                  size: 19, color: Colors.red),
+            ),
+            const SizedBox(width: 14),
+            const Text(
+              'تسجيل الخروج',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: Colors.red,
+              ),
+            ),
+            const Spacer(),
+            Icon(Icons.arrow_forward_ios_rounded,
+                size: 13, color: Colors.red.withValues(alpha: 0.4)),
+          ],
+        ),
+      ),
     );
   }
 }

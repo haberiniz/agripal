@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:agripal/main.dart'; // لاستيراد AppTheme
+import 'package:agripal/core/constants/app_colors.dart';
+import 'package:agripal/main.dart';
 
 class SettingsScreen extends StatefulWidget {
   final Function(AppTheme) onThemeChanged;
@@ -18,9 +19,8 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
+  late AnimationController _fadeController;
+  late Animation<double> _fadeIn;
 
   bool _notificationsEnabled = true;
   String _selectedLanguage = 'ar';
@@ -30,27 +30,16 @@ class _SettingsScreenState extends State<SettingsScreen>
   void initState() {
     super.initState();
     _loadPreferences();
-    _animationController = AnimationController(
+    _fadeController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 600),
-    );
-    _fadeAnimation = CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    );
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.2),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
-    _animationController.forward();
+      duration: const Duration(milliseconds: 500),
+    )..forward();
+    _fadeIn = CurvedAnimation(parent: _fadeController, curve: Curves.easeOut);
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _fadeController.dispose();
     super.dispose();
   }
 
@@ -72,212 +61,385 @@ class _SettingsScreenState extends State<SettingsScreen>
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final iconColor = isDark ? Colors.amber.shade200 : const Color(0xFF7C9473);
+    final bg = isDark ? const Color(0xFF0F1A0F) : const Color(0xFFF5F9F0);
+    final cardBg = isDark ? const Color(0xFF1A2A1A) : Colors.white;
 
     return Scaffold(
+      backgroundColor: bg,
       appBar: AppBar(
-        title: const Text('الإعدادات'),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        foregroundColor: isDark ? Colors.white : null,
+        backgroundColor: isDark ? const Color(0xFF0F1A0F) : Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new,
+              size: 18, color: AppColors.primary),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'الإعدادات',
+          style: TextStyle(
+            color: AppColors.primary,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Divider(
+            height: 1,
+            color: AppColors.primary.withValues(alpha: 0.1),
+          ),
+        ),
       ),
       body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: SlideTransition(
-          position: _slideAnimation,
-          child: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              _buildSectionTitle('المظهر', iconColor),
-              _buildThemeOptions(),
-              const Divider(height: 32),
-              _buildSectionTitle('اللغة', iconColor),
-              _buildLanguageOptions(),
-              const Divider(height: 32),
-              _buildSectionTitle('الإشعارات', iconColor),
-              _buildNotificationTile(),
-              const Divider(height: 32),
-              _buildSectionTitle('الوحدات', iconColor),
-              _buildUnitOptions(),
-              const Divider(height: 32),
-              ListTile(
-                leading: Icon(Icons.info_outline, color: iconColor),
-                title: const Text('حول التطبيق'),
-                subtitle: const Text('الإصدار 1.0.0'),
-                onTap: () {},
+        opacity: _fadeIn,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
+          children: [
+            // ── المظهر ────────────────────────────────────────────
+            _sectionLabel('المظهر', isDark),
+            const SizedBox(height: 8),
+            _card(
+              isDark: isDark,
+              cardBg: cardBg,
+              child: Column(
+                children: [
+                  _themeRow(AppTheme.light, 'فاتح', Icons.light_mode_outlined,
+                      isDark, cardBg),
+                  _divider(isDark),
+                  _themeRow(AppTheme.dark, 'داكن', Icons.dark_mode_outlined,
+                      isDark, cardBg),
+                  _divider(isDark),
+                  _themeRow(AppTheme.system, 'حسب النظام',
+                      Icons.phone_android_outlined, isDark, cardBg),
+                ],
               ),
-              ListTile(
-                leading: Icon(Icons.star_outline, color: iconColor),
-                title: const Text('قيم التطبيق'),
-                onTap: () {},
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionTitle(String title, Color iconColor) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Icon(Icons.settings, size: 20, color: iconColor),
-          const SizedBox(width: 8),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: iconColor,
             ),
-          ),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildThemeOptions() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Theme.of(context).cardColor,
-      ),
-      child: Column(
-        children: [
-          _buildRadioTile<AppTheme>(
-            value: AppTheme.light,
-            groupValue: widget.currentTheme,
-            title: 'فاتح',
-            icon: Icons.light_mode,
-            onChanged: (val) => widget.onThemeChanged(val!),
-          ),
-          _buildRadioTile<AppTheme>(
-            value: AppTheme.dark,
-            groupValue: widget.currentTheme,
-            title: 'داكن',
-            icon: Icons.dark_mode,
-            onChanged: (val) => widget.onThemeChanged(val!),
-          ),
-          _buildRadioTile<AppTheme>(
-            value: AppTheme.system,
-            groupValue: widget.currentTheme,
-            title: 'حسب النظام',
-            icon: Icons.settings_suggest,
-            onChanged: (val) => widget.onThemeChanged(val!),
-          ),
-        ],
-      ),
-    );
-  }
+            const SizedBox(height: 22),
 
-  Widget _buildLanguageOptions() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Theme.of(context).cardColor,
-      ),
-      child: Column(
-        children: [
-          _buildRadioTile<String>(
-            value: 'ar',
-            groupValue: _selectedLanguage,
-            title: 'العربية',
-            icon: Icons.language,
-            onChanged: (val) {
-              setState(() => _selectedLanguage = val!);
-              _savePreference('language', val);
-            },
-          ),
-          _buildRadioTile<String>(
-            value: 'en',
-            groupValue: _selectedLanguage,
-            title: 'English',
-            icon: Icons.language,
-            onChanged: (val) {
-              setState(() => _selectedLanguage = val!);
-              _savePreference('language', val);
-            },
-          ),
-        ],
-      ),
-    );
-  }
+            // ── الإشعارات ─────────────────────────────────────────
+            _sectionLabel('الإشعارات', isDark),
+            const SizedBox(height: 8),
+            _card(
+              isDark: isDark,
+              cardBg: cardBg,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                child: Row(
+                  children: [
+                    Icon(
+                      _notificationsEnabled
+                          ? Icons.notifications_outlined
+                          : Icons.notifications_off_outlined,
+                      color: _notificationsEnabled
+                          ? AppColors.primary
+                          : Colors.grey,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'تفعيل الإشعارات',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: isDark ? Colors.white : const Color(0xFF2A3A2A),
+                            ),
+                          ),
+                          Text(
+                            'تنبيهات المحاصيل والطقس',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Switch(
+                      value: _notificationsEnabled,
+                      onChanged: (val) {
+                        setState(() => _notificationsEnabled = val);
+                        _savePreference('notifications', val);
+                      },
+                      activeColor: AppColors.primary,
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                  ],
+                ),
+              ),
+            ),
 
-  Widget _buildUnitOptions() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Theme.of(context).cardColor,
-      ),
-      child: Column(
-        children: [
-          _buildRadioTile<String>(
-            value: 'metric',
-            groupValue: _selectedUnit,
-            title: 'متري (كغ، هكتار)',
-            icon: Icons.scale,
-            onChanged: (val) {
-              setState(() => _selectedUnit = val!);
-              _savePreference('unit', val);
-            },
-          ),
-          _buildRadioTile<String>(
-            value: 'imperial',
-            groupValue: _selectedUnit,
-            title: 'إمبراطوري (رطل، فدان)',
-            icon: Icons.monitor_weight,
-            onChanged: (val) {
-              setState(() => _selectedUnit = val!);
-              _savePreference('unit', val);
-            },
-          ),
-        ],
-      ),
-    );
-  }
+            const SizedBox(height: 22),
 
-  Widget _buildRadioTile<T>({
-    required T value,
-    required T groupValue,
-    required String title,
-    required IconData icon,
-    required Function(T?) onChanged,
-  }) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeInOut,
-      child: RadioListTile<T>(
-        value: value,
-        groupValue: groupValue,
-        onChanged: onChanged,
-        title: Text(title),
-        secondary: Icon(icon),
-        activeColor: Theme.of(context).colorScheme.primary,
-      ),
-    );
-  }
+            // ── اللغة ─────────────────────────────────────────────
+            _sectionLabel('اللغة', isDark),
+            const SizedBox(height: 8),
+            _card(
+              isDark: isDark,
+              cardBg: cardBg,
+              child: Column(
+                children: [
+                  _selectRow(
+                    label: 'العربية',
+                    sub: '🇩🇿',
+                    selected: _selectedLanguage == 'ar',
+                    isDark: isDark,
+                    onTap: () {
+                      setState(() => _selectedLanguage = 'ar');
+                      _savePreference('language', 'ar');
+                    },
+                  ),
+                  _divider(isDark),
+                  _selectRow(
+                    label: 'English',
+                    sub: '🇬🇧',
+                    selected: _selectedLanguage == 'en',
+                    isDark: isDark,
+                    onTap: () {
+                      setState(() => _selectedLanguage = 'en');
+                      _savePreference('language', 'en');
+                    },
+                  ),
+                ],
+              ),
+            ),
 
-  Widget _buildNotificationTile() {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeInOut,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Theme.of(context).cardColor,
-      ),
-      child: SwitchListTile(
-        title: const Text('تفعيل الإشعارات'),
-        subtitle: const Text('استلام تنبيهات حول المحاصيل والطقس'),
-        secondary: Icon(
-          _notificationsEnabled ? Icons.notifications_active : Icons.notifications_off,
-          color: _notificationsEnabled ? Colors.green : Colors.grey,
+            const SizedBox(height: 22),
+
+            // ── الوحدات ───────────────────────────────────────────
+            _sectionLabel('الوحدات', isDark),
+            const SizedBox(height: 8),
+            _card(
+              isDark: isDark,
+              cardBg: cardBg,
+              child: Column(
+                children: [
+                  _selectRow(
+                    label: 'متري',
+                    sub: 'كغ، هكتار',
+                    selected: _selectedUnit == 'metric',
+                    isDark: isDark,
+                    onTap: () {
+                      setState(() => _selectedUnit = 'metric');
+                      _savePreference('unit', 'metric');
+                    },
+                  ),
+                  _divider(isDark),
+                  _selectRow(
+                    label: 'إمبراطوري',
+                    sub: 'رطل، فدان',
+                    selected: _selectedUnit == 'imperial',
+                    isDark: isDark,
+                    onTap: () {
+                      setState(() => _selectedUnit = 'imperial');
+                      _savePreference('unit', 'imperial');
+                    },
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 22),
+
+            // ── معلومات ───────────────────────────────────────────
+            _sectionLabel('معلومات', isDark),
+            const SizedBox(height: 8),
+            _card(
+              isDark: isDark,
+              cardBg: cardBg,
+              child: Column(
+                children: [
+                  _linkRow(
+                    icon: Icons.info_outline_rounded,
+                    label: 'حول التطبيق',
+                    sub: 'الإصدار 1.0.0',
+                    isDark: isDark,
+                    onTap: () {},
+                  ),
+                  _divider(isDark),
+                  _linkRow(
+                    icon: Icons.star_outline_rounded,
+                    label: 'قيم التطبيق',
+                    sub: 'شاركنا رأيك',
+                    isDark: isDark,
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        value: _notificationsEnabled,
-        onChanged: (val) {
-          setState(() => _notificationsEnabled = val);
-          _savePreference('notifications', val);
-        },
+      ),
+    );
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────
+
+  Widget _sectionLabel(String title, bool isDark) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 4, bottom: 0),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: isDark
+              ? Colors.white38
+              : Colors.grey.shade500,
+          letterSpacing: 0.5,
+        ),
+      ),
+    );
+  }
+
+  Widget _card({
+    required bool isDark,
+    required Color cardBg,
+    required Widget child,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: cardBg,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+
+  Widget _divider(bool isDark) {
+    return Divider(
+      height: 1,
+      indent: 16,
+      endIndent: 16,
+      color: isDark ? Colors.white10 : Colors.grey.shade100,
+    );
+  }
+
+  Widget _themeRow(AppTheme theme, String label, IconData icon, bool isDark,
+      Color cardBg) {
+    final isSelected = widget.currentTheme == theme;
+    return GestureDetector(
+      onTap: () => widget.onThemeChanged(theme),
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Icon(icon,
+                size: 20,
+                color: isSelected ? AppColors.primary : Colors.grey.shade400),
+            const SizedBox(width: 12),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight:
+                    isSelected ? FontWeight.w600 : FontWeight.normal,
+                color: isSelected
+                    ? AppColors.primary
+                    : isDark
+                        ? Colors.white70
+                        : const Color(0xFF2A3A2A),
+              ),
+            ),
+            const Spacer(),
+            if (isSelected)
+              Icon(Icons.check_rounded, size: 18, color: AppColors.primary),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _selectRow({
+    required String label,
+    required String sub,
+    required bool selected,
+    required bool isDark,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Text(sub, style: const TextStyle(fontSize: 18)),
+            const SizedBox(width: 12),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+                color: selected
+                    ? AppColors.primary
+                    : isDark
+                        ? Colors.white70
+                        : const Color(0xFF2A3A2A),
+              ),
+            ),
+            const Spacer(),
+            if (selected)
+              Icon(Icons.check_rounded, size: 18, color: AppColors.primary),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _linkRow({
+    required IconData icon,
+    required String label,
+    required String sub,
+    required bool isDark,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: Colors.grey.shade400),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: isDark ? Colors.white70 : const Color(0xFF2A3A2A),
+                  ),
+                ),
+                Text(
+                  sub,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.grey.shade500,
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            Icon(Icons.arrow_forward_ios_rounded,
+                size: 13, color: Colors.grey.shade400),
+          ],
+        ),
       ),
     );
   }

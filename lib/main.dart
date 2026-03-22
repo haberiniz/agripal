@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive_flutter/hive_flutter.dart'; // ✅ أضفنا هذا
 import 'package:agripal/screens/splash_screens.dart';
-import 'package:agripal/screens/home_screen.dart';
-import 'package:agripal/screens/signin_screen.dart';
 
 enum AppTheme { light, dark, system }
 
@@ -32,6 +30,7 @@ class AppThemeProvider extends InheritedWidget {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await Hive.initFlutter(); // ✅ لازم يكون قبل أي openBox
   final prefs = await SharedPreferences.getInstance();
   final themeIndex = prefs.getInt('themeMode') ?? 0;
   runApp(MyApp(initialTheme: AppTheme.values[themeIndex]));
@@ -95,24 +94,12 @@ class _MyAppState extends State<MyApp> {
             secondary: Color(0xFFD9B8A4),
           ),
           scaffoldBackgroundColor: const Color(0xFF121212),
-          appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF1F1F1F)),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Color(0xFF1F1F1F),
+          ),
         ),
         themeMode: _getThemeMode(),
-        home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.active) {
-              if (snapshot.hasData) {
-                return const HomeScreen();
-              } else {
-                return const SplashScreens();
-              }
-            }
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          },
-        ),
+        home: const SplashScreens(),
       ),
     );
   }

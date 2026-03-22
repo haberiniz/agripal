@@ -4,7 +4,7 @@ class AppColors {
  static const Color primaryDark = Color(0xFF524133);
 
   // 🌿 أخضر زيتوني – حيوية، نمو، هوية التطبيق
-  static const Color primary = Color(0xFF7C9473);
+static const Color primary = Color(0xFF55833D);
 
   // ⚪ أبيض مخضر – خلفيات، بطاقات، نقاء
   static const Color backgroundSoft = Color(0xFFE3EED4);
