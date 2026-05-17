@@ -6,8 +6,16 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:agripal/screens/home_screen.dart';
 import 'package:agripal/core/constants/app_colors.dart';
+
+// ── حدود الجزائر التقريبية ──────────────────────────────────────────
+const double _DZ_LAT_MIN = 18.9;
+const double _DZ_LAT_MAX = 37.1;
+const double _DZ_LNG_MIN = -8.7;
+const double _DZ_LNG_MAX = 12.0;
+
+// مركز الجزائر (تقريبًا)
+const LatLng _kAlgeriaCenter = LatLng(28.0339, 1.6596);
 
 class FarmLocationScreen extends StatefulWidget {
   const FarmLocationScreen({super.key});
@@ -22,7 +30,6 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
   final TextEditingController _latController = TextEditingController();
   final TextEditingController _lngController = TextEditingController();
   final TextEditingController _areaController = TextEditingController();
-  final TextEditingController _farmNameController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
 
   late AnimationController _sheetAnim;
@@ -50,8 +57,10 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
   double _calculatedArea = 0;
   MapType _mapType = MapType.hybrid;
 
-  // ← اسم الموقع الحقيقي المحدد (من GPS أو من البحث)
   String _realLocationName = '';
+  
+  // للإشارة إلى ما إذا كان المستخدم قد أدخل مساحة (يدوياً أو بالرسم)
+  bool get _hasAreaEntered => _calculatedArea > 0 || _areaController.text.trim().isNotEmpty;
 
   @override
   void initState() {
@@ -75,14 +84,13 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
     _latController.dispose();
     _lngController.dispose();
     _areaController.dispose();
-    _farmNameController.dispose();
     _searchController.dispose();
     _searchDebounce?.cancel();
     _removeSearchOverlay();
     super.dispose();
   }
 
-  // ── GPS ───────────────────────────────────────────────────────────
+  // ── GPS ────────────────────────────────────────────────────────────
   Future<void> _getUserLocation() async {
     setState(() => _isLoadingLocation = true);
     try {
@@ -107,9 +115,13 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
         timeLimit: const Duration(seconds: 15),
       );
 
-      final loc = LatLng(position.latitude, position.longitude);
+      // ← تحقق إن الموقع داخل الجزائر
+      if (!_isInAlgeria(position.latitude, position.longitude)) {
+        if (mounted) _showError('موقعك الحالي خارج الجزائر');
+        return;
+      }
 
-      // ← جلب اسم الموقع الحقيقي عبر Reverse Geocoding
+      final loc = LatLng(position.latitude, position.longitude);
       final realName =
           await _reverseGeocode(position.latitude, position.longitude);
 
@@ -120,7 +132,6 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
           _latController.text = loc.latitude.toStringAsFixed(6);
           _lngController.text = loc.longitude.toStringAsFixed(6);
           _realLocationName = realName;
-          // ← عرض اسم الموقع الحقيقي في شريط البحث
           _searchController.text = realName;
         });
         final ctrl = await _mapController.future;
@@ -134,19 +145,25 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
     }
   }
 
-  // ── Reverse Geocoding (Nominatim) ─────────────────────────────────
+  bool _isInAlgeria(double lat, double lng) {
+    return lat >= _DZ_LAT_MIN &&
+        lat <= _DZ_LAT_MAX &&
+        lng >= _DZ_LNG_MIN &&
+        lng <= _DZ_LNG_MAX;
+  }
+
+  // ── Reverse Geocoding ──────────────────────────────────────────────
   Future<String> _reverseGeocode(double lat, double lng) async {
     try {
       final uri = Uri.parse(
         'https://nominatim.openstreetmap.org/reverse'
-        '?lat=$lat&lon=$lng&format=json&accept-language=ar',
+        '?lat=$lat&lon=$lng&format=json&accept-language=ar&countrycodes=dz',
       );
       final res =
           await http.get(uri, headers: {'User-Agent': 'AgriPalApp/1.0'});
       if (res.statusCode == 200) {
         final data = json.decode(res.body) as Map<String, dynamic>;
         final addr = data['address'] as Map<String, dynamic>? ?? {};
-        // أولوية: قرية > بلدة > مدينة > بلدية > ولاية
         return (addr['village'] as String?) ??
             (addr['town'] as String?) ??
             (addr['city'] as String?) ??
@@ -159,7 +176,7 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
     return 'موقعي';
   }
 
-  // ── Search via Nominatim (OpenStreetMap) ─────────────────────────
+  // ── Search — مقيّد بالجزائر فقط ────────────────────────────────────
   void _onSearchChanged(String query) {
     _searchDebounce?.cancel();
     if (query.trim().isEmpty) {
@@ -174,9 +191,11 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
   Future<void> _doSearch(String query) async {
     setState(() => _isSearching = true);
     try {
+      // countrycodes=dz  →  نتائج الجزائر فقط
       final uri = Uri.parse(
         'https://nominatim.openstreetmap.org/search'
-        '?q=${Uri.encodeComponent(query)}&format=json&limit=5&accept-language=ar',
+        '?q=${Uri.encodeComponent(query)}'
+        '&format=json&limit=5&accept-language=ar&countrycodes=dz',
       );
       final res =
           await http.get(uri, headers: {'User-Agent': 'AgriPalApp/1.0'});
@@ -246,8 +265,7 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color:
-                                AppColors.primary.withValues(alpha: 0.1),
+                            color: AppColors.primary.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(Icons.location_on_rounded,
@@ -302,7 +320,6 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
       _searchController.text = shortName;
       _latController.text = loc.latitude.toStringAsFixed(6);
       _lngController.text = loc.longitude.toStringAsFixed(6);
-      // ← حفظ اسم الموقع الحقيقي من نتيجة البحث
       _realLocationName = shortName;
     });
     final ctrl = await _mapController.future;
@@ -310,8 +327,13 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
     _updateSingleMarker(loc);
   }
 
-  // ── Map ───────────────────────────────────────────────────────────
+  // ── Map ────────────────────────────────────────────────────────────
   void _onMapTap(LatLng position) {
+    // ← رفض أي نقرة خارج الجزائر
+    if (!_isInAlgeria(position.latitude, position.longitude)) {
+      _showError('يرجى تحديد موقع داخل الجزائر');
+      return;
+    }
     setState(() => _searchResults = []);
     _removeSearchOverlay();
     FocusScope.of(context).unfocus();
@@ -327,7 +349,6 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
         _lngController.text = position.longitude.toStringAsFixed(6);
         _updateSingleMarker(position);
       });
-      // ← عند النقر على الخريطة نجلب اسم الموقع تلقائياً
       _reverseGeocode(position.latitude, position.longitude).then((name) {
         if (mounted) {
           setState(() {
@@ -445,56 +466,78 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
 
   // ── Save ──────────────────────────────────────────────────────────
   Future<void> _save() async {
+    // ✅ التحقق من إدخال المساحة (إجباري)
+    if (!_hasAreaEntered) {
+      _showError('يرجى إدخال مساحة الأرض (يدوياً أو باستخدام أداة الرسم)');
+      return;
+    }
+    
     if (_selectedLocation == null && _polygonPoints.length < 3) {
-      _showError('يرجى تحديد موقع الأرض أو رسمها على الخريطة');
+      _showError('يرجى تحديد موقع الأرض على الخريطة');
       return;
     }
-    if (_farmNameController.text.trim().isEmpty) {
-      _showError('يرجى إدخال اسم المزرعة');
-      return;
-    }
+    
     setState(() => _isSaving = true);
     try {
-      final prefs = await SharedPreferences.getInstance();
       final lat = _polygonPoints.length >= 3
-          ? _polygonPoints
-                  .map((p) => p.latitude)
-                  .reduce((a, b) => a + b) /
+          ? _polygonPoints.map((p) => p.latitude).reduce((a, b) => a + b) /
               _polygonPoints.length
           : _selectedLocation!.latitude;
       final lng = _polygonPoints.length >= 3
-          ? _polygonPoints
-                  .map((p) => p.longitude)
-                  .reduce((a, b) => a + b) /
+          ? _polygonPoints.map((p) => p.longitude).reduce((a, b) => a + b) /
               _polygonPoints.length
           : _selectedLocation!.longitude;
 
-      await prefs.setDouble('farm_lat', lat);
-      await prefs.setDouble('farm_lng', lng);
-      // ← احفظ اسم المزرعة (ما يختاره المستخدم)
-      await prefs.setString('farm_name', _farmNameController.text.trim());
-
-      // ← احفظ اسم الموقع الحقيقي (من GPS أو البحث أو Reverse Geocoding)
+      // جلب اسم الموقع إن لم يكن محدداً
       String locationName = _realLocationName.trim();
       if (locationName.isEmpty) {
-        // آخر محاولة: نجلبه الآن
         locationName = await _reverseGeocode(lat, lng);
       }
+
+      // المساحة: من الرسم أو من الخانة اليدوية
+      final double areaToSave = _calculatedArea > 0
+          ? _calculatedArea
+          : _parseAreaFromText(_areaController.text);
+          
+      if (areaToSave <= 0) {
+        _showError('يرجى إدخال مساحة صالحة (أكبر من 0)');
+        setState(() => _isSaving = false);
+        return;
+      }
+
+      // حفظ في SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setDouble('farm_lat', lat);
+      await prefs.setDouble('farm_lng', lng);
       await prefs.setString('farm_location_name', locationName);
+      await prefs.setDouble('farm_area', areaToSave);
 
-      await prefs.setDouble('farm_area', _calculatedArea);
-
+      // ← نرجع Map بالبيانات لـ FarmSetupSheet باش يحدّث locationDisplayName والمساحة
       if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-        );
+        Navigator.pop(context, {
+          'locationName': locationName,
+          'lat': lat,
+          'lng': lng,
+          'area': areaToSave,
+        });
       }
     } catch (e) {
       _showError('حدث خطأ: $e');
     } finally {
       if (mounted) setState(() => _isSaving = false);
     }
+  }
+  
+  // دالة لتحويل النص المدخل إلى رقم (م²)
+  double _parseAreaFromText(String text) {
+    if (text.isEmpty) return 0;
+    String cleaned = text.replaceAll(RegExp(r'[^\d.]'), '');
+    // التعامل مع الهكتار إذا وجد
+    if (text.contains('هكتار') || text.toLowerCase().contains('ha')) {
+      final double hectares = double.tryParse(cleaned) ?? 0;
+      return hectares * 10000; // تحويل هكتار إلى م²
+    }
+    return double.tryParse(cleaned) ?? 0;
   }
 
   void _showError(String msg) {
@@ -513,14 +556,17 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
     return Scaffold(
       body: Stack(
         children: [
-          // Map
+          // ← Map تبدأ على الجزائر كاملة (zoom=5)
           GoogleMap(
-            initialCameraPosition: CameraPosition(
-              target: _currentPosition ?? const LatLng(36.7, 3.05),
-              zoom: _currentPosition != null ? 17 : 6,
+            initialCameraPosition: const CameraPosition(
+              target: _kAlgeriaCenter,
+              zoom: 5.5,
             ),
             mapType: _mapType,
-            onMapCreated: (c) => _mapController.complete(c),
+            onMapCreated: (c) {
+              _mapController.complete(c);
+              // إذا لم يتم تحديد GPS نبقى على الجزائر
+            },
             onTap: _onMapTap,
             markers: _markers,
             polygons: _polygons,
@@ -529,6 +575,13 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
             myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
             mapToolbarEnabled: false,
+            // ← تقييد الكاميرا داخل الجزائر
+            cameraTargetBounds: CameraTargetBounds(
+              LatLngBounds(
+                southwest: const LatLng(_DZ_LAT_MIN, _DZ_LNG_MIN),
+                northeast: const LatLng(_DZ_LAT_MAX, _DZ_LNG_MAX),
+              ),
+            ),
           ),
 
           // ── Top Controls ──
@@ -539,7 +592,6 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Title row
                   Row(
                     children: [
                       _glassCard(
@@ -599,10 +651,9 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
                             textDirection: TextDirection.rtl,
                             onChanged: _onSearchChanged,
                             decoration: InputDecoration(
-                              hintText: 'ابحث عن قرية، مدينة...',
+                              hintText: 'ابحث عن منطقة في الجزائر...',
                               hintStyle: TextStyle(
-                                  color: Colors.grey.shade400,
-                                  fontSize: 13),
+                                  color: Colors.grey.shade400, fontSize: 13),
                               prefixIcon: _isSearching
                                   ? Padding(
                                       padding: const EdgeInsets.all(12),
@@ -627,17 +678,15 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
                                         _removeSearchOverlay();
                                       },
                                       child: Icon(Icons.close_rounded,
-                                          color: Colors.grey.shade400,
-                                          size: 18),
+                                          color: Colors.grey.shade400, size: 18),
                                     )
                                   : null,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(14),
                                 borderSide: BorderSide.none,
                               ),
-                              contentPadding:
-                                  const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 13),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 13),
                             ),
                           ),
                         ),
@@ -645,10 +694,8 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
 
                       const SizedBox(width: 8),
 
-                      // زر موقعي
                       GestureDetector(
-                        onTap:
-                            _isLoadingLocation ? null : _getUserLocation,
+                        onTap: _isLoadingLocation ? null : _getUserLocation,
                         child: Container(
                           width: 48,
                           height: 48,
@@ -657,8 +704,7 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
                             borderRadius: BorderRadius.circular(14),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.primary
-                                    .withValues(alpha: 0.4),
+                                color: AppColors.primary.withValues(alpha: 0.4),
                                 blurRadius: 12,
                                 offset: const Offset(0, 4),
                               ),
@@ -668,8 +714,7 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
                               ? const Padding(
                                   padding: EdgeInsets.all(12),
                                   child: CircularProgressIndicator(
-                                      strokeWidth: 2.5,
-                                      color: Colors.white),
+                                      strokeWidth: 2.5, color: Colors.white),
                                 )
                               : const Icon(Icons.my_location_rounded,
                                   color: Colors.white, size: 22),
@@ -689,8 +734,8 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
               left: 16,
               right: 16,
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
                   color: AppColors.primary.withValues(alpha: 0.92),
                   borderRadius: BorderRadius.circular(14),
@@ -724,7 +769,7 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
           // ── FABs ──
           Positioned(
             right: 12,
-            bottom: 390,
+            bottom: 330,
             child: Column(
               children: [
                 ScaleTransition(
@@ -806,20 +851,42 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
 
                       if (_calculatedArea > 0) _buildAreaBadge(),
 
-                      _buildSectionLabel('اسم المزرعة'),
-                      _buildTextField(
-                        controller: _farmNameController,
-                        hint: 'مثال: مزرعة الوادي الخضراء',
-                        icon: Icons.agriculture_rounded,
+                      // ← حقل المساحة (إجباري الآن)
+                      _buildSectionLabel(
+                        'مساحة الأرض *',
+                        isRequired: true,
                       ),
-                      const SizedBox(height: 16),
+                      _buildTextField(
+                        controller: _areaController,
+                        hint: 'مثال: 5000 أو 2.5 هكتار',
+                        icon: Icons.square_foot_rounded,
+                        onChanged: (_) => setState(() {}), // لتحديث حالة الزر
+                      ),
+                      const SizedBox(height: 6),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Row(
+                          children: [
+                            Icon(Icons.info_outline, size: 12, color: Colors.grey.shade400),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                'أو استخدم أداة الرسم ✏️ لحساب المساحة تلقائياً',
+                                style: TextStyle(
+                                    fontSize: 11, color: Colors.grey.shade400),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
 
                       GestureDetector(
                         onTap: () => setState(
                             () => _showManualInput = !_showManualInput),
                         child: Row(
                           children: [
-                            _buildSectionLabel('الإحداثيات اليدوية'),
+                            _buildSectionLabel('الإحداثيات'),
                             const Spacer(),
                             Icon(
                               _showManualInput
@@ -856,53 +923,93 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12),
-                        _buildTextField(
-                          controller: _areaController,
-                          hint: 'المساحة (اختياري)',
-                          icon: Icons.square_foot_rounded,
-                        ),
                       ],
 
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
                       _buildStatusRow(),
                       const SizedBox(height: 16),
 
-                      SizedBox(
-                        width: double.infinity,
-                        height: 52,
-                        child: ElevatedButton(
-                          onPressed: _isSaving ? null : _save,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16)),
-                            elevation: 0,
+                      // ← زر متناسق مع FarmSetupSheet
+                      Row(
+                        children: [
+                          // زر رجوع
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () => Navigator.pop(context),
+                              style: OutlinedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 14),
+                                side: BorderSide(
+                                    color: AppColors.primary
+                                        .withValues(alpha: 0.4)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14)),
+                              ),
+                              child: Text(
+                                'رجوع',
+                                style: TextStyle(
+                                    color: AppColors.primary, fontSize: 14),
+                              ),
+                            ),
                           ),
-                          child: _isSaving
-                              ? const SizedBox(
-                                  width: 22,
-                                  height: 22,
-                                  child: CircularProgressIndicator(
-                                      strokeWidth: 2.5,
-                                      color: Colors.white))
-                              : const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.check_circle_rounded,
-                                        size: 20),
-                                    SizedBox(width: 8),
-                                    Text('حفظ والمتابعة',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight:
-                                                FontWeight.bold)),
-                                  ],
-                                ),
-                        ),
+                          const SizedBox(width: 12),
+                          // زر حفظ - يتم تعطيله إذا لم يتم إدخال مساحة
+                          Expanded(
+                            flex: 2,
+                            child: ElevatedButton(
+                              onPressed: (_isSaving || !_hasAreaEntered || (_selectedLocation == null && _polygonPoints.length < 3))
+                                  ? null
+                                  : _save,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 14),
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14)),
+                              ),
+                              child: _isSaving
+                                  ? const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                          strokeWidth: 2.5,
+                                          color: Colors.white),
+                                    )
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Text(
+                                          'تأكيد الموقع',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        const SizedBox(width: 6),
+                                        const Icon(Icons.check_rounded,
+                                            color: Colors.white, size: 16),
+                                      ],
+                                    ),
+                            ),
+                          ),
+                        ],
                       ),
+                      
+                      // رسالة تحذيرية إذا لم يتم إدخال مساحة
+                      if (!_hasAreaEntered && !_isSaving)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            '⚠️ مساحة الأرض مطلوبة',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.orange.shade700,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -918,12 +1025,15 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
     final lat = double.tryParse(_latController.text);
     final lng = double.tryParse(_lngController.text);
     if (lat != null && lng != null) {
+      if (!_isInAlgeria(lat, lng)) {
+        _showError('الإحداثيات خارج نطاق الجزائر');
+        return;
+      }
       final pos = LatLng(lat, lng);
       setState(() => _selectedLocation = pos);
       _updateSingleMarker(pos);
-      _mapController.future
-          .then((c) => c.animateCamera(CameraUpdate.newLatLngZoom(pos, 16)));
-      // ← جلب اسم الموقع من الإحداثيات اليدوية أيضاً
+      _mapController.future.then(
+          (c) => c.animateCamera(CameraUpdate.newLatLngZoom(pos, 16)));
       _reverseGeocode(lat, lng).then((name) {
         if (mounted) {
           setState(() {
@@ -940,13 +1050,12 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: wide ? 14 : 10, vertical: 10),
+        padding:
+            EdgeInsets.symmetric(horizontal: wide ? 14 : 10, vertical: 10),
         decoration: BoxDecoration(
           color: Colors.black.withValues(alpha: 0.45),
           borderRadius: BorderRadius.circular(14),
-          border:
-              Border.all(color: Colors.white.withValues(alpha: 0.15)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
         ),
         child: child,
       ),
@@ -988,14 +1097,20 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
     );
   }
 
-  Widget _buildSectionLabel(String label) {
+  Widget _buildSectionLabel(String label, {bool isRequired = false}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Text(label,
-          style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: Colors.grey.shade600)),
+      child: Row(
+        children: [
+          Text(label,
+              style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey.shade600)),
+          if (isRequired)
+            Text(' *', style: TextStyle(color: Colors.red.shade500, fontSize: 13)),
+        ],
+      ),
     );
   }
 
@@ -1013,8 +1128,7 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
       textDirection: TextDirection.rtl,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle:
-            TextStyle(color: Colors.grey.shade400, fontSize: 13),
+        hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
         prefixIcon: Icon(icon, color: AppColors.primary, size: 18),
         filled: true,
         fillColor: AppColors.primary.withValues(alpha: 0.05),
@@ -1022,18 +1136,17 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
             const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-              color: AppColors.primary.withValues(alpha: 0.15)),
+          borderSide:
+              BorderSide(color: AppColors.primary.withValues(alpha: 0.15)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-              color: AppColors.primary.withValues(alpha: 0.15)),
+          borderSide:
+              BorderSide(color: AppColors.primary.withValues(alpha: 0.15)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide:
-              BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
         ),
       ),
     );
@@ -1042,8 +1155,7 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
   Widget _buildAreaBadge() {
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
-      padding:
-          const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         gradient: LinearGradient(colors: [
           AppColors.primary.withValues(alpha: 0.12),
@@ -1062,8 +1174,7 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('مساحة الأرض المحسوبة',
-                  style:
-                      TextStyle(fontSize: 11, color: Colors.grey)),
+                  style: TextStyle(fontSize: 11, color: Colors.grey)),
               Text(_areaController.text,
                   style: TextStyle(
                       fontSize: 15,
@@ -1079,6 +1190,7 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
   Widget _buildStatusRow() {
     final hasPolygon = _polygonPoints.length >= 3;
     final hasPin = _selectedLocation != null;
+    final hasArea = _hasAreaEntered;
     return Row(
       children: [
         _statusChip(
@@ -1094,6 +1206,12 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
           label: hasPin ? 'تم تحديد الموقع' : 'لا يوجد موقع',
           ok: hasPin,
         ),
+        const SizedBox(width: 8),
+        _statusChip(
+          icon: Icons.square_foot_rounded,
+          label: hasArea ? 'تم إدخال المساحة' : 'مساحة مطلوبة',
+          ok: hasArea,
+        ),
       ],
     );
   }
@@ -1104,8 +1222,7 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
       required bool ok}) {
     return Expanded(
       child: Container(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: ok
               ? AppColors.primary.withValues(alpha: 0.08)
@@ -1129,8 +1246,7 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
                 label,
                 style: TextStyle(
                   fontSize: 11,
-                  color:
-                      ok ? AppColors.primary : Colors.grey.shade500,
+                  color: ok ? AppColors.primary : Colors.grey.shade500,
                   fontWeight:
                       ok ? FontWeight.w600 : FontWeight.normal,
                 ),

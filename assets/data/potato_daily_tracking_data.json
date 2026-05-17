@@ -1,0 +1,2841 @@
+[
+  {
+    "day": 1,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": "NPK متوازن (مثل Patstart/Patroot)",
+      "quantity_kg_per_hectare": "حسب تحليل التربة، جزء من الجرعة الأساسية",
+      "method": "أساسي (Basal) عند الغرس",
+      "notes": "لتحفيز نمو الجذور الأولي."
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": "يوم الغرس. الري مباشرة بعد الغرس."
+  },
+  {
+    "day": 2,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 3,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 4,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 5,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 6,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 7,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 8,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 9,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 10,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "تغيرات في درجات الحرارة",
+        "threshold": "تقلبات كبيرة",
+        "impact": "إجهاد على النباتات",
+        "recommendation": "مراقبة النباتات عن كثب وتعديل الري حسب الحاجة."
+      }
+    ],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 11,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 12,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 13,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 14,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 15,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "درجات حرارة منخفضة",
+        "threshold": "أقل من 10 درجات مئوية",
+        "impact": "تثبيط نمو البراعم، تأخر الإنبات",
+        "recommendation": "تغطية النباتات الصغيرة بالبلاستيك أو القش للحماية من الصقيع."
+      }
+    ],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 16,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 17,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 18,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 19,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 20,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "تغيرات في درجات الحرارة",
+        "threshold": "تقلبات كبيرة",
+        "impact": "إجهاد على النباتات",
+        "recommendation": "مراقبة النباتات عن كثب وتعديل الري حسب الحاجة."
+      },
+      {
+        "type": "درجات حرارة منخفضة",
+        "threshold": "أقل من 10 درجات مئوية",
+        "impact": "تثبيط نمو البراعم، تأخر الإنبات",
+        "recommendation": "تغطية النباتات الصغيرة بالبلاستيك أو القش للحماية من الصقيع."
+      }
+    ],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 21,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 22,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 23,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 24,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 25,
+    "growth_stage": "تطور البراعم الأولي (Sprout Development)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.5,
+      "frequency": "يومي أو كل يومين",
+      "method": "رش خفيف أو تنقيط",
+      "notes": "الحفاظ على رطوبة التربة السطحية لتشجيع الإنبات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "درجات حرارة منخفضة",
+        "threshold": "أقل من 10 درجات مئوية",
+        "impact": "تثبيط نمو البراعم، تأخر الإنبات",
+        "recommendation": "تغطية النباتات الصغيرة بالبلاستيك أو القش للحماية من الصقيع."
+      }
+    ],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 26,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": "نيتروجين عالٍ (مثل Patgrow/Patgreen)",
+      "quantity_kg_per_hectare": "حسب تحليل التربة واحتياجات الصنف",
+      "method": "تسميد ورقي أو مع مياه الري (Fertigation)",
+      "notes": "لتحفيز النمو الخضري القوي وتكوين مجموع ورقي جيد."
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 27,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 28,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 29,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 30,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "تغيرات في درجات الحرارة",
+        "threshold": "تقلبات كبيرة",
+        "impact": "إجهاد على النباتات",
+        "recommendation": "مراقبة النباتات عن كثب وتعديل الري حسب الحاجة."
+      }
+    ],
+    "pest_disease_warnings": [
+      {
+        "name": "المن (Aphids)",
+        "risk_factors": "درجات حرارة معتدلة، رطوبة نسبية عالية",
+        "symptoms": "التفاف الأوراق، وجود حشرات صغيرة على السطح السفلي للأوراق، إفراز الندوة العسلية.",
+        "prevention_control": "مراقبة دورية، استخدام المبيدات الحشرية المناسبة عند الضرورة، تشجيع الأعداء الطبيعية."
+      }
+    ],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 31,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 32,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 33,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": "نيتروجين عالٍ (مثل Patgrow/Patgreen)",
+      "quantity_kg_per_hectare": "حسب تحليل التربة واحتياجات الصنف",
+      "method": "تسميد ورقي أو مع مياه الري (Fertigation)",
+      "notes": "لتحفيز النمو الخضري القوي وتكوين مجموع ورقي جيد."
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 34,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 35,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": "العزيق والتحضين (Hilling) لحماية الدرنات من الضوء الأخضر وتوفير بيئة جيدة للنمو."
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 36,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 37,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 38,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 39,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 40,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": "نيتروجين عالٍ (مثل Patgrow/Patgreen)",
+      "quantity_kg_per_hectare": "حسب تحليل التربة واحتياجات الصنف",
+      "method": "تسميد ورقي أو مع مياه الري (Fertigation)",
+      "notes": "لتحفيز النمو الخضري القوي وتكوين مجموع ورقي جيد."
+    },
+    "weather_alerts": [
+      {
+        "type": "تغيرات في درجات الحرارة",
+        "threshold": "تقلبات كبيرة",
+        "impact": "إجهاد على النباتات",
+        "recommendation": "مراقبة النباتات عن كثب وتعديل الري حسب الحاجة."
+      }
+    ],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 41,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 42,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 43,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 44,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 45,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "درجات حرارة مرتفعة",
+        "threshold": "أكثر من 30 درجة مئوية",
+        "impact": "إجهاد حراري، تثبيط النمو، حروق الأوراق",
+        "recommendation": "زيادة فترات الري، الري في الصباح الباكر أو المساء، استخدام مواد عاكسة للحرارة إن أمكن."
+      }
+    ],
+    "pest_disease_warnings": [
+      {
+        "name": "المن (Aphids)",
+        "risk_factors": "درجات حرارة معتدلة، رطوبة نسبية عالية",
+        "symptoms": "التفاف الأوراق، وجود حشرات صغيرة على السطح السفلي للأوراق، إفراز الندوة العسلية.",
+        "prevention_control": "مراقبة دورية، استخدام المبيدات الحشرية المناسبة عند الضرورة، تشجيع الأعداء الطبيعية."
+      }
+    ],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 46,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 47,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": "نيتروجين عالٍ (مثل Patgrow/Patgreen)",
+      "quantity_kg_per_hectare": "حسب تحليل التربة واحتياجات الصنف",
+      "method": "تسميد ورقي أو مع مياه الري (Fertigation)",
+      "notes": "لتحفيز النمو الخضري القوي وتكوين مجموع ورقي جيد."
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 48,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 49,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 50,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "تغيرات في درجات الحرارة",
+        "threshold": "تقلبات كبيرة",
+        "impact": "إجهاد على النباتات",
+        "recommendation": "مراقبة النباتات عن كثب وتعديل الري حسب الحاجة."
+      },
+      {
+        "type": "درجات حرارة مرتفعة",
+        "threshold": "أكثر من 30 درجة مئوية",
+        "impact": "إجهاد حراري، تثبيط النمو، حروق الأوراق",
+        "recommendation": "زيادة فترات الري، الري في الصباح الباكر أو المساء، استخدام مواد عاكسة للحرارة إن أمكن."
+      }
+    ],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 51,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 52,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 53,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 54,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": "نيتروجين عالٍ (مثل Patgrow/Patgreen)",
+      "quantity_kg_per_hectare": "حسب تحليل التربة واحتياجات الصنف",
+      "method": "تسميد ورقي أو مع مياه الري (Fertigation)",
+      "notes": "لتحفيز النمو الخضري القوي وتكوين مجموع ورقي جيد."
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 55,
+    "growth_stage": "النمو الخضري (Vegetative Growth)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.0,
+      "frequency": "يومي أو كل يومين",
+      "method": "تنقيط أو رش",
+      "notes": "زيادة كمية الري تدريجياً مع نمو النبات. الحفاظ على رطوبة التربة في منطقة الجذور."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "درجات حرارة مرتفعة",
+        "threshold": "أكثر من 30 درجة مئوية",
+        "impact": "إجهاد حراري، تثبيط النمو، حروق الأوراق",
+        "recommendation": "زيادة فترات الري، الري في الصباح الباكر أو المساء، استخدام مواد عاكسة للحرارة إن أمكن."
+      }
+    ],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 56,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": "بوتاسيوم عالٍ (مثل Patfert) وفوسفور",
+      "quantity_kg_per_hectare": "حسب تحليل التربة واحتياجات الصنف",
+      "method": "تسميد ورقي أو مع مياه الري (Fertigation)",
+      "notes": "لزيادة حجم وجودة الدرنات."
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 57,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 58,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 59,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 60,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "تغيرات في درجات الحرارة",
+        "threshold": "تقلبات كبيرة",
+        "impact": "إجهاد على النباتات",
+        "recommendation": "مراقبة النباتات عن كثب وتعديل الري حسب الحاجة."
+      },
+      {
+        "type": "درجات حرارة مرتفعة",
+        "threshold": "أكثر من 30 درجة مئوية",
+        "impact": "إجهاد حراري، تثبيط النمو، حروق الأوراق",
+        "recommendation": "زيادة فترات الري، الري في الصباح الباكر أو المساء، استخدام مواد عاكسة للحرارة إن أمكن."
+      }
+    ],
+    "pest_disease_warnings": [
+      {
+        "name": "اللفحة المتأخرة (Late Blight)",
+        "risk_factors": "رطوبة عالية، درجات حرارة معتدلة (10-25 درجة مئوية)",
+        "symptoms": "بقع مائية على الأوراق تتحول إلى بنية/سوداء، عفن على الدرنات.",
+        "prevention_control": "الرش الوقائي بالمبيدات الفطرية، تحسين التهوية، استخدام أصناف مقاومة."
+      }
+    ],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 61,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 62,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 63,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": "بوتاسيوم عالٍ (مثل Patfert) وفوسفور",
+      "quantity_kg_per_hectare": "حسب تحليل التربة واحتياجات الصنف",
+      "method": "تسميد ورقي أو مع مياه الري (Fertigation)",
+      "notes": "لزيادة حجم وجودة الدرنات."
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 64,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 65,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "درجات حرارة مرتفعة",
+        "threshold": "أكثر من 30 درجة مئوية",
+        "impact": "إجهاد حراري، تثبيط النمو، حروق الأوراق",
+        "recommendation": "زيادة فترات الري، الري في الصباح الباكر أو المساء، استخدام مواد عاكسة للحرارة إن أمكن."
+      }
+    ],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 66,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 67,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 68,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 69,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 70,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": "بوتاسيوم عالٍ (مثل Patfert) وفوسفور",
+      "quantity_kg_per_hectare": "حسب تحليل التربة واحتياجات الصنف",
+      "method": "تسميد ورقي أو مع مياه الري (Fertigation)",
+      "notes": "لزيادة حجم وجودة الدرنات."
+    },
+    "weather_alerts": [
+      {
+        "type": "تغيرات في درجات الحرارة",
+        "threshold": "تقلبات كبيرة",
+        "impact": "إجهاد على النباتات",
+        "recommendation": "مراقبة النباتات عن كثب وتعديل الري حسب الحاجة."
+      },
+      {
+        "type": "درجات حرارة مرتفعة",
+        "threshold": "أكثر من 30 درجة مئوية",
+        "impact": "إجهاد حراري، تثبيط النمو، حروق الأوراق",
+        "recommendation": "زيادة فترات الري، الري في الصباح الباكر أو المساء، استخدام مواد عاكسة للحرارة إن أمكن."
+      }
+    ],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 71,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 72,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 73,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 74,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 75,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "درجات حرارة مرتفعة",
+        "threshold": "أكثر من 30 درجة مئوية",
+        "impact": "إجهاد حراري، تثبيط النمو، حروق الأوراق",
+        "recommendation": "زيادة فترات الري، الري في الصباح الباكر أو المساء، استخدام مواد عاكسة للحرارة إن أمكن."
+      }
+    ],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 76,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 77,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": "بوتاسيوم عالٍ (مثل Patfert) وفوسفور",
+      "quantity_kg_per_hectare": "حسب تحليل التربة واحتياجات الصنف",
+      "method": "تسميد ورقي أو مع مياه الري (Fertigation)",
+      "notes": "لزيادة حجم وجودة الدرنات."
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 78,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 79,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 80,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "تغيرات في درجات الحرارة",
+        "threshold": "تقلبات كبيرة",
+        "impact": "إجهاد على النباتات",
+        "recommendation": "مراقبة النباتات عن كثب وتعديل الري حسب الحاجة."
+      }
+    ],
+    "pest_disease_warnings": [
+      {
+        "name": "اللفحة المتأخرة (Late Blight)",
+        "risk_factors": "رطوبة عالية، درجات حرارة معتدلة (10-25 درجة مئوية)",
+        "symptoms": "بقع مائية على الأوراق تتحول إلى بنية/سوداء، عفن على الدرنات.",
+        "prevention_control": "الرش الوقائي بالمبيدات الفطرية، تحسين التهوية، استخدام أصناف مقاومة."
+      }
+    ],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 81,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 82,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 83,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 84,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": "بوتاسيوم عالٍ (مثل Patfert) وفوسفور",
+      "quantity_kg_per_hectare": "حسب تحليل التربة واحتياجات الصنف",
+      "method": "تسميد ورقي أو مع مياه الري (Fertigation)",
+      "notes": "لزيادة حجم وجودة الدرنات."
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 85,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 86,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 87,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 88,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 89,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 90,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "تغيرات في درجات الحرارة",
+        "threshold": "تقلبات كبيرة",
+        "impact": "إجهاد على النباتات",
+        "recommendation": "مراقبة النباتات عن كثب وتعديل الري حسب الحاجة."
+      }
+    ],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 91,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": "بوتاسيوم عالٍ (مثل Patfert) وفوسفور",
+      "quantity_kg_per_hectare": "حسب تحليل التربة واحتياجات الصنف",
+      "method": "تسميد ورقي أو مع مياه الري (Fertigation)",
+      "notes": "لزيادة حجم وجودة الدرنات."
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 92,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 93,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 94,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 95,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 96,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 97,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 98,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": "بوتاسيوم عالٍ (مثل Patfert) وفوسفور",
+      "quantity_kg_per_hectare": "حسب تحليل التربة واحتياجات الصنف",
+      "method": "تسميد ورقي أو مع مياه الري (Fertigation)",
+      "notes": "لزيادة حجم وجودة الدرنات."
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 99,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 100,
+    "growth_stage": "مرحلة التحجيم (Tuber Bulking)",
+    "irrigation": {
+      "quantity_liters_per_plant": 1.5,
+      "frequency": "يومي",
+      "method": "تنقيط (مفضل) أو رش",
+      "notes": "فترة حرجة لاحتياجات المياه. أي نقص يؤثر سلباً على حجم وجودة الدرنات. في المناطق الجافة (مثل الوادي) قد تصل الاحتياجات إلى 6.5-7.5 ملم/يوم."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "تغيرات في درجات الحرارة",
+        "threshold": "تقلبات كبيرة",
+        "impact": "إجهاد على النباتات",
+        "recommendation": "مراقبة النباتات عن كثب وتعديل الري حسب الحاجة."
+      }
+    ],
+    "pest_disease_warnings": [
+      {
+        "name": "اللفحة المتأخرة (Late Blight)",
+        "risk_factors": "رطوبة عالية، درجات حرارة معتدلة (10-25 درجة مئوية)",
+        "symptoms": "بقع مائية على الأوراق تتحول إلى بنية/سوداء، عفن على الدرنات.",
+        "prevention_control": "الرش الوقائي بالمبيدات الفطرية، تحسين التهوية، استخدام أصناف مقاومة."
+      }
+    ],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 101,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 102,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 103,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 104,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 105,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 106,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 107,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 108,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 109,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 110,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "تغيرات في درجات الحرارة",
+        "threshold": "تقلبات كبيرة",
+        "impact": "إجهاد على النباتات",
+        "recommendation": "مراقبة النباتات عن كثب وتعديل الري حسب الحاجة."
+      }
+    ],
+    "pest_disease_warnings": [
+      {
+        "name": "سوسة البطاطا (Potato Tuber Moth)",
+        "risk_factors": "درجات حرارة دافئة، تربة جافة ومتشققة",
+        "symptoms": "أنفاق داخل الدرنات، وجود يرقات.",
+        "prevention_control": "التحضين الجيد للدرنات، الري المنتظم، استخدام المصائد الفرمونية، المبيدات الحشرية."
+      }
+    ],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 111,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 112,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 113,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 114,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 115,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 116,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 117,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 118,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 119,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [],
+    "pest_disease_warnings": [],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  },
+  {
+    "day": 120,
+    "growth_stage": "مرحلة النضج (Maturation)",
+    "irrigation": {
+      "quantity_liters_per_plant": 0.7,
+      "frequency": "كل 2-3 أيام",
+      "method": "تنقيط أو رش",
+      "notes": "تقليل الري تدريجياً لتشجيع نضج الدرنات وتكوين القشرة. تجنب الإفراط في الري لتجنب تعفن الدرنات."
+    },
+    "fertilization": {
+      "type": null,
+      "quantity_kg_per_hectare": null,
+      "method": null,
+      "notes": ""
+    },
+    "weather_alerts": [
+      {
+        "type": "تغيرات في درجات الحرارة",
+        "threshold": "تقلبات كبيرة",
+        "impact": "إجهاد على النباتات",
+        "recommendation": "مراقبة النباتات عن كثب وتعديل الري حسب الحاجة."
+      }
+    ],
+    "pest_disease_warnings": [
+      {
+        "name": "سوسة البطاطا (Potato Tuber Moth)",
+        "risk_factors": "درجات حرارة دافئة، تربة جافة ومتشققة",
+        "symptoms": "أنفاق داخل الدرنات، وجود يرقات.",
+        "prevention_control": "التحضين الجيد للدرنات، الري المنتظم، استخدام المصائد الفرمونية، المبيدات الحشرية."
+      }
+    ],
+    "soil_management": {
+      "notes": ""
+    },
+    "general_notes": ""
+  }
+]

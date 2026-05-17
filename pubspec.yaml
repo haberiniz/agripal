@@ -14,6 +14,7 @@ dependencies:
   firebase_core: 3.13.0
   firebase_auth: 5.5.1
   google_sign_in: 6.3.0
+  cloud_firestore: ^5.6.0
 
   # باقي الباكاجات
   flutter_svg: ^2.0.17
@@ -26,6 +27,9 @@ dependencies:
   geolocator: ^13.0.1
   shared_preferences: ^2.3.2   # ← مرة وحدة فقط (حذفنا ^2.2.2)
   http: ^1.2.2
+  intl: ^0.19.0
+  webview_flutter: ^4.0.0
+ 
 
 dev_dependencies:
   flutter_test:
@@ -33,6 +37,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.4
   flutter_native_splash: ^2.4.4
+  flutter_riverpod: ^2.5.1
 
 flutter_launcher_icons:
   android: true
@@ -63,3 +68,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/data/
+    - assets/data/potato_encyclopedia_dz.json
+    - app/app.zip

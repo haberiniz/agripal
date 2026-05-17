@@ -1,0 +1,345 @@
+{
+  "Sols alluviaux": {
+    "code": "SA-001",
+    "texture": "Limono-sablo-argileuse",
+    "ph_min": 6.8,
+    "ph_max": 7.5,
+    "irrigation": "Modérée - 500-700 mm/an",
+    "fertilisation": "Fumier composté 20-30 t/ha + NPK équilibré",
+    "cereales": [
+      "Blé tendre",
+      "Blé dur",
+      "Orge",
+      "Avoine",
+      "Maïs",
+      "Sorgho",
+      "Triticale"
+    ],
+    "legumineuses": [
+      "Pois chiche",
+      "Lentille",
+      "Fève",
+      "Haricot",
+      "Pois",
+      "Lupin",
+      "Gesse"
+    ],
+    "legumes": [
+      "Tomate",
+      "Pomme de terre",
+      "Oignon",
+      "Ail",
+      "Carotte",
+      "Poivron",
+      "Aubergine",
+      "Courgette",
+      "Concombre",
+      "Melon",
+      "Pastèque",
+      "Chou",
+      "Artichaut",
+      "Fraise",
+      "Laitue",
+      "Épinard",
+      "Céleri",
+      "Betterave rouge",
+      "Navet",
+      "Radis"
+    ],
+    "fruitiers": [
+      "Agrumes",
+      "Olivier",
+      "Figuier",
+      "Grenadier",
+      "Pêcher",
+      "Abricotier",
+      "Pommier",
+      "Poirier",
+      "Prunier",
+      "Cerisier",
+      "Amandier",
+      "Noyer",
+      "Vigne"
+    ],
+    "cultures_industrielles": [
+      "Betterave sucrière",
+      "Tabac",
+      "Coton",
+      "Tournesol",
+      "Colza",
+      "Lin"
+    ],
+    "plantes_aromatiques": [
+      "Menthe",
+      "Basilic",
+      "Romarin",
+      "Thym",
+      "Sauge",
+      "Origan",
+      "Coriandre"
+    ],
+    "fourrages": [
+      "Luzerne",
+      "Trèfle",
+      "Vesce",
+      "Sorgho fourrager",
+      "Maïs ensilage"
+    ]
+  },
+  "Sols bruns calcaires": {
+    "code": "SB-002",
+    "texture": "Limono-argileuse",
+    "ph_min": 7.2,
+    "ph_max": 8.0,
+    "irrigation": "Complémentaire - 400-600 mm/an",
+    "fertilisation": "Phosphate naturel + engrais verts",
+    "cereales": [
+      "Blé dur (excellent)",
+      "Orge",
+      "Avoine",
+      "Triticale",
+      "Seigle"
+    ],
+    "legumineuses": [
+      "Pois chiche",
+      "Lentille",
+      "Fève",
+      "Gesse",
+      "Lupin blanc"
+    ],
+    "legumes": [
+      "Pomme de terre",
+      "Oignon",
+      "Ail",
+      "Carotte",
+      "Betterave",
+      "Artichaut"
+    ],
+    "fruitiers": [
+      "Olivier (excellent)",
+      "Amandier",
+      "Figuier",
+      "Pommier",
+      "Abricotier",
+      "Poirier",
+      "Prunier",
+      "Noyer",
+      "Vigne"
+    ],
+    "cultures_industrielles": [
+      "Tournesol",
+      "Colza",
+      "Carthame"
+    ],
+    "plantes_aromatiques": [
+      "Romarin",
+      "Thym",
+      "Lavande",
+      "Sauge",
+      "Origan"
+    ],
+    "fourrages": [
+      "Luzerne",
+      "Trèfle incarnat",
+      "Vesce",
+      "Avoine fourragère"
+    ]
+  },
+  "Vertisols": {
+    "code": "SV-003",
+    "texture": "Argileuse lourde (40-60% argile)",
+    "ph_min": 7.0,
+    "ph_max": 8.2,
+    "irrigation": "Gérée - 600-800 mm/an (éviter saturation)",
+    "fertilisation": "Fumier 15-20 t/ha + engrais verts",
+    "cereales": [
+      "Blé dur",
+      "Orge",
+      "Sorgho",
+      "Maïs",
+      "Triticale"
+    ],
+    "legumineuses": [
+      "Pois chiche",
+      "Fève",
+      "Lentille (tolérante)"
+    ],
+    "legumes": [
+      "Artichaut",
+      "Pomme de terre (légère)",
+      "Oignon",
+      "Ail"
+    ],
+    "fruitiers": [
+      "Olivier",
+      "Grenadier",
+      "Palmier dattier",
+      "Figuier"
+    ],
+    "cultures_industrielles": [
+      "Coton",
+      "Tournesol",
+      "Betterave"
+    ],
+    "plantes_aromatiques": [
+      "Menthe",
+      "Mélisse"
+    ],
+    "fourrages": [
+      "Luzerne (adaptée)",
+      "Trèfle d'Alexandrie"
+    ]
+  },
+  "Sols peu évolués d'érosion": {
+    "code": "SP-004",
+    "texture": "Caillouteuse à limoneuse",
+    "ph_min": 6.5,
+    "ph_max": 7.5,
+    "irrigation": "Pluviale - 400-600 mm/an",
+    "fertilisation": "Compost 10-15 t/ha + paillage anti-érosif",
+    "cereales": [
+      "Orge (rustique)",
+      "Seigle",
+      "Avoine",
+      "Blé dur (sur terrasses)"
+    ],
+    "legumineuses": [
+      "Fève",
+      "Pois chiche",
+      "Gesse"
+    ],
+    "legumes": [
+      "Pomme de terre (sur terrasses)",
+      "Fève",
+      "Haricot sec"
+    ],
+    "fruitiers": [
+      "Olivier (très adapté)",
+      "Figuier",
+      "Amandier",
+      "Pommier",
+      "Poirier",
+      "Cerisier",
+      "Noyer",
+      "Châtaignier"
+    ],
+    "cultures_industrielles": [],
+    "plantes_aromatiques": [
+      "Thym",
+      "Romarin",
+      "Lavande",
+      "Sarriette"
+    ],
+    "fourrages": [
+      "Trèfle souterrain",
+      "Lotus"
+    ]
+  },
+  "Sols sableux (Erg)": {
+    "code": "SS-005",
+    "texture": "Sableuse (85-95% sable)",
+    "ph_min": 7.5,
+    "ph_max": 8.5,
+    "irrigation": "Intensive - goutte-à-goutte (800-1200 mm/an)",
+    "fertilisation": "Fertilisation localisée + matière organique (40-50 t/ha fumier)",
+    "cereales": [
+      "Orge (rustique)",
+      "Millet",
+      "Sorgho"
+    ],
+    "legumineuses": [
+      "Niébé",
+      "Lentille (irriguée)"
+    ],
+    "legumes": [
+      "Pastèque",
+      "Melon",
+      "Piment",
+      "Tomate (sous serre)",
+      "Pomme de terre (irriguée)"
+    ],
+    "fruitiers": [
+      "Palmier dattier (excellent)",
+      "Grenadier",
+      "Figuier de Barbarie",
+      "Jujubier"
+    ],
+    "cultures_industrielles": [],
+    "plantes_aromatiques": [
+      "Menthe (ombragée)",
+      "Basilic (irrigué)"
+    ],
+    "fourrages": [
+      "Atriplex",
+      "Sorgho sucrier",
+      "Pennisetum"
+    ]
+  },
+  "Sols minéraux bruts (Reg)": {
+    "code": "SM-007",
+    "texture": "Caillouteuse (graviers + sable)",
+    "ph_min": 7.5,
+    "ph_max": 8.8,
+    "irrigation": "Hydroponique ou goutte-à-goutte sur substrat",
+    "fertilisation": "Hors-sol - solution nutritive complète",
+    "cereales": [],
+    "legumineuses": [],
+    "legumes": [
+      "Tomate (sous serre)",
+      "Piment (sous serre)",
+      "Laitue hydroponique"
+    ],
+    "fruitiers": [
+      "Palmier dattier (en oasis)",
+      "Figuier de Barbarie"
+    ],
+    "cultures_industrielles": [],
+    "plantes_aromatiques": [],
+    "fourrages": [
+      "Hydroseeding sur substrat"
+    ]
+  },
+  "Sols hydromorphes (Oasis)": {
+    "code": "SH-008",
+    "texture": "Limono-sableuse à sableuse",
+    "ph_min": 7.2,
+    "ph_max": 8.0,
+    "irrigation": "Submersion - 1000-1500 mm/an (traditionnelle)",
+    "fertilisation": "Fumier oasien (40-60 t/ha) + compost de palmes",
+    "cereales": [
+      "Sorgho",
+      "Millet",
+      "Orge"
+    ],
+    "legumineuses": [
+      "Niébé",
+      "Haricot"
+    ],
+    "legumes": [
+      "Tomate",
+      "Piment",
+      "Aubergine",
+      "Oignon",
+      "Ail",
+      "Pastèque",
+      "Melon"
+    ],
+    "fruitiers": [
+      "Palmier dattier (excellent)",
+      "Grenadier",
+      "Figuier",
+      "Olivier (limité)"
+    ],
+    "cultures_industrielles": [],
+    "plantes_aromatiques": [
+      "Menthe",
+      "Basilic",
+      "Persil",
+      "Coriandre"
+    ],
+    "fourrages": [
+      "Luzerne (adaptée)",
+      "Sorgho fourrager"
+    ]
+  }
+}

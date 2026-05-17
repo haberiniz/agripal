@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:agripal/screens/signin_screen.dart';
+import 'package:agripal/screens/sign_in_screen.dart';
 import 'package:agripal/core/constants/app_colors.dart';
 
 class SplashScreens extends StatefulWidget {

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:hive_flutter/hive_flutter.dart'; // ✅ أضفنا هذا
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:agripal/screens/splash_screens.dart';
-
+import 'package:agripal/services/smart_recommendation_service.dart';
+import 'package:agripal/services/knowledge_service.dart';
 enum AppTheme { light, dark, system }
 
 class AppThemeProvider extends InheritedWidget {
@@ -29,10 +31,23 @@ class AppThemeProvider extends InheritedWidget {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // تهيئة Firebase
   await Firebase.initializeApp();
-  await Hive.initFlutter(); // ✅ لازم يكون قبل أي openBox
+  
+  // تهيئة Hive للتخزين المحلي
+  await Hive.initFlutter();
+  
+  // تهيئة التواريخ باللغة العربية
+  await initializeDateFormatting('ar', null);
+  
+  // تحميل بيانات البطاطا عند بدء التشغيل
+  await SmartRecommendationService.loadPotatoData();
+  
+  // استرجاع إعدادات الثيم
   final prefs = await SharedPreferences.getInstance();
   final themeIndex = prefs.getInt('themeMode') ?? 0;
+  
   runApp(MyApp(initialTheme: AppTheme.values[themeIndex]));
 }
 
@@ -51,6 +66,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _currentTheme = widget.initialTheme;
+    KnowledgeService.load();
   }
 
   void changeTheme(AppTheme theme) async {
@@ -78,12 +94,19 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         title: 'AgriPal',
         debugShowCheckedModeBanner: false,
+        locale: const Locale('ar', 'DZ'),
         theme: ThemeData(
           brightness: Brightness.light,
           primaryColor: const Color(0xFF7C9473),
           colorScheme: const ColorScheme.light(
             primary: Color(0xFF7C9473),
             secondary: Color(0xFFBC9F8B),
+          ),
+          fontFamily: 'Cairo',
+          useMaterial3: true,
+          appBarTheme: const AppBarTheme(
+            elevation: 0,
+            centerTitle: true,
           ),
         ),
         darkTheme: ThemeData(
@@ -94,8 +117,11 @@ class _MyAppState extends State<MyApp> {
             secondary: Color(0xFFD9B8A4),
           ),
           scaffoldBackgroundColor: const Color(0xFF121212),
+          useMaterial3: true,
           appBarTheme: const AppBarTheme(
             backgroundColor: Color(0xFF1F1F1F),
+            elevation: 0,
+            centerTitle: true,
           ),
         ),
         themeMode: _getThemeMode(),

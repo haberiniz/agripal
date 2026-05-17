@@ -4,9 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final User user;
+  // ── user اختياري — نقرأ من FirebaseAuth مباشرة إذا لم يُمرَّر ──
+  final User? user;
 
-  const ProfileScreen({super.key, required this.user});
+  const ProfileScreen({super.key, this.user});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -18,6 +19,9 @@ class _ProfileScreenState extends State<ProfileScreen>
   late AnimationController _slideController;
   late Animation<double> _fadeIn;
   late Animation<Offset> _slideUp;
+
+  // جلب المستخدم من Firebase مباشرة
+  User? get _user => widget.user ?? FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
@@ -80,7 +84,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                 flexibleSpace: FlexibleSpaceBar(
                   background: Stack(
                     children: [
-                      // Gradient background
                       Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -93,7 +96,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ),
                         ),
                       ),
-                      // Decorative circle
                       Positioned(
                         top: -40,
                         right: -40,
@@ -118,18 +120,16 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ),
                         ),
                       ),
-                      // Content
                       SafeArea(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const SizedBox(height: 16),
-                            // Avatar
                             Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                border:
-                                    Border.all(color: Colors.white, width: 2.5),
+                                border: Border.all(
+                                    color: Colors.white, width: 2.5),
                                 boxShadow: [
                                   BoxShadow(
                                     color:
@@ -143,18 +143,18 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 radius: 44,
                                 backgroundColor:
                                     Colors.white.withValues(alpha: 0.2),
-                                backgroundImage: widget.user.photoURL != null
-                                    ? NetworkImage(widget.user.photoURL!)
+                                backgroundImage: _user?.photoURL != null
+                                    ? NetworkImage(_user!.photoURL!)
                                     : null,
-                                child: widget.user.photoURL == null
-                                    ? Icon(Icons.person_rounded,
+                                child: _user?.photoURL == null
+                                    ? const Icon(Icons.person_rounded,
                                         size: 44, color: Colors.white)
                                     : null,
                               ),
                             ),
                             const SizedBox(height: 12),
                             Text(
-                              widget.user.displayName ?? 'مستخدم AgriPal',
+                              _user?.displayName ?? 'مستخدم AgriPal',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -168,14 +168,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                               children: [
                                 Icon(Icons.mail_outline_rounded,
                                     size: 12,
-                                    color:
-                                        Colors.white.withValues(alpha: 0.75)),
+                                    color: Colors.white
+                                        .withValues(alpha: 0.75)),
                                 const SizedBox(width: 4),
                                 Text(
-                                  widget.user.email ?? '',
+                                  _user?.email ?? '',
                                   style: TextStyle(
-                                    color:
-                                        Colors.white.withValues(alpha: 0.82),
+                                    color: Colors.white
+                                        .withValues(alpha: 0.82),
                                     fontSize: 13,
                                   ),
                                 ),
@@ -196,17 +196,15 @@ class _ProfileScreenState extends State<ProfileScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      
                       const SizedBox(height: 26),
 
-                      // ── Account Info ──
                       _buildSectionTitle('معلومات الحساب', isDark),
                       const SizedBox(height: 12),
 
                       _buildInfoCard(
                         icon: Icons.person_outline_rounded,
                         label: 'الاسم الكامل',
-                        value: widget.user.displayName ?? '—',
+                        value: _user?.displayName ?? '—',
                         iconBg: const Color(0xFFE8F5E9),
                         iconColor: const Color(0xFF55833D),
                         isDark: isDark,
@@ -215,7 +213,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       _buildInfoCard(
                         icon: Icons.email_outlined,
                         label: 'البريد الإلكتروني',
-                        value: widget.user.email ?? '—',
+                        value: _user?.email ?? '—',
                         iconBg: const Color(0xFFE3F2FD),
                         iconColor: const Color(0xFF2E7D9A),
                         isDark: isDark,
@@ -223,7 +221,6 @@ class _ProfileScreenState extends State<ProfileScreen>
 
                       const SizedBox(height: 26),
 
-                      // ── Account Actions ──
                       _buildSectionTitle('الحساب', isDark),
                       const SizedBox(height: 12),
 
@@ -240,8 +237,6 @@ class _ProfileScreenState extends State<ProfileScreen>
       ),
     );
   }
-
-  // ── Helpers ───────────────────────────────────────────────────────
 
   Widget _buildSectionTitle(String title, bool isDark) {
     return Row(
@@ -269,52 +264,6 @@ class _ProfileScreenState extends State<ProfileScreen>
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildStatCard(
-      String emoji, String value, String label, Color color) {
-    return Expanded(
-      child: TweenAnimationBuilder<double>(
-        tween: Tween(begin: 0.0, end: 1.0),
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.easeOutBack,
-        builder: (_, v, child) =>
-            Transform.scale(scale: v.clamp(0.0, 1.0), child: child),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: color.withValues(alpha: 0.1),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-            border: Border.all(color: color.withValues(alpha: 0.12)),
-          ),
-          child: Column(
-            children: [
-              Text(emoji, style: const TextStyle(fontSize: 22)),
-              const SizedBox(height: 5),
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                ),
-              ),
-              Text(
-                label,
-                style: TextStyle(fontSize: 10, color: Colors.grey.shade500),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 
@@ -368,7 +317,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: isDark ? Colors.white : const Color(0xFF2A3A2A),
+                    color: isDark
+                        ? Colors.white
+                        : const Color(0xFF2A3A2A),
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -390,15 +341,13 @@ class _ProfileScreenState extends State<ProfileScreen>
         }
       },
       child: Container(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
         decoration: BoxDecoration(
           color: isDark
               ? Colors.red.withValues(alpha: 0.08)
               : Colors.red.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(16),
-          border:
-              Border.all(color: Colors.red.withValues(alpha: 0.18)),
+          border: Border.all(color: Colors.red.withValues(alpha: 0.18)),
         ),
         child: Row(
           children: [

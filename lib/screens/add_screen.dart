@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:agripal/core/constants/app_colors.dart';
+import 'package:agripal/screens/irrigation_page.dart' hide AppColors;
+import 'package:agripal/screens/fertilization_screen.dart' hide AppColors;
+import 'package:agripal/screens/crop_prediction_screen.dart';
+import 'package:agripal/screens/illness_crop_screen.dart';
+
+
 
 class AddScreen extends StatefulWidget {
   const AddScreen({super.key});
@@ -10,22 +16,15 @@ class AddScreen extends StatefulWidget {
 
 class _AddScreenState extends State<AddScreen> with TickerProviderStateMixin {
   late AnimationController _headerController;
-  late AnimationController _cardsController;
   late Animation<double> _headerFade;
   late Animation<Offset> _headerSlide;
 
   @override
   void initState() {
     super.initState();
-
     _headerController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 900),
-    )..forward();
-
-    _cardsController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
     )..forward();
 
     _headerFade = CurvedAnimation(
@@ -45,7 +44,6 @@ class _AddScreenState extends State<AddScreen> with TickerProviderStateMixin {
   @override
   void dispose() {
     _headerController.dispose();
-    _cardsController.dispose();
     super.dispose();
   }
 
@@ -57,26 +55,42 @@ class _AddScreenState extends State<AddScreen> with TickerProviderStateMixin {
       {
         'icon': Icons.water_drop_rounded,
         'title': 'الري',
-        'desc': 'مواعيد وكميات الري',
+        'desc': 'توصيات وتسجيل عمليات الري',
         'color': const Color(0xFF4A90C8),
+        'onTap': () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const IrrigationPage()),
+            ),
       },
       {
         'icon': Icons.spa_rounded,
         'title': 'الأسمدة',
-        'desc': 'أنواع وتواريخ التسميد',
+        'desc': 'توصيات وتسجيل عمليات التسميد',
         'color': const Color(0xFF55833D),
+        'onTap': () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const FertilizationScreen()),
+            ),
       },
       {
         'icon': Icons.grass_rounded,
         'title': 'المحاصيل',
         'desc': 'أصناف وتواريخ الزراعة',
         'color': const Color(0xFFE07B30),
+         'onTap': () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const CropPredictionScreen()),
+            ),
       },
       {
         'icon': Icons.biotech_rounded,
         'title': 'أمراض النباتات',
         'desc': 'تتبع وتشخيص الأمراض',
         'color': const Color(0xFF7B68EE),
+         'onTap': () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const IllnessCropScreen()),
+            ),
       },
     ];
 
@@ -88,7 +102,6 @@ class _AddScreenState extends State<AddScreen> with TickerProviderStateMixin {
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
-            // ── Header ──────────────────────────────────────────────
             SliverToBoxAdapter(
               child: SlideTransition(
                 position: _headerSlide,
@@ -98,48 +111,36 @@ class _AddScreenState extends State<AddScreen> with TickerProviderStateMixin {
                 ),
               ),
             ),
-
-            // ── Section Label ────────────────────────────────────────
             SliverToBoxAdapter(
               child: FadeTransition(
                 opacity: _headerFade,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 3,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              AppColors.primary,
-                              const Color(0xFF7C9473)
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                          borderRadius: BorderRadius.circular(2),
+                  child: Row(children: [
+                    Container(
+                      width: 3, height: 16,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [AppColors.primary, const Color(0xFF7C9473)],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
                         ),
+                        borderRadius: BorderRadius.circular(2),
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'اختر فئة الإضافة',
+                    ),
+                    const SizedBox(width: 8),
+                    Text('اختر فئة',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: isDark
                               ? Colors.white70
                               : const Color(0xFF2A3A2A),
-                        ),
-                      ),
-                    ],
-                  ),
+                        )),
+                  ]),
                 ),
               ),
             ),
-
-            // ── Cards Grid ───────────────────────────────────────────
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
               sliver: SliverGrid(
@@ -147,13 +148,13 @@ class _AddScreenState extends State<AddScreen> with TickerProviderStateMixin {
                   (context, index) {
                     final item = categories[index];
                     return _buildCard(
-                      context: context,
                       icon: item['icon'] as IconData,
                       label: item['title'] as String,
                       desc: item['desc'] as String,
                       color: item['color'] as Color,
                       isDark: isDark,
                       index: index,
+                      onTap: item['onTap'] as VoidCallback,
                     );
                   },
                   childCount: categories.length,
@@ -166,15 +167,12 @@ class _AddScreenState extends State<AddScreen> with TickerProviderStateMixin {
                 ),
               ),
             ),
-
-            // ── Tip Card ─────────────────────────────────────────────
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
                 child: _buildTipCard(isDark),
               ),
             ),
-
             const SliverToBoxAdapter(child: SizedBox(height: 80)),
           ],
         ),
@@ -182,7 +180,16 @@ class _AddScreenState extends State<AddScreen> with TickerProviderStateMixin {
     );
   }
 
-  // ── Header ────────────────────────────────────────────────────────
+  void _comingSoon(String label, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('سيتم فتح صفحة $label قريباً'),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: color,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      duration: const Duration(seconds: 1),
+    ));
+  }
+
   Widget _buildHeader(bool isDark) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -192,10 +199,7 @@ class _AddScreenState extends State<AddScreen> with TickerProviderStateMixin {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            AppColors.primary,
-            const Color(0xFF7C9473),
-          ],
+          colors: [AppColors.primary, const Color(0xFF7C9473)],
         ),
         boxShadow: [
           BoxShadow(
@@ -205,95 +209,64 @@ class _AddScreenState extends State<AddScreen> with TickerProviderStateMixin {
           ),
         ],
       ),
-      child: Stack(
-        children: [
-          Positioned(
-            right: -20,
-            top: -20,
-            child: Container(
-              width: 130,
-              height: 130,
+      child: Stack(children: [
+        Positioned(
+          right: -20, top: -20,
+          child: Container(
+            width: 130, height: 130,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withValues(alpha: 0.07),
+            ),
+          ),
+        ),
+        Positioned(
+          left: -15, bottom: -25,
+          child: Container(
+            width: 90, height: 90,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withValues(alpha: 0.05),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(22),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+              padding: const EdgeInsets.all(7),
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.07),
+                color: Colors.white.withValues(alpha: 0.18),
+                borderRadius: BorderRadius.circular(10),
               ),
+              child: const Icon(Icons.add_rounded, color: Colors.white, size: 18),
             ),
-          ),
-          Positioned(
-            left: -15,
-            bottom: -25,
-            child: Container(
-              width: 90,
-              height: 90,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.05),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(22),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(7),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.18),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Icon(
-                        Icons.add_rounded,
-                        color: Colors.white,
-                        size: 18,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    
-                  ],
-                ),
-                const Spacer(),
-                const Text(
-                  'إضافة جديدة',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 0.3,
-                    height: 1.1,
-                  ),
-                ),
-                
-                Text(
-                  'اختر نوع السجل الذي تريد إضافته',
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.78),
-                    fontSize: 13,
-                  ),
-                ),
-                const SizedBox(height: 16),
-              ],
-            ),
-          ),
-        ],
-      ),
+            const Spacer(),
+            const Text('إضافة جديدة',
+                style: TextStyle(
+                  color: Colors.white, fontSize: 26,
+                  fontWeight: FontWeight.bold, letterSpacing: 0.3, height: 1.1,
+                )),
+            Text('اختر نوع السجل الذي تريد إضافته',
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.78), fontSize: 13)),
+            const SizedBox(height: 16),
+          ]),
+        ),
+      ]),
     );
   }
 
-  // ── Card ──────────────────────────────────────────────────────────
   Widget _buildCard({
-    required BuildContext context,
     required IconData icon,
     required String label,
     required String desc,
     required Color color,
     required bool isDark,
     required int index,
+    required VoidCallback onTap,
   }) {
     final cardBg = isDark ? const Color(0xFF1A2A1A) : Colors.white;
-
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.0, end: 1.0),
       duration: Duration(milliseconds: 400 + index * 80),
@@ -303,25 +276,12 @@ class _AddScreenState extends State<AddScreen> with TickerProviderStateMixin {
         child: Opacity(opacity: value.clamp(0.0, 1.0), child: child),
       ),
       child: GestureDetector(
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('سيتم فتح صفحة $label قريباً'),
-              behavior: SnackBarBehavior.floating,
-              backgroundColor: color,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14)),
-              duration: const Duration(seconds: 1),
-            ),
-          );
-        },
+        onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
             color: cardBg,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: color.withValues(alpha: 0.15),
-            ),
+            border: Border.all(color: color.withValues(alpha: 0.15)),
             boxShadow: [
               BoxShadow(
                 color: color.withValues(alpha: isDark ? 0.08 : 0.06),
@@ -330,35 +290,26 @@ class _AddScreenState extends State<AddScreen> with TickerProviderStateMixin {
               ),
             ],
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Icon
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: isDark ? 0.2 : 0.1),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Icon(icon, color: color, size: 24),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: isDark ? 0.2 : 0.1),
+                borderRadius: BorderRadius.circular(14),
               ),
-              const SizedBox(height: 10),
-              // Title
-              Text(
-                label,
+              child: Icon(icon, color: color, size: 24),
+            ),
+            const SizedBox(height: 10),
+            Text(label,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: isDark ? Colors.white : const Color(0xFF1A2E1A),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 3),
-              // Desc
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  desc,
+                  fontWeight: FontWeight.bold, fontSize: 14,
+                )),
+            const SizedBox(height: 3),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(desc,
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -366,87 +317,56 @@ class _AddScreenState extends State<AddScreen> with TickerProviderStateMixin {
                     fontSize: 10.5,
                     color: isDark ? Colors.white38 : Colors.grey.shade500,
                     height: 1.3,
-                  ),
-                ),
-              ),
-            ],
-          ),
+                  )),
+            ),
+          ]),
         ),
       ),
     );
   }
 
-  // ── Tip Card ──────────────────────────────────────────────────────
   Widget _buildTipCard(bool isDark) {
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.0, end: 1.0),
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.easeOut,
-      builder: (context, value, child) => Opacity(
-        opacity: value.clamp(0.0, 1.0),
-        child: Transform.translate(
-          offset: Offset(0, 20 * (1 - value)),
-          child: child,
-        ),
-      ),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF1A2A1A) : Colors.white,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: AppColors.primary.withValues(alpha: 0.12),
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1A2A1A) : Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.12)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withValues(alpha: 0.05),
+            blurRadius: 10, offset: const Offset(0, 3),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                Icons.lightbulb_outline_rounded,
-                color: AppColors.primary,
-                size: 20,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'نصيحة اليوم',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 3),
-                  Text(
-                    'سجّل بيانات حقلك بانتظام للحصول على توصيات أدق',
-                    style: TextStyle(
-                      fontSize: 11.5,
-                      color: isDark ? Colors.white54 : Colors.grey.shade500,
-                      height: 1.4,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
+      child: Row(children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: AppColors.primary.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(Icons.lightbulb_outline_rounded,
+              color: AppColors.primary, size: 20),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('نصيحة اليوم',
+                style: TextStyle(
+                  fontSize: 13, fontWeight: FontWeight.bold,
+                  color: AppColors.primary,
+                )),
+            const SizedBox(height: 3),
+            Text('سجّل بيانات حقلك بانتظام للحصول على توصيات أدق',
+                style: TextStyle(
+                  fontSize: 11.5,
+                  color: isDark ? Colors.white54 : Colors.grey.shade500,
+                  height: 1.4,
+                )),
+          ]),
+        ),
+      ]),
     );
   }
 }

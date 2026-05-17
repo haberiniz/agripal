@@ -1,0 +1,292 @@
+[
+  {
+    "code": 1,
+    "name": "Adrar",
+    "soil_type": "Sols sableux (Erg)"
+  },
+  {
+    "code": 2,
+    "name": "Chlef",
+    "soil_type": "Sols alluviaux"
+  },
+  {
+    "code": 3,
+    "name": "Laghouat",
+    "soil_type": "Sols sableux (Erg)"
+  },
+  {
+    "code": 4,
+    "name": "Oum El Bouaghi",
+    "soil_type": "Vertisols"
+  },
+  {
+    "code": 5,
+    "name": "Batna",
+    "soil_type": "Sols peu évolués d'érosion"
+  },
+  {
+    "code": 6,
+    "name": "Béjaïa",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 7,
+    "name": "Biskra",
+    "soil_type": "Sols sableux (Erg)"
+  },
+  {
+    "code": 8,
+    "name": "Béchar",
+    "soil_type": "Sols sableux (Erg)"
+  },
+  {
+    "code": 9,
+    "name": "Blida",
+    "soil_type": "Sols alluviaux"
+  },
+  {
+    "code": 10,
+    "name": "Bouira",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 11,
+    "name": "Tamanrasset",
+    "soil_type": "Sols minéraux bruts (Reg)"
+  },
+  {
+    "code": 12,
+    "name": "Tébessa",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 13,
+    "name": "Tlemcen",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 14,
+    "name": "Tiaret",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 15,
+    "name": "Tizi Ouzou",
+    "soil_type": "Sols peu évolués d'érosion"
+  },
+  {
+    "code": 16,
+    "name": "Alger",
+    "soil_type": "Sols alluviaux"
+  },
+  {
+    "code": 17,
+    "name": "Djelfa",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 18,
+    "name": "Jijel",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 19,
+    "name": "Sétif",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 20,
+    "name": "Saïda",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 21,
+    "name": "Skikda",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 22,
+    "name": "Sidi Bel Abbès",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 23,
+    "name": "Annaba",
+    "soil_type": "Sols alluviaux"
+  },
+  {
+    "code": 24,
+    "name": "Guelma",
+    "soil_type": "Vertisols"
+  },
+  {
+    "code": 25,
+    "name": "Constantine",
+    "soil_type": "Vertisols"
+  },
+  {
+    "code": 26,
+    "name": "Médéa",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 27,
+    "name": "Mostaganem",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 28,
+    "name": "M'Sila",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 29,
+    "name": "Mascara",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 30,
+    "name": "Ouargla",
+    "soil_type": "Sols sableux (Erg)"
+  },
+  {
+    "code": 31,
+    "name": "Oran",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 32,
+    "name": "El Bayadh",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 33,
+    "name": "Illizi",
+    "soil_type": "Sols minéraux bruts (Reg)"
+  },
+  {
+    "code": 34,
+    "name": "Bordj Bou Arreridj",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 35,
+    "name": "Boumerdès",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 36,
+    "name": "El Tarf",
+    "soil_type": "Sols hydromorphes (Oasis)"
+  },
+  {
+    "code": 37,
+    "name": "Tindouf",
+    "soil_type": "Sols minéraux bruts (Reg)"
+  },
+  {
+    "code": 38,
+    "name": "Tissemsilt",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 39,
+    "name": "El Oued",
+    "soil_type": "Sols sableux (Erg)"
+  },
+  {
+    "code": 40,
+    "name": "Khenchela",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 41,
+    "name": "Souk Ahras",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 42,
+    "name": "Tipaza",
+    "soil_type": "Sols alluviaux"
+  },
+  {
+    "code": 43,
+    "name": "Mila",
+    "soil_type": "Vertisols"
+  },
+  {
+    "code": 44,
+    "name": "Aïn Defla",
+    "soil_type": "Sols alluviaux"
+  },
+  {
+    "code": 45,
+    "name": "Naâma",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 46,
+    "name": "Aïn Témouchent",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 47,
+    "name": "Ghardaïa",
+    "soil_type": "Sols hydromorphes (Oasis)"
+  },
+  {
+    "code": 48,
+    "name": "Relizane",
+    "soil_type": "Sols bruns calcaires"
+  },
+  {
+    "code": 49,
+    "name": "Timimoun",
+    "soil_type": "Sols sableux (Erg)"
+  },
+  {
+    "code": 50,
+    "name": "Bordj Badji Mokhtar",
+    "soil_type": "Sols minéraux bruts (Reg)"
+  },
+  {
+    "code": 51,
+    "name": "Ouled Djellal",
+    "soil_type": "Sols sableux (Erg)"
+  },
+  {
+    "code": 52,
+    "name": "Béni Abbès",
+    "soil_type": "Sols sableux (Erg)"
+  },
+  {
+    "code": 53,
+    "name": "In Salah",
+    "soil_type": "Sols minéraux bruts (Reg)"
+  },
+  {
+    "code": 54,
+    "name": "In Guezzam",
+    "soil_type": "Sols minéraux bruts (Reg)"
+  },
+  {
+    "code": 55,
+    "name": "Touggourt",
+    "soil_type": "Sols hydromorphes (Oasis)"
+  },
+  {
+    "code": 56,
+    "name": "Djanet",
+    "soil_type": "Sols minéraux bruts (Reg)"
+  },
+  {
+    "code": 57,
+    "name": "El M'Ghair",
+    "soil_type": "Sols hydromorphes (Oasis)"
+  },
+  {
+    "code": 58,
+    "name": "El Menia",
+    "soil_type": "Sols sableux (Erg)"
+  }
+]
