@@ -8,6 +8,10 @@
 		<string>Agripal</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
+		<key>NSCameraUsageDescription</key>
+		<string>نحتاج الكاميرا لتصوير أوراق النبات</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>نحتاج المعرض لاختيار صورة نبات</string>
 		<key>CFBundleIdentifier</key>
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 		<key>CFBundleInfoDictionaryVersion</key>
