@@ -564,9 +564,9 @@ class _FarmLocationScreenState extends State<FarmLocationScreen>
             ),
             mapType: _mapType,
             onMapCreated: (c) {
-              _mapController.complete(c);
-              // إذا لم يتم تحديد GPS نبقى على الجزائر
-            },
+  _mapController.complete(c);
+  debugPrint('✅ GoogleMap created successfully');
+},
             onTap: _onMapTap,
             markers: _markers,
             polygons: _polygons,

@@ -23,18 +23,18 @@ class _SplashScreensState extends State<SplashScreens>
 
   final List<Map<String, String>> pages = [
     {
-      'title': 'Smart Farming',
-      'desc': 'Predict your harvest with AI insights',
+      'title': 'الزراعة الذكية',
+      'desc': 'تنبؤ بمحصولك باستخدام رؤى الذكاء الاصطناعي',
       'image': 'assets/images/farm1.jpg',
     },
     {
-      'title': 'Water & Fertilizer',
-      'desc': 'Optimize resources with precision',
+      'title': 'المياه والأسمدة',
+      'desc': 'تحسين الموارد بدقة متناهية',
       'image': 'assets/images/farm2.jpg',
     },
     {
-      'title': 'AI Assistant',
-      'desc': 'Ask anything about your crops',
+      'title': 'المساعد الذكي',
+      'desc': 'اسأل أي شيء عن محاصيلك',
       'image': 'assets/images/farm3.jpg',
     },
   ];
@@ -258,7 +258,7 @@ class _SplashScreensState extends State<SplashScreens>
                 children: const [
                   SizedBox(width: 10),
                   Text(
-                    'Continue →',
+                    'متابعة ←',
                     style: TextStyle(
                       color: Color(0xFFE3EED4),
                       fontSize: 18,
@@ -320,7 +320,7 @@ class _SplashScreensState extends State<SplashScreens>
                 children: const [
                   SizedBox(width: 10),
                   Text(
-                    'Get Started',
+                    'ابدأ الآن',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,

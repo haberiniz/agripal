@@ -10,7 +10,7 @@ import 'package:agripal/screens/home/widgets/status_card.dart';
 import 'package:agripal/screens/home/widgets/farm_setup_sheet.dart';
 import 'package:agripal/screens/home/widgets/drawer_widget.dart';
 import 'package:agripal/screens/settings_screen.dart';
-import 'package:agripal/screens/crop_prediction_screen.dart';
+import 'package:agripal/screens/crop_prediction_screen.dart' hide AppColors;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:agripal/screens/home/widgets/farm-recommandation.dart' as farm_rec;

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:agripal/core/constants/app_colors.dart';
 import 'package:agripal/screens/irrigation_page.dart' hide AppColors;
 import 'package:agripal/screens/fertilization_screen.dart' hide AppColors;
-import 'package:agripal/screens/crop_prediction_screen.dart';
-import 'package:agripal/screens/illness_crop_screen.dart';
+import 'package:agripal/screens/crop_prediction_screen.dart' hide AppColors;
+import 'package:agripal/screens/illness_crop_screen.dart' hide AppColors;
 
 
 

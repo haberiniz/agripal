@@ -1,2172 +1,2467 @@
-// ============================================================
-// 🌾 FERTILIZATION SCREEN — REDESIGNED ELEGANT UI
-// Flutter | Animated | Dark/Light | 58 Wilayas | Full Crop DB
-// ============================================================
+// lib/screens/fertilization_screen.dart
+// 🌿 AgriPal – مستشار التسميد الذكي
+// ✅ Redesigned to match IrrigationPage design system: green-forward, modern, animated
 
-import 'dart:convert';
-import 'dart:math' as math;
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:math';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-// ==================== COLORS ====================
+// ============================================================
+// 🎨 DESIGN SYSTEM  (mirrors AppColors from irrigation_page)
+// ============================================================
 class AppColors {
-  // Primary palette
-  static const Color primaryDark    = Color(0xFF3D2F1E);
-  static const Color primary        = Color(0xFF4A7A32);
-  static const Color primaryLight   = Color(0xFF6BA348);
-  static const Color primaryGlow    = Color(0xFF8DC96A);
+  static const Color forest         = Color(0xFF1E3A0F);
+  static const Color sage           = Color(0xFF55833D);
+  static const Color mint           = Color(0xFF7BAE68);
+  static const Color olive          = Color(0xFF6B8C3A);
+  static const Color cream          = Color(0xFFF5F1E8);
+  static const Color sand           = Color(0xFFEDE4D0);
+  static const Color clay           = Color(0xFFD4B896);
+  static const Color bark           = Color(0xFF6B4C2E);
+  static const Color earth          = Color(0xFF8B6914);
+  static const Color wheat          = Color(0xFFC8A44A);
+  static const Color backgroundSoft = Color(0xFFE3EED4);
 
-  // Backgrounds
-  static const Color backgroundSoft = Color(0xFFEDF4E0);
-  static const Color backgroundCard = Color(0xFFF8FAF3);
-  static const Color surfaceLight   = Color(0xFFFFFFFF);
+  static const Color surface        = Color(0xFFFFFFFF);
+  static const Color surfaceWarm    = Color(0xFFFAF7F0);
+  static const Color border         = Color(0xFFE0D5C0);
+  static const Color divider        = Color(0xFFEDE8DE);
 
-  // Accents
-  static const Color accent         = Color(0xFFD4C5A9);
-  static const Color accentWarm     = Color(0xFFE8D5B0);
-  static const Color accentGold     = Color(0xFFC8A96E);
-  static const Color accentAmber    = Color(0xFFE5A530);
+  static const Color textPrimary    = Color(0xFF1A2B10);
+  static const Color textSecond     = Color(0xFF5A6B4A);
+  static const Color textLight      = Color(0xFFF5F1E8);
+  static const Color textMuted      = Color(0xFF9EA88A);
+  static const Color textWarm       = Color(0xFF7A5C3A);
 
-  // Text
-  static const Color textDark       = Color(0xFF2A1F12);
-  static const Color textMid        = Color(0xFF5C4A32);
-  static const Color textLight      = Color(0xFFF5F0E8);
-  static const Color textMuted      = Color(0xFF8B7355);
+  static const Color primary        = Color(0xFF55833D);
+  static const Color primaryDark    = Color(0xFF3A6E1E);
 
-  // Status
-  static const Color success        = Color(0xFF2E7D32);
-  static const Color warning        = Color(0xFFE65100);
-  static const Color info           = Color(0xFF1565C0);
+  static const Color success        = Color(0xFF3D7A3D);
+  static const Color warning        = Color(0xFFB8860B);
+  static const Color danger         = Color(0xFFC0392B);
+  static const Color info           = Color(0xFF1B6CA8);
+  static const Color sky            = Color(0xFF5BA4CF);
 
-  // Dark mode
-  static const Color darkBg         = Color(0xFF0E1509);
-  static const Color darkSurface    = Color(0xFF161E0E);
-  static const Color darkCard       = Color(0xFF1E2A14);
-  static const Color darkCardHover  = Color(0xFF253218);
-  static const Color darkBorder     = Color(0xFF2E3D20);
-  static const Color darkText       = Color(0xFFCFE3A8);
-  static const Color darkTextMuted  = Color(0xFF7A9558);
+  static Color riskColor(String level) {
+    if (level.isEmpty) return success;
+    final l = level.toLowerCase();
+    if (l.contains('حرج') || l.contains('عالية') || l.contains('critique') ||
+        l.contains('critical') || l.contains('high'))
+      return danger;
+    if (l.contains('متوسط') || l.contains('modérée') || l.contains('normale') ||
+        l.contains('moderate') || l.contains('medium'))
+      return warning;
+    return success;
+  }
 }
 
-// ==================== THEME ====================
-ThemeData buildLightTheme() => ThemeData(
-  useMaterial3: true,
-  brightness: Brightness.light,
-  colorScheme: ColorScheme.fromSeed(
-    seedColor: AppColors.primary,
-    brightness: Brightness.light,
-  ).copyWith(
-    primary: AppColors.primary,
-    secondary: AppColors.accentGold,
-    surface: AppColors.surfaceLight,
-    background: AppColors.backgroundSoft,
-  ),
-  scaffoldBackgroundColor: AppColors.backgroundSoft,
-  fontFamily: 'Cairo',
-  cardTheme: CardThemeData(
-    color: AppColors.surfaceLight,
-    elevation: 0,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-  ),
-);
-
-ThemeData buildDarkTheme() => ThemeData(
-  useMaterial3: true,
-  brightness: Brightness.dark,
-  colorScheme: ColorScheme.fromSeed(
-    seedColor: AppColors.primary,
-    brightness: Brightness.dark,
-  ).copyWith(
-    primary: AppColors.primaryLight,
-    secondary: AppColors.accentGold,
-    surface: AppColors.darkCard,
-    background: AppColors.darkBg,
-  ),
-  scaffoldBackgroundColor: AppColors.darkBg,
-  fontFamily: 'Cairo',
-  cardTheme: CardThemeData(
-    color: AppColors.darkCard,
-    elevation: 0,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-  ),
-);
-
-// ==================== DATA MODELS (unchanged) ====================
-class WilayaModel {
-  final int code;
-  final String name;
-  final String soilType;
-  final double lat;
-  final double lon;
-  WilayaModel({required this.code, required this.name, required this.soilType, required this.lat, required this.lon});
-}
-
-class SoilModel {
-  final String texture;
-  final double phMin, phMax;
-  final String irrigation, fertilisation;
-  final int N, P, K, Ca, Mg, S;
-  final double efficacite;
-  SoilModel({required this.texture, required this.phMin, required this.phMax,
-    required this.irrigation, required this.fertilisation,
-    required this.N, required this.P, required this.K, required this.Ca,
-    required this.Mg, required this.S, required this.efficacite});
-}
-
-class CropStage {
-  final String name;
-  final int days, N, P, K, Ca, Mg, S;
-  CropStage({required this.name, required this.days, required this.N, required this.P,
-    required this.K, required this.Ca, required this.Mg, required this.S});
-}
-
-class CropModel {
-  final String name, category, icon;
-  final int cycleDays, tempMin, tempMax, waterMm;
-  final List<CropStage> stages;
-  CropModel({required this.name, required this.category, required this.icon,
-    required this.cycleDays, required this.tempMin, required this.tempMax,
-    required this.waterMm, required this.stages});
-}
-
-class FertilizerRec {
-  final String name, icon, how, when;
-  final double kgHa;
-  FertilizerRec({required this.name, required this.icon, required this.kgHa,
-    required this.how, required this.when});
-}
-
-class AnalysisResult {
-  final String wilayaName, cropName, soilType, stageName, plantDate, analysisDate;
-  final double area, stageProgress, totalKgHa;
-  final int daysElapsed, totalDays, daysRemaining;
-  final Map<String, Map<String, dynamic>> nutrients;
-  final List<FertilizerRec> fertilizers;
-  final List<String> alerts, warnings;
-  final Map<String, dynamic>? weather;
-  final Map<String, dynamic> irrigation;
-
-  AnalysisResult({
-    required this.wilayaName, required this.area, required this.cropName,
-    required this.soilType, required this.stageName, required this.stageProgress,
-    required this.daysElapsed, required this.totalDays, required this.daysRemaining,
-    required this.totalKgHa, required this.nutrients, required this.fertilizers,
-    required this.alerts, required this.warnings, required this.plantDate,
-    required this.analysisDate, this.weather, required this.irrigation,
-  });
-
-  Map<String, dynamic> toJson() => {
-    'wilayaName': wilayaName, 'area': area, 'cropName': cropName, 'soilType': soilType,
-    'stageName': stageName, 'stageProgress': stageProgress, 'daysElapsed': daysElapsed,
-    'totalDays': totalDays, 'daysRemaining': daysRemaining, 'totalKgHa': totalKgHa,
-    'nutrients': nutrients, 'plantDate': plantDate, 'analysisDate': analysisDate,
-    'alerts': alerts, 'warnings': warnings, 'irrigation': irrigation,
-    'fertilizers': fertilizers.map((f) => {
-      'name': f.name, 'icon': f.icon, 'kgHa': f.kgHa, 'how': f.how, 'when': f.when
-    }).toList(),
-  };
-}
-
-// ==================== 58 WILAYAS ====================
-final List<WilayaModel> allWilayas = [
-  WilayaModel(code:1,  name:'أدرار',           soilType:'Sols sableux (Erg)',          lat:27.87, lon:-0.28),
-  WilayaModel(code:2,  name:'الشلف',            soilType:'Sols alluviaux',              lat:36.17, lon:1.33),
-  WilayaModel(code:3,  name:'الأغواط',          soilType:'Sols sableux (Erg)',          lat:33.80, lon:2.86),
-  WilayaModel(code:4,  name:'أم البواقي',       soilType:'Vertisols',                   lat:35.88, lon:7.11),
-  WilayaModel(code:5,  name:'باتنة',            soilType:'Sols peu évolués d\'érosion', lat:35.57, lon:6.17),
-  WilayaModel(code:6,  name:'بجاية',            soilType:'Sols bruns calcaires',        lat:36.75, lon:5.08),
-  WilayaModel(code:7,  name:'بسكرة',            soilType:'Sols sableux (Erg)',          lat:34.85, lon:5.73),
-  WilayaModel(code:8,  name:'بشار',             soilType:'Sols sableux (Erg)',          lat:31.62, lon:-2.22),
-  WilayaModel(code:9,  name:'البليدة',          soilType:'Sols alluviaux',              lat:36.47, lon:2.83),
-  WilayaModel(code:10, name:'البويرة',          soilType:'Sols bruns calcaires',        lat:36.38, lon:3.90),
-  WilayaModel(code:11, name:'تمنراست',          soilType:'Sols minéraux bruts (Reg)',   lat:22.79, lon:5.52),
-  WilayaModel(code:12, name:'تبسة',             soilType:'Sols bruns calcaires',        lat:35.40, lon:8.12),
-  WilayaModel(code:13, name:'تلمسان',           soilType:'Sols bruns calcaires',        lat:34.88, lon:-1.32),
-  WilayaModel(code:14, name:'تيارت',            soilType:'Sols bruns calcaires',        lat:35.37, lon:1.32),
-  WilayaModel(code:15, name:'تيزي وزو',         soilType:'Sols peu évolués d\'érosion', lat:36.72, lon:4.05),
-  WilayaModel(code:16, name:'الجزائر',          soilType:'Sols alluviaux',              lat:36.78, lon:3.06),
-  WilayaModel(code:17, name:'الجلفة',           soilType:'Sols bruns calcaires',        lat:34.67, lon:3.25),
-  WilayaModel(code:18, name:'جيجل',             soilType:'Sols bruns calcaires',        lat:36.82, lon:5.77),
-  WilayaModel(code:19, name:'سطيف',             soilType:'Sols bruns calcaires',        lat:36.19, lon:5.41),
-  WilayaModel(code:20, name:'سعيدة',            soilType:'Sols bruns calcaires',        lat:34.83, lon:0.15),
-  WilayaModel(code:21, name:'سكيكدة',           soilType:'Sols bruns calcaires',        lat:36.87, lon:6.90),
-  WilayaModel(code:22, name:'سيدي بلعباس',     soilType:'Sols bruns calcaires',        lat:35.19, lon:-0.64),
-  WilayaModel(code:23, name:'عنابة',            soilType:'Sols alluviaux',              lat:36.90, lon:7.77),
-  WilayaModel(code:24, name:'قالمة',            soilType:'Vertisols',                   lat:36.47, lon:7.43),
-  WilayaModel(code:25, name:'قسنطينة',          soilType:'Vertisols',                   lat:36.37, lon:6.61),
-  WilayaModel(code:26, name:'المدية',           soilType:'Sols bruns calcaires',        lat:36.27, lon:2.75),
-  WilayaModel(code:27, name:'مستغانم',          soilType:'Sols bruns calcaires',        lat:35.93, lon:0.09),
-  WilayaModel(code:28, name:'المسيلة',          soilType:'Sols bruns calcaires',        lat:35.71, lon:4.54),
-  WilayaModel(code:29, name:'معسكر',            soilType:'Sols bruns calcaires',        lat:35.40, lon:0.13),
-  WilayaModel(code:30, name:'ورقلة',            soilType:'Sols sableux (Erg)',          lat:31.95, lon:5.32),
-  WilayaModel(code:31, name:'وهران',            soilType:'Sols bruns calcaires',        lat:35.70, lon:-0.63),
-  WilayaModel(code:32, name:'البيض',            soilType:'Sols bruns calcaires',        lat:33.68, lon:1.02),
-  WilayaModel(code:33, name:'إليزي',            soilType:'Sols minéraux bruts (Reg)',   lat:26.50, lon:8.42),
-  WilayaModel(code:34, name:'برج بوعريريج',    soilType:'Sols bruns calcaires',        lat:36.07, lon:4.76),
-  WilayaModel(code:35, name:'بومرداس',          soilType:'Sols bruns calcaires',        lat:36.76, lon:3.48),
-  WilayaModel(code:36, name:'الطارف',           soilType:'Sols hydromorphes (Oasis)',   lat:36.77, lon:8.32),
-  WilayaModel(code:37, name:'تندوف',            soilType:'Sols minéraux bruts (Reg)',   lat:27.67, lon:-8.13),
-  WilayaModel(code:38, name:'تيسمسيلت',        soilType:'Sols bruns calcaires',        lat:35.60, lon:1.82),
-  WilayaModel(code:39, name:'الوادي',           soilType:'Sols sableux (Erg)',          lat:33.37, lon:6.87),
-  WilayaModel(code:40, name:'خنشلة',            soilType:'Sols bruns calcaires',        lat:35.43, lon:7.13),
-  WilayaModel(code:41, name:'سوق أهراس',        soilType:'Sols bruns calcaires',        lat:36.28, lon:7.95),
-  WilayaModel(code:42, name:'تيبازة',           soilType:'Sols alluviaux',              lat:36.59, lon:2.44),
-  WilayaModel(code:43, name:'ميلة',             soilType:'Vertisols',                   lat:36.45, lon:6.27),
-  WilayaModel(code:44, name:'عين الدفلى',       soilType:'Sols alluviaux',              lat:36.26, lon:1.97),
-  WilayaModel(code:45, name:'النعامة',          soilType:'Sols bruns calcaires',        lat:33.27, lon:-0.32),
-  WilayaModel(code:46, name:'عين تيموشنت',     soilType:'Sols bruns calcaires',        lat:35.30, lon:-1.13),
-  WilayaModel(code:47, name:'غرداية',           soilType:'Sols hydromorphes (Oasis)',   lat:32.48, lon:3.67),
-  WilayaModel(code:48, name:'غليزان',           soilType:'Sols bruns calcaires',        lat:35.74, lon:0.55),
-  WilayaModel(code:49, name:'تيميمون',          soilType:'Sols sableux (Erg)',          lat:29.27, lon:0.23),
-  WilayaModel(code:50, name:'برج باجي مختار',  soilType:'Sols minéraux bruts (Reg)',   lat:21.38, lon:0.95),
-  WilayaModel(code:51, name:'أولاد جلال',       soilType:'Sols sableux (Erg)',          lat:34.43, lon:5.07),
-  WilayaModel(code:52, name:'بني عباس',         soilType:'Sols sableux (Erg)',          lat:30.12, lon:-2.17),
-  WilayaModel(code:53, name:'إن صالح',          soilType:'Sols minéraux bruts (Reg)',   lat:27.20, lon:2.48),
-  WilayaModel(code:54, name:'إن قزام',          soilType:'Sols minéraux bruts (Reg)',   lat:19.57, lon:5.77),
-  WilayaModel(code:55, name:'تقرت',             soilType:'Sols hydromorphes (Oasis)',   lat:33.10, lon:6.07),
-  WilayaModel(code:56, name:'جانت',             soilType:'Sols minéraux bruts (Reg)',   lat:24.55, lon:9.48),
-  WilayaModel(code:57, name:'المغير',           soilType:'Sols hydromorphes (Oasis)',   lat:33.95, lon:5.92),
-  WilayaModel(code:58, name:'المنيعة',          soilType:'Sols sableux (Erg)',          lat:30.58, lon:2.88),
+// ============================================================
+// 📍 DATA LISTS
+// ============================================================
+const List<String> _kWilayas = [
+  'أدرار', 'الشلف', 'الأغواط', 'أم البواقي', 'باتنة', 'بجاية', 'بسكرة', 'بشار',
+  'البليدة', 'البويرة', 'تمنراست', 'تبسة', 'تلمسان', 'تيارت', 'تيزي وزو', 'الجزائر',
+  'الجلفة', 'جيجل', 'سطيف', 'سعيدة', 'سكيكدة', 'سيدي بلعباس', 'عنابة', 'قالمة',
+  'قسنطينة', 'المدية', 'مستغانم', 'المسيلة', 'معسكر', 'ورقلة', 'وهران', 'البيض',
+  'إليزي', 'برج بوعريريج', 'بومرداس', 'الطارف', 'تندوف', 'تيسمسيلت', 'الوادي',
+  'خنشلة', 'سوق أهراس', 'تيبازة', 'ميلة', 'عين الدفلى', 'النعامة', 'عين تموشنت',
+  'غرداية', 'غليزان', 'تيميمون', 'برج باجي مختار', 'أولاد جلال', 'بني عباس',
+  'عين صالح', 'عين قزام', 'تقرت', 'جانت', 'المغير', 'المنيعة',
 ];
 
-// ==================== SOIL DATABASE ====================
-final Map<String, SoilModel> soilDb = {
-  'Sols alluviaux': SoilModel(
-    texture:'طمي رملي طيني - ممتاز', phMin:6.8, phMax:7.5,
-    irrigation:'معتدل (500-700مم/سنة)', fertilisation:'كمبوست 20-30 ط/ه + NPK متوازن',
-    N:85, P:45, K:180, Ca:2500, Mg:350, S:25, efficacite:0.80),
-  'Sols bruns calcaires': SoilModel(
-    texture:'طمي طيني - جيري', phMin:7.2, phMax:8.0,
-    irrigation:'تكميلي (400-600مم/سنة)', fertilisation:'فوسفات طبيعي + تسميد أخضر',
-    N:55, P:25, K:150, Ca:3500, Mg:250, S:18, efficacite:0.75),
-  'Vertisols': SoilModel(
-    texture:'طيني ثقيل (40-60% طين)', phMin:7.0, phMax:8.2,
-    irrigation:'مُدارة (600-800مم/سنة)', fertilisation:'سماد عضوي 15-20 ط/ه',
-    N:70, P:35, K:200, Ca:2800, Mg:400, S:30, efficacite:0.85),
-  "Sols peu évolués d'érosion": SoilModel(
-    texture:'حجري إلى طمي', phMin:6.5, phMax:7.5,
-    irrigation:'مطري (400-600مم/سنة)', fertilisation:'كمبوست 10-15 ط/ه + تغطية',
-    N:25, P:10, K:80, Ca:1500, Mg:120, S:8, efficacite:0.55),
-  'Sols sableux (Erg)': SoilModel(
-    texture:'رملي (85-95% رمل)', phMin:7.5, phMax:8.5,
-    irrigation:'مكثف بالتقطير (800-1200مم/سنة)', fertilisation:'تسميد موضعي + مادة عضوية كثيرة',
-    N:12, P:6, K:45, Ca:800, Mg:60, S:5, efficacite:0.50),
-  'Sols minéraux bruts (Reg)': SoilModel(
-    texture:'حجري مع رمل', phMin:7.5, phMax:8.8,
-    irrigation:'هيدروبونيك أو تقطير على ركيزة', fertilisation:'محلول غذائي كامل',
-    N:5, P:2, K:25, Ca:500, Mg:30, S:2, efficacite:0.40),
-  'Sols hydromorphes (Oasis)': SoilModel(
-    texture:'طمي رملي', phMin:7.2, phMax:8.0,
-    irrigation:'غمر (1000-1500مم/سنة)', fertilisation:'سماد واحات 40-60 ط/ه',
-    N:40, P:20, K:110, Ca:1800, Mg:200, S:15, efficacite:0.65),
+const Map<String, List<String>> _kCulturesByCategory = {
+  'الحبوب':          ['قمح صلب', 'قمح لين', 'شعير', 'ذرة', 'سرغو', 'شوفان'],
+  'الخضروات':        ['طماطم', 'بطاطس', 'بصل', 'ثوم', 'فلفل', 'كوسة', 'باذنجان', 'جزر', 'خس', 'بطيخ', 'قرع', 'فلفل حار', 'لفت', 'خرشوف'],
+  'البقوليات':       ['حمص', 'عدس', 'فول', 'فاصوليا خضراء', 'بازلاء'],
+  'الأشجار المثمرة': ['زيتون', 'نخيل التمر', 'تين', 'رمان', 'كرمة', 'لوز', 'مشمش', 'خوخ', 'برقوق', 'كرز', 'حمضيات (برتقال)', 'ليمون'],
+  'الصناعية':        ['عباد الشمس', 'شمندر السكر', 'قطن', 'تبغ'],
 };
 
-// ==================== CROPS DATABASE ====================
-final List<CropModel> allCrops = [
-  CropModel(name:'قمح صلب', category:'حبوب', icon:'🌾', cycleDays:180, tempMin:12, tempMax:25, waterMm:450, stages:[
-    CropStage(name:'الإنبات', days:15, N:25, P:40, K:30, Ca:10, Mg:5, S:5),
-    CropStage(name:'التفريخ', days:55, N:70, P:35, K:55, Ca:15, Mg:8, S:8),
-    CropStage(name:'الاستطالة', days:30, N:60, P:25, K:45, Ca:12, Mg:6, S:6),
-    CropStage(name:'التسنبل والإزهار', days:40, N:45, P:20, K:50, Ca:10, Mg:5, S:5),
-    CropStage(name:'النضج', days:40, N:10, P:15, K:20, Ca:5, Mg:3, S:3),
-  ]),
-  CropModel(name:'قمح لين', category:'حبوب', icon:'🌾', cycleDays:170, tempMin:10, tempMax:24, waterMm:420, stages:[
-    CropStage(name:'الإنبات', days:14, N:22, P:38, K:28, Ca:10, Mg:5, S:5),
-    CropStage(name:'التفريخ', days:50, N:65, P:32, K:50, Ca:14, Mg:7, S:7),
-    CropStage(name:'الاستطالة', days:28, N:55, P:22, K:42, Ca:11, Mg:6, S:6),
-    CropStage(name:'الإزهار', days:38, N:40, P:18, K:45, Ca:9, Mg:4, S:4),
-    CropStage(name:'النضج', days:40, N:8, P:12, K:18, Ca:4, Mg:3, S:3),
-  ]),
-  CropModel(name:'شعير', category:'حبوب', icon:'🌾', cycleDays:150, tempMin:10, tempMax:28, waterMm:380, stages:[
-    CropStage(name:'الإنبات', days:12, N:20, P:35, K:25, Ca:8, Mg:4, S:4),
-    CropStage(name:'التفريخ', days:45, N:55, P:28, K:42, Ca:12, Mg:6, S:6),
-    CropStage(name:'الاستطالة', days:25, N:48, P:20, K:38, Ca:10, Mg:5, S:5),
-    CropStage(name:'التسنبل', days:35, N:35, P:15, K:40, Ca:8, Mg:4, S:4),
-    CropStage(name:'النضج', days:33, N:5, P:10, K:14, Ca:4, Mg:2, S:2),
-  ]),
-  CropModel(name:'ذرة', category:'حبوب', icon:'🌽', cycleDays:130, tempMin:18, tempMax:32, waterMm:550, stages:[
-    CropStage(name:'الإنبات', days:10, N:30, P:45, K:28, Ca:12, Mg:7, S:6),
-    CropStage(name:'النمو الخضري', days:40, N:75, P:32, K:48, Ca:22, Mg:14, S:11),
-    CropStage(name:'الإزهار', days:25, N:50, P:40, K:68, Ca:28, Mg:17, S:14),
-    CropStage(name:'النضج', days:55, N:18, P:18, K:38, Ca:18, Mg:9, S:7),
-  ]),
-  CropModel(name:'طماطم', category:'خضروات', icon:'🍅', cycleDays:120, tempMin:18, tempMax:30, waterMm:600, stages:[
-    CropStage(name:'الشتلات', days:25, N:30, P:50, K:40, Ca:20, Mg:10, S:8),
-    CropStage(name:'النمو الخضري', days:35, N:65, P:35, K:55, Ca:30, Mg:14, S:12),
-    CropStage(name:'الإزهار', days:20, N:40, P:55, K:75, Ca:38, Mg:19, S:16),
-    CropStage(name:'الإثمار', days:40, N:35, P:32, K:70, Ca:32, Mg:16, S:11),
-  ]),
-  CropModel(name:'بطاطس', category:'خضروات', icon:'🥔', cycleDays:100, tempMin:14, tempMax:24, waterMm:500, stages:[
-    CropStage(name:'الإنبات', days:20, N:25, P:45, K:40, Ca:18, Mg:9, S:8),
-    CropStage(name:'النمو الخضري', days:30, N:52, P:28, K:48, Ca:28, Mg:14, S:11),
-    CropStage(name:'تكوين الدرنات', days:30, N:32, P:33, K:68, Ca:24, Mg:19, S:14),
-    CropStage(name:'النضج', days:20, N:8, P:13, K:22, Ca:13, Mg:9, S:5),
-  ]),
-  CropModel(name:'بصل', category:'خضروات', icon:'🧅', cycleDays:150, tempMin:12, tempMax:26, waterMm:420, stages:[
-    CropStage(name:'الإنبات', days:15, N:30, P:50, K:30, Ca:10, Mg:5, S:8),
-    CropStage(name:'النمو الخضري', days:60, N:60, P:40, K:50, Ca:20, Mg:10, S:15),
-    CropStage(name:'تكوين البصلة', days:50, N:30, P:50, K:80, Ca:25, Mg:15, S:20),
-    CropStage(name:'النضج', days:25, N:0, P:20, K:40, Ca:15, Mg:8, S:10),
-  ]),
-  CropModel(name:'ثوم', category:'خضروات', icon:'🧄', cycleDays:180, tempMin:10, tempMax:24, waterMm:380, stages:[
-    CropStage(name:'الإنبات', days:20, N:25, P:45, K:30, Ca:12, Mg:6, S:10),
-    CropStage(name:'النمو الخضري', days:80, N:55, P:35, K:45, Ca:18, Mg:10, S:18),
-    CropStage(name:'تكوين الفصوص', days:50, N:25, P:45, K:70, Ca:22, Mg:13, S:22),
-    CropStage(name:'النضج', days:30, N:0, P:15, K:30, Ca:10, Mg:6, S:8),
-  ]),
-  CropModel(name:'جزر', category:'خضروات', icon:'🥕', cycleDays:90, tempMin:12, tempMax:24, waterMm:350, stages:[
-    CropStage(name:'الإنبات', days:15, N:20, P:40, K:25, Ca:10, Mg:5, S:5),
-    CropStage(name:'النمو الخضري', days:35, N:45, P:28, K:42, Ca:18, Mg:9, S:8),
-    CropStage(name:'تكوين الجذر', days:30, N:18, P:30, K:60, Ca:20, Mg:12, S:10),
-    CropStage(name:'النضج', days:10, N:5, P:10, K:20, Ca:8, Mg:5, S:4),
-  ]),
-  CropModel(name:'فلفل', category:'خضروات', icon:'🫑', cycleDays:120, tempMin:18, tempMax:32, waterMm:520, stages:[
-    CropStage(name:'الشتلات', days:25, N:28, P:48, K:38, Ca:18, Mg:9, S:7),
-    CropStage(name:'النمو الخضري', days:35, N:60, P:32, K:52, Ca:28, Mg:13, S:11),
-    CropStage(name:'الإزهار', days:25, N:38, P:52, K:72, Ca:35, Mg:18, S:15),
-    CropStage(name:'الإثمار', days:35, N:32, P:30, K:65, Ca:30, Mg:15, S:10),
-  ]),
-  CropModel(name:'باذنجان', category:'خضروات', icon:'🍆', cycleDays:130, tempMin:20, tempMax:32, waterMm:500, stages:[
-    CropStage(name:'الشتلات', days:25, N:25, P:45, K:35, Ca:16, Mg:8, S:6),
-    CropStage(name:'النمو الخضري', days:40, N:58, P:30, K:50, Ca:26, Mg:12, S:10),
-    CropStage(name:'الإزهار', days:30, N:35, P:50, K:68, Ca:32, Mg:17, S:14),
-    CropStage(name:'الإثمار', days:35, N:30, P:28, K:62, Ca:28, Mg:14, S:9),
-  ]),
-  CropModel(name:'بطيخ أحمر', category:'خضروات', icon:'🍉', cycleDays:90, tempMin:22, tempMax:36, waterMm:550, stages:[
-    CropStage(name:'الإنبات', days:12, N:22, P:42, K:30, Ca:12, Mg:6, S:5),
-    CropStage(name:'النمو الخضري', days:28, N:55, P:28, K:45, Ca:22, Mg:11, S:9),
-    CropStage(name:'الإزهار والعقد', days:20, N:35, P:45, K:65, Ca:30, Mg:16, S:13),
-    CropStage(name:'نضج الثمار', days:30, N:15, P:25, K:55, Ca:22, Mg:12, S:8),
-  ]),
-  CropModel(name:'شمام', category:'خضروات', icon:'🍈', cycleDays:85, tempMin:20, tempMax:34, waterMm:500, stages:[
-    CropStage(name:'الإنبات', days:10, N:20, P:40, K:28, Ca:10, Mg:5, S:4),
-    CropStage(name:'النمو الخضري', days:28, N:50, P:26, K:42, Ca:20, Mg:10, S:8),
-    CropStage(name:'الإزهار والعقد', days:20, N:32, P:42, K:62, Ca:28, Mg:15, S:12),
-    CropStage(name:'نضج الثمار', days:27, N:12, P:22, K:50, Ca:20, Mg:10, S:7),
-  ]),
-  CropModel(name:'حمص', category:'بقوليات', icon:'🫘', cycleDays:100, tempMin:10, tempMax:28, waterMm:300, stages:[
-    CropStage(name:'الإنبات', days:15, N:15, P:40, K:25, Ca:12, Mg:5, S:5),
-    CropStage(name:'النمو الخضري', days:40, N:30, P:28, K:38, Ca:20, Mg:8, S:7),
-    CropStage(name:'الإزهار والتعقد', days:25, N:20, P:38, K:55, Ca:28, Mg:12, S:10),
-    CropStage(name:'النضج', days:20, N:5, P:15, K:25, Ca:15, Mg:7, S:5),
-  ]),
-  CropModel(name:'عدس', category:'بقوليات', icon:'🫘', cycleDays:110, tempMin:10, tempMax:26, waterMm:280, stages:[
-    CropStage(name:'الإنبات', days:14, N:12, P:38, K:22, Ca:10, Mg:4, S:4),
-    CropStage(name:'النمو الخضري', days:45, N:28, P:26, K:35, Ca:18, Mg:7, S:6),
-    CropStage(name:'الإزهار', days:28, N:18, P:35, K:52, Ca:25, Mg:11, S:9),
-    CropStage(name:'النضج', days:23, N:4, P:12, K:22, Ca:13, Mg:6, S:4),
-  ]),
-  CropModel(name:'فول', category:'بقوليات', icon:'🫘', cycleDays:130, tempMin:8, tempMax:25, waterMm:350, stages:[
-    CropStage(name:'الإنبات', days:18, N:18, P:42, K:28, Ca:14, Mg:6, S:6),
-    CropStage(name:'النمو الخضري', days:52, N:35, P:30, K:42, Ca:22, Mg:9, S:8),
-    CropStage(name:'الإزهار', days:32, N:22, P:40, K:58, Ca:30, Mg:13, S:11),
-    CropStage(name:'النضج', days:28, N:5, P:14, K:25, Ca:16, Mg:7, S:5),
-  ]),
-  CropModel(name:'نخيل التمر', category:'أشجار مثمرة', icon:'🌴', cycleDays:365, tempMin:20, tempMax:45, waterMm:900, stages:[
-    CropStage(name:'النمو الخضري', days:180, N:95, P:75, K:115, Ca:38, Mg:24, S:19),
-    CropStage(name:'الإزهار', days:60, N:58, P:95, K:145, Ca:48, Mg:29, S:24),
-    CropStage(name:'نمو الثمار', days:90, N:38, P:58, K:175, Ca:43, Mg:33, S:28),
-    CropStage(name:'النضج', days:35, N:18, P:28, K:96, Ca:28, Mg:19, S:14),
-  ]),
-  CropModel(name:'زيتون', category:'أشجار مثمرة', icon:'🫒', cycleDays:365, tempMin:10, tempMax:38, waterMm:600, stages:[
-    CropStage(name:'النمو الخضري', days:150, N:48, P:38, K:48, Ca:28, Mg:14, S:9),
-    CropStage(name:'الإزهار', days:30, N:28, P:48, K:58, Ca:33, Mg:19, S:11),
-    CropStage(name:'العقد', days:60, N:18, P:38, K:68, Ca:38, Mg:21, S:14),
-    CropStage(name:'النضج', days:125, N:9, P:18, K:38, Ca:23, Mg:11, S:7),
-  ]),
-  CropModel(name:'تفاح', category:'أشجار مثمرة', icon:'🍎', cycleDays:365, tempMin:5, tempMax:28, waterMm:700, stages:[
-    CropStage(name:'السكون الشتوي', days:90, N:20, P:30, K:40, Ca:25, Mg:12, S:8),
-    CropStage(name:'النمو الخضري', days:90, N:60, P:45, K:65, Ca:40, Mg:18, S:12),
-    CropStage(name:'الإزهار والعقد', days:60, N:35, P:55, K:80, Ca:50, Mg:22, S:15),
-    CropStage(name:'نضج الثمار', days:125, N:15, P:25, K:55, Ca:35, Mg:15, S:9),
-  ]),
-  CropModel(name:'عنب', category:'أشجار مثمرة', icon:'🍇', cycleDays:180, tempMin:12, tempMax:36, waterMm:600, stages:[
-    CropStage(name:'التفتح', days:30, N:25, P:35, K:40, Ca:20, Mg:10, S:8),
-    CropStage(name:'النمو الخضري', days:60, N:60, P:40, K:55, Ca:30, Mg:15, S:12),
-    CropStage(name:'الإزهار والعقد', days:30, N:30, P:50, K:75, Ca:40, Mg:20, S:15),
-    CropStage(name:'نضج العنب', days:60, N:10, P:25, K:60, Ca:28, Mg:15, S:8),
-  ]),
-  CropModel(name:'رمان', category:'أشجار مثمرة', icon:'🍎', cycleDays:365, tempMin:15, tempMax:38, waterMm:550, stages:[
-    CropStage(name:'النمو الخضري', days:150, N:45, P:35, K:50, Ca:30, Mg:15, S:10),
-    CropStage(name:'الإزهار', days:45, N:28, P:45, K:62, Ca:38, Mg:20, S:13),
-    CropStage(name:'نمو الثمار', days:120, N:20, P:30, K:75, Ca:42, Mg:22, S:15),
-    CropStage(name:'النضج', days:50, N:8, P:18, K:42, Ca:28, Mg:13, S:8),
-  ]),
-  CropModel(name:'نعناع', category:'أعشاب عطرية', icon:'🌿', cycleDays:60, tempMin:12, tempMax:26, waterMm:300, stages:[
-    CropStage(name:'الإنبات', days:12, N:18, P:30, K:22, Ca:8, Mg:4, S:5),
-    CropStage(name:'النمو الخضري', days:30, N:42, P:22, K:35, Ca:15, Mg:8, S:10),
-    CropStage(name:'النضج', days:18, N:12, P:15, K:28, Ca:10, Mg:5, S:7),
-  ]),
-  CropModel(name:'إكليل الجبل', category:'أعشاب عطرية', icon:'🌿', cycleDays:90, tempMin:10, tempMax:28, waterMm:250, stages:[
-    CropStage(name:'الإنبات', days:20, N:12, P:25, K:18, Ca:8, Mg:4, S:4),
-    CropStage(name:'النمو', days:45, N:30, P:18, K:28, Ca:12, Mg:6, S:7),
-    CropStage(name:'النضج', days:25, N:8, P:12, K:22, Ca:8, Mg:4, S:5),
-  ]),
-  CropModel(name:'زعتر', category:'أعشاب عطرية', icon:'🌿', cycleDays:90, tempMin:10, tempMax:28, waterMm:220, stages:[
-    CropStage(name:'الإنبات', days:18, N:10, P:22, K:16, Ca:6, Mg:3, S:3),
-    CropStage(name:'النمو', days:48, N:28, P:16, K:26, Ca:10, Mg:5, S:6),
-    CropStage(name:'النضج', days:24, N:6, P:10, K:20, Ca:7, Mg:3, S:4),
-  ]),
-  CropModel(name:'برسيم', category:'أعلاف', icon:'🌿', cycleDays:365, tempMin:10, tempMax:30, waterMm:800, stages:[
-    CropStage(name:'الإنبات', days:15, N:20, P:35, K:25, Ca:15, Mg:7, S:6),
-    CropStage(name:'النمو الخضري', days:180, N:50, P:28, K:42, Ca:30, Mg:15, S:12),
-    CropStage(name:'الإزهار والقطع', days:120, N:30, P:20, K:35, Ca:22, Mg:10, S:8),
-    CropStage(name:'الراحة', days:50, N:10, P:10, K:18, Ca:10, Mg:5, S:4),
-  ]),
-  CropModel(name:'عباد الشمس', category:'محاصيل صناعية', icon:'🌻', cycleDays:120, tempMin:18, tempMax:32, waterMm:450, stages:[
-    CropStage(name:'الإنبات', days:12, N:22, P:38, K:28, Ca:10, Mg:6, S:6),
-    CropStage(name:'النمو الخضري', days:45, N:60, P:30, K:48, Ca:20, Mg:12, S:10),
-    CropStage(name:'الإزهار', days:28, N:35, P:42, K:65, Ca:28, Mg:16, S:13),
-    CropStage(name:'نضج البذور', days:35, N:12, P:22, K:40, Ca:18, Mg:10, S:7),
-  ]),
-  CropModel(name:'بنجر السكر', category:'محاصيل صناعية', icon:'🌱', cycleDays:180, tempMin:12, tempMax:26, waterMm:550, stages:[
-    CropStage(name:'الإنبات', days:20, N:25, P:42, K:35, Ca:15, Mg:7, S:7),
-    CropStage(name:'النمو الخضري', days:70, N:65, P:32, K:55, Ca:25, Mg:13, S:11),
-    CropStage(name:'تراكم السكر', days:60, N:20, P:38, K:80, Ca:30, Mg:17, S:14),
-    CropStage(name:'النضج', days:30, N:5, P:18, K:42, Ca:18, Mg:9, S:6),
-  ]),
-];
+// ============================================================
+// 📦 MODELS
+// ============================================================
+class FertilizationResult {
+  final bool success;
+  final String? error;
+  final String? wilaya, crop, stageName, soilType;
+  final double? area, totalKg, totalKgHa, stageProgress, irrigationAmount;
+  final int? daysElapsed, totalDays, daysRemaining;
+  final Map<String, dynamic>? nutrients;
+  final List<dynamic>? fertilizers, tips;
+  final List<String>? alerts, warnings;
+  final String? riskLevel;
+  final Map<String, dynamic> raw;
 
-// ==================== ANIMATED WIDGETS ====================
+  FertilizationResult({
+    required this.success,
+    this.error,
+    this.wilaya,
+    this.area,
+    this.crop,
+    this.totalKg,
+    this.totalKgHa,
+    this.stageProgress,
+    this.stageName,
+    this.daysElapsed,
+    this.totalDays,
+    this.daysRemaining,
+    this.soilType,
+    this.nutrients,
+    this.fertilizers,
+    this.alerts,
+    this.warnings,
+    this.tips,
+    this.irrigationAmount,
+    this.riskLevel,
+    required this.raw,
+  });
 
-/// Shimmer-loading animation placeholder
-class ShimmerBox extends StatefulWidget {
-  final double width, height, radius;
-  const ShimmerBox({super.key, this.width = double.infinity, this.height = 48, this.radius = 12});
-  @override State<ShimmerBox> createState() => _ShimmerBoxState();
-}
-class _ShimmerBoxState extends State<ShimmerBox> with SingleTickerProviderStateMixin {
-  late AnimationController _ctrl;
-  late Animation<double> _anim;
-  @override void initState() {
-    super.initState();
-    _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))..repeat();
-    _anim = Tween<double>(begin: -1, end: 2).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
-  }
-  @override void dispose() { _ctrl.dispose(); super.dispose(); }
-  @override Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _anim,
-      builder: (_, __) => Container(
-        width: widget.width, height: widget.height,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(widget.radius),
-          gradient: LinearGradient(
-            begin: Alignment(_anim.value - 1, 0), end: Alignment(_anim.value, 0),
-            colors: [const Color(0xFFE8EFD8), const Color(0xFFF5FAF0), const Color(0xFFE8EFD8)],
-          ),
-        ),
-      ),
+  factory FertilizationResult.fromJson(Map<String, dynamic> json) {
+    String risk = 'منخفضة';
+    if (json['riskLevel'] != null)
+      risk = json['riskLevel'].toString();
+    else if (json['alerts'] != null && (json['alerts'] as List).isNotEmpty)
+      risk = 'حرجة';
+    else if (json['warnings'] != null && (json['warnings'] as List).isNotEmpty)
+      risk = 'متوسطة';
+
+    return FertilizationResult(
+      success: json['success'] ?? true,
+      error: json['error'],
+      wilaya: json['wilaya'],
+      area: (json['area'] as num?)?.toDouble(),
+      crop: json['crop'],
+      totalKg: (json['totalKg'] as num?)?.toDouble(),
+      totalKgHa: (json['totalKgHa'] as num?)?.toDouble(),
+      stageProgress: (json['stageProgress'] as num?)?.toDouble(),
+      stageName: json['stageName'],
+      daysElapsed: (json['daysElapsed'] as num?)?.toInt(),
+      totalDays: (json['totalDays'] as num?)?.toInt(),
+      daysRemaining: (json['daysRemaining'] as num?)?.toInt(),
+      soilType: json['soilType'],
+      nutrients: json['nutrients'] as Map<String, dynamic>?,
+      fertilizers: json['fertilizers'] as List?,
+      alerts: (json['alerts'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
+      warnings: (json['warnings'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
+      tips: json['tips'] as List?,
+      irrigationAmount: (json['irrigation']?['amount'] as num?)?.toDouble(),
+      riskLevel: risk,
+      raw: json,
     );
   }
 }
 
-/// Fade + slide up animation wrapper
-class FadeSlideIn extends StatefulWidget {
-  final Widget child;
-  final Duration delay;
-  const FadeSlideIn({super.key, required this.child, this.delay = Duration.zero});
-  @override State<FadeSlideIn> createState() => _FadeSlideInState();
-}
-class _FadeSlideInState extends State<FadeSlideIn> with SingleTickerProviderStateMixin {
-  late AnimationController _ctrl;
-  late Animation<double> _fade;
-  late Animation<Offset> _slide;
-  @override void initState() {
-    super.initState();
-    _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
-    _fade = CurvedAnimation(parent: _ctrl, curve: Curves.easeOut);
-    _slide = Tween<Offset>(begin: const Offset(0, 0.12), end: Offset.zero)
-      .animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOut));
-    Future.delayed(widget.delay, () { if (mounted) _ctrl.forward(); });
+class FertilizationRecord {
+  final String id, wilaya, culture, previousCulture, stageName, riskLevel;
+  final DateTime datePlantation, dateCalcul;
+  final double superficie, totalKg, totalKgHa;
+  final int progression;
+  final Map<String, dynamic> rawData;
+
+  FertilizationRecord({
+    required this.id,
+    required this.wilaya,
+    required this.culture,
+    required this.previousCulture,
+    required this.datePlantation,
+    required this.superficie,
+    required this.dateCalcul,
+    required this.totalKg,
+    required this.totalKgHa,
+    required this.stageName,
+    required this.progression,
+    required this.riskLevel,
+    required this.rawData,
+  });
+
+  factory FertilizationRecord.fromFirestore(DocumentSnapshot doc) {
+    final d = doc.data() as Map<String, dynamic>;
+    return FertilizationRecord(
+      id: doc.id,
+      wilaya: d['wilaya'] ?? '',
+      culture: d['culture'] ?? '',
+      previousCulture: d['previous_culture'] ?? '',
+      datePlantation: (d['date_plantation'] as Timestamp).toDate(),
+      superficie: (d['superficie'] as num?)?.toDouble() ?? 0,
+      dateCalcul: (d['date_calcul'] as Timestamp).toDate(),
+      totalKg: (d['total_kg'] as num?)?.toDouble() ?? 0,
+      totalKgHa: (d['total_kg_ha'] as num?)?.toDouble() ?? 0,
+      stageName: d['stage_name'] ?? '',
+      progression: (d['progression'] as num?)?.toInt() ?? 0,
+      riskLevel: d['risk_level'] ?? '',
+      rawData: Map<String, dynamic>.from(d['raw_data'] ?? {}),
+    );
   }
-  @override void dispose() { _ctrl.dispose(); super.dispose(); }
-  @override Widget build(BuildContext context) => SlideTransition(
-    position: _slide, child: FadeTransition(opacity: _fade, child: widget.child));
+
+  Map<String, dynamic> toFirestore() => {
+        'wilaya': wilaya,
+        'culture': culture,
+        'previous_culture': previousCulture,
+        'date_plantation': Timestamp.fromDate(datePlantation),
+        'superficie': superficie,
+        'date_calcul': Timestamp.fromDate(dateCalcul),
+        'total_kg': totalKg,
+        'total_kg_ha': totalKgHa,
+        'stage_name': stageName,
+        'progression': progression,
+        'risk_level': riskLevel,
+        'raw_data': rawData,
+      };
 }
 
-/// Animated progress bar
-class AnimatedProgressBar extends StatefulWidget {
-  final double value;
+// ============================================================
+// 🚜 TRACTOR PAINTER – Fixed version with proper animations
+// ============================================================
+class TractorPainter extends CustomPainter {
+  final double wheelAngle;
+  final double smokeProgress;
+
+  const TractorPainter({required this.wheelAngle, required this.smokeProgress});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.scale(size.width / 140, size.height / 100);
+    _drawSmoke(canvas);
+    _drawRearWheel(canvas);
+    _drawFrontWheel(canvas);
+    _drawBody(canvas);
+  }
+
+  void _drawSmoke(Canvas canvas) {
+    final paint = Paint()..style = PaintingStyle.fill;
+
+    // Puff 1
+    final alpha1 = (0.6 * (1 - smokeProgress)).clamp(0.0, 1.0);
+    paint.color = Color.fromRGBO(184, 201, 168, alpha1);
+    canvas.drawCircle(
+      Offset(102 - smokeProgress * 12, 22 - smokeProgress * 18),
+      5 * (1 + smokeProgress * 0.8),
+      paint,
+    );
+
+    // Puff 2 (delayed)
+    final delay = (smokeProgress + 0.5) % 1.0;
+    final alpha2 = (0.4 * (1 - delay)).clamp(0.0, 1.0);
+    paint.color = Color.fromRGBO(197, 212, 176, alpha2);
+    canvas.drawCircle(
+      Offset(98 - delay * 12, 18 - delay * 18),
+      3.5 * (1 + delay * 0.8),
+      paint,
+    );
+  }
+
+  void _drawRearWheel(Canvas canvas) {
+    canvas.save();
+    canvas.translate(35, 70);
+    canvas.rotate(wheelAngle);
+    canvas.translate(-35, -70);
+
+    final fill = Paint()..style = PaintingStyle.fill;
+
+    fill.color = const Color(0xFF3A3A3A);
+    canvas.drawCircle(const Offset(35, 70), 25, fill);
+    fill.color = const Color(0xFF2D2D2D);
+    canvas.drawCircle(const Offset(35, 70), 20, fill);
+    fill.color = const Color(0xFFE8E4DC);
+    canvas.drawCircle(const Offset(35, 70), 10, fill);
+    fill.color = const Color(0xFF55833D);
+    canvas.drawCircle(const Offset(35, 70), 5, fill);
+
+    final spoke = Paint()
+      ..color = const Color(0xFF444444)
+      ..strokeWidth = 2.5
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawLine(const Offset(35, 45), const Offset(35, 95), spoke);
+    canvas.drawLine(const Offset(10, 70), const Offset(60, 70), spoke);
+    spoke.strokeWidth = 2;
+    canvas.drawLine(const Offset(18, 52), const Offset(52, 88), spoke);
+    canvas.drawLine(const Offset(52, 52), const Offset(18, 88), spoke);
+
+    canvas.restore();
+  }
+
+  void _drawFrontWheel(Canvas canvas) {
+    canvas.save();
+    canvas.translate(105, 70);
+    canvas.rotate(wheelAngle);
+    canvas.translate(-105, -70);
+
+    final fill = Paint()..style = PaintingStyle.fill;
+
+    fill.color = const Color(0xFF3A3A3A);
+    canvas.drawCircle(const Offset(105, 70), 16, fill);
+    fill.color = const Color(0xFF2D2D2D);
+    canvas.drawCircle(const Offset(105, 70), 12, fill);
+    fill.color = const Color(0xFFE8E4DC);
+    canvas.drawCircle(const Offset(105, 70), 6, fill);
+    fill.color = const Color(0xFF55833D);
+    canvas.drawCircle(const Offset(105, 70), 3, fill);
+
+    final spoke = Paint()
+      ..color = const Color(0xFF444444)
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawLine(const Offset(105, 54), const Offset(105, 86), spoke);
+    canvas.drawLine(const Offset(89, 70), const Offset(121, 70), spoke);
+
+    canvas.restore();
+  }
+
+  void _drawBody(Canvas canvas) {
+    final paint = Paint()..style = PaintingStyle.fill;
+
+    // Main body
+    paint.color = const Color(0xFF55833D);
+    final body = Path()
+      ..moveTo(55, 70)
+      ..lineTo(55, 52)
+      ..quadraticBezierTo(55, 44, 63, 44)
+      ..lineTo(95, 44)
+      ..quadraticBezierTo(112, 44, 112, 60)
+      ..lineTo(112, 70)
+      ..close();
+    canvas.drawPath(body, paint);
+
+    // Cabin
+    paint.color = const Color(0xFF4A7535);
+    final cabin = Path()
+      ..moveTo(57, 44)
+      ..lineTo(57, 24)
+      ..quadraticBezierTo(57, 16, 67, 16)
+      ..lineTo(88, 16)
+      ..quadraticBezierTo(96, 16, 96, 24)
+      ..lineTo(96, 44)
+      ..close();
+    canvas.drawPath(cabin, paint);
+
+    // Window (main glass)
+    paint.color = const Color(0xD9C8DFF0);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(const Rect.fromLTWH(61, 20, 30, 20), const Radius.circular(3)),
+      paint,
+    );
+    // Window reflection
+    paint.color = const Color(0xB3A8CBEA);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(const Rect.fromLTWH(63, 22, 12, 16), const Radius.circular(2)),
+      paint,
+    );
+
+    // Exhaust pipe body
+    paint.color = const Color(0xFF524133);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(const Rect.fromLTWH(97, 28, 4, 16), const Radius.circular(2)),
+      paint,
+    );
+    // Exhaust pipe cap
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(const Rect.fromLTWH(97, 25, 6, 5), const Radius.circular(3)),
+      paint,
+    );
+
+    // Grill panel
+    paint.color = const Color(0xFF3D6B2B);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(const Rect.fromLTWH(100, 50, 10, 18), const Radius.circular(2)),
+      paint,
+    );
+    // Grill lines
+    final grill = Paint()
+      ..color = const Color(0xB3E3EED4)
+      ..strokeWidth = 1.5
+      ..style = PaintingStyle.stroke;
+    canvas.drawLine(const Offset(101, 54), const Offset(109, 54), grill);
+    canvas.drawLine(const Offset(101, 58), const Offset(109, 58), grill);
+    canvas.drawLine(const Offset(101, 62), const Offset(109, 62), grill);
+
+    // Headlight
+    paint.color = const Color(0xFFDDA811);
+    canvas.drawCircle(const Offset(110, 47), 3.5, paint);
+    paint.color = const Color(0x80FFFFFF);
+    canvas.drawCircle(const Offset(110, 47), 1.5, paint);
+
+    // Ground shadow line
+    final ground = Paint()
+      ..color = const Color(0x663D6B2B)
+      ..strokeWidth = 3
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+    final groundPath = Path()
+      ..moveTo(58, 68)
+      ..quadraticBezierTo(46, 75, 22, 75);
+    canvas.drawPath(groundPath, ground);
+  }
+
+  @override
+  bool shouldRepaint(TractorPainter old) =>
+      old.wheelAngle != wheelAngle || old.smokeProgress != smokeProgress;
+}
+
+// ============================================================
+// 🔵 ANIMATED DOTS TEXT
+// ============================================================
+class _AnimatedDotsText extends StatefulWidget {
+  final String text;
   final Color color;
-  final double height;
-  const AnimatedProgressBar({super.key, required this.value, required this.color, this.height = 8});
-  @override State<AnimatedProgressBar> createState() => _AnimatedProgressBarState();
-}
-class _AnimatedProgressBarState extends State<AnimatedProgressBar> with SingleTickerProviderStateMixin {
-  late AnimationController _ctrl;
-  late Animation<double> _anim;
-  @override void initState() {
-    super.initState();
-    _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200));
-    _anim = Tween<double>(begin: 0, end: widget.value).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
-    Future.delayed(const Duration(milliseconds: 300), () { if (mounted) _ctrl.forward(); });
-  }
-  @override void dispose() { _ctrl.dispose(); super.dispose(); }
-  @override Widget build(BuildContext context) => AnimatedBuilder(
-    animation: _anim,
-    builder: (_, __) => LayoutBuilder(builder: (ctx, c) => Stack(children: [
-      Container(
-        height: widget.height,
-        decoration: BoxDecoration(
-          color: widget.color.withOpacity(0.15),
-          borderRadius: BorderRadius.circular(widget.height),
-        ),
-      ),
-      Container(
-        height: widget.height,
-        width: c.maxWidth * _anim.value.clamp(0.0, 1.0),
-        decoration: BoxDecoration(
-          color: widget.color,
-          borderRadius: BorderRadius.circular(widget.height),
-        ),
-      ),
-    ])),
-  );
+  const _AnimatedDotsText({required this.text, required this.color});
+  @override
+  State<_AnimatedDotsText> createState() => _AnimatedDotsTextState();
 }
 
-/// Animated counter text
-class AnimatedCounter extends StatefulWidget {
-  final double value;
-  final String suffix;
-  final TextStyle style;
-  const AnimatedCounter({super.key, required this.value, this.suffix = '', required this.style});
-  @override State<AnimatedCounter> createState() => _AnimatedCounterState();
-}
-class _AnimatedCounterState extends State<AnimatedCounter> with SingleTickerProviderStateMixin {
-  late AnimationController _ctrl;
-  late Animation<double> _anim;
-  @override void initState() {
-    super.initState();
-    _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500));
-    _anim = Tween<double>(begin: 0, end: widget.value)
-      .animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutExpo));
-    Future.delayed(const Duration(milliseconds: 200), () { if (mounted) _ctrl.forward(); });
-  }
-  @override void dispose() { _ctrl.dispose(); super.dispose(); }
-  @override Widget build(BuildContext context) => AnimatedBuilder(
-    animation: _anim,
-    builder: (_, __) => Text(
-      '${_anim.value.toStringAsFixed(1)}${widget.suffix}',
-      style: widget.style,
-    ),
-  );
-}
-
-// ==================== MAIN SCREEN ====================
-class FertilizationScreen extends StatefulWidget {
-  const FertilizationScreen({super.key});
-  @override State<FertilizationScreen> createState() => _FertilizationScreenState();
-}
-
-class _FertilizationScreenState extends State<FertilizationScreen>
+class _AnimatedDotsTextState extends State<_AnimatedDotsText>
     with TickerProviderStateMixin {
-  late TabController _tabController;
-  int _currentTab = 0;
-  bool _isLoading = false;
-  String _loadingMsg = '🤖 الذكاء الاصطناعي يحلل...';
-  bool _isDark = false;
-
-  // Form
-  WilayaModel? _selectedWilaya;
-  CropModel? _selectedCrop;
-  final _areaCtrl = TextEditingController();
-  final _phCtrl = TextEditingController();
-  final _searchCtrl = TextEditingController();
-  DateTime _plantDate = DateTime.now().subtract(const Duration(days: 30));
-  String _prevCrop = '';
-  String _irrigation = 'ري_تقطير';
-  String _season = 'خريف';
-  List<WilayaModel> _filteredWilayas = allWilayas;
-
-  // Results
-  AnalysisResult? _result;
-  List<AnalysisResult> _savedRecords = [];
-  Map<String, dynamic>? _weatherData;
-
-  // Animation controllers
-  late AnimationController _fabCtrl;
-  late Animation<double> _fabScale;
+  late List<AnimationController> _ctrl;
+  late List<Animation<double>> _anim;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
-    _tabController.addListener(() {
-      setState(() {
-        _currentTab = _tabController.index;
-        if (_currentTab == 2) _loadRecords();
+    _ctrl = List.generate(
+      3,
+      (i) => AnimationController(
+        duration: const Duration(milliseconds: 1200),
+        vsync: this,
+      ),
+    );
+    for (int i = 0; i < 3; i++) {
+      Future.delayed(Duration(milliseconds: i * 200), () {
+        if (mounted) _ctrl[i].repeat(reverse: true);
       });
-    });
-    _fabCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
-    _fabScale = CurvedAnimation(parent: _fabCtrl, curve: Curves.elasticOut);
-    _loadRecords();
+    }
+    _anim = _ctrl
+        .map((c) => Tween<double>(begin: 0.2, end: 1.0)
+            .animate(CurvedAnimation(parent: c, curve: Curves.easeInOut)))
+        .toList();
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
-    _areaCtrl.dispose();
-    _phCtrl.dispose();
-    _searchCtrl.dispose();
-    _fabCtrl.dispose();
+    for (final c in _ctrl) c.dispose();
     super.dispose();
   }
 
-  // ==================== LOGIC ====================
-  void _filterWilayas(String query) {
-    setState(() {
-      _filteredWilayas = allWilayas.where((w) =>
-        w.name.contains(query) || w.code.toString().contains(query)
-      ).toList();
-    });
-  }
-
-  Future<void> _fetchWeather(WilayaModel wilaya) async {
-    try {
-      final url = Uri.parse(
-        'https://api.open-meteo.com/v1/forecast?latitude=${wilaya.lat}&longitude=${wilaya.lon}'
-        '&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,'
-        'relative_humidity_2m_mean&timezone=Africa/Algiers&forecast_days=3'
-      );
-      final res = await http.get(url).timeout(const Duration(seconds: 8));
-      if (res.statusCode == 200) {
-        final d = json.decode(res.body);
-        setState(() {
-          _weatherData = {
-            'temp': (d['current_weather']['temperature'] as num?)?.round() ?? 22,
-            'tempMax': (d['daily']['temperature_2m_max'][0] as num?)?.round() ?? 28,
-            'tempMin': (d['daily']['temperature_2m_min'][0] as num?)?.round() ?? 12,
-            'rain': (d['daily']['precipitation_sum'][0] as num?)?.toDouble() ?? 0.0,
-            'humidity': (d['daily']['relative_humidity_2m_mean'][0] as num?)?.round() ?? 55,
-          };
-        });
-      }
-    } catch (_) {}
-  }
-
-  void _calculate() async {
-    if (_selectedWilaya == null) { _snack('⚠️ اختر الولاية أولاً'); return; }
-    if (_selectedCrop == null)   { _snack('⚠️ اختر المحصول أولاً'); return; }
-    final areaText = _areaCtrl.text.trim();
-    if (areaText.isEmpty) { _snack('⚠️ أدخل مساحة الحقل'); return; }
-    final area = double.tryParse(areaText);
-    if (area == null || area <= 0) { _snack('⚠️ أدخل مساحة صحيحة (رقم موجب)'); return; }
-
-    setState(() { _isLoading = true; _loadingMsg = '🌍 جاري تحليل التربة والمناخ...'; });
-    await Future.delayed(const Duration(milliseconds: 700));
-
-    setState(() => _loadingMsg = '🧬 حساب الاحتياجات الغذائية...');
-    await Future.delayed(const Duration(milliseconds: 600));
-
-    setState(() => _loadingMsg = '🤖 الذكاء الاصطناعي يولّد التوصيات...');
-    await Future.delayed(const Duration(milliseconds: 600));
-
-    final soil = soilDb[_selectedWilaya!.soilType]!;
-    final crop = _selectedCrop!;
-
-    final daysElapsed = DateTime.now().difference(_plantDate).inDays.clamp(0, crop.cycleDays);
-    int daysCum = 0;
-    CropStage? curStage;
-    for (int i = 0; i < crop.stages.length; i++) {
-      final s = crop.stages[i];
-      if (daysElapsed < daysCum + s.days) { curStage = s; break; }
-      daysCum += s.days;
-    }
-    curStage ??= crop.stages.last;
-    final daysInStage = (daysElapsed - daysCum).clamp(0, curStage.days);
-    final progress = (daysInStage / curStage.days * 100).clamp(0.0, 100.0);
-    final remaining = (curStage.days - daysInStage).clamp(0, curStage.days);
-
-    double phFactor = 1.0;
-    final userPh = double.tryParse(_phCtrl.text.trim());
-    if (userPh != null) {
-      if (userPh > soil.phMax + 0.5) phFactor = 1.2;
-      else if (userPh < soil.phMin - 0.5) phFactor = 0.9;
-    }
-
-    double weatherFactor = 1.0;
-    if (_weatherData != null) {
-      final temp = _weatherData!['temp'] as int;
-      final rain = _weatherData!['rain'] as double;
-      if (temp > 35) weatherFactor *= 1.12;
-      else if (temp > 30) weatherFactor *= 1.06;
-      if (rain > 20) weatherFactor *= 1.15;
-      else if (rain > 10) weatherFactor *= 1.08;
-    }
-
-    double nBonus = 0;
-    if (['حمص','عدس','فول','برسيم'].contains(_prevCrop)) nBonus = 15;
-
-    Map<String, Map<String, dynamic>> nutrients = {};
-    double totalKgHa = 0;
-    for (final entry in {
-      'N': {'need': curStage.N.toDouble(), 'avail': soil.N.toDouble() - nBonus},
-      'P': {'need': curStage.P.toDouble(), 'avail': soil.P.toDouble()},
-      'K': {'need': curStage.K.toDouble(), 'avail': soil.K.toDouble()},
-      'Ca': {'need': curStage.Ca.toDouble(), 'avail': soil.Ca.toDouble() / 100},
-      'Mg': {'need': curStage.Mg.toDouble(), 'avail': soil.Mg.toDouble() / 10},
-      'S':  {'need': curStage.S.toDouble(), 'avail': soil.S.toDouble()},
-    }.entries) {
-      final need = entry.value['need']! * phFactor * weatherFactor;
-      final avail = (entry.value['avail']! * soil.efficacite).clamp(0.0, double.infinity);
-      final deficit = (need - avail).clamp(0.0, need);
-      final required = deficit > 0 ? deficit / soil.efficacite : 0.0;
-      totalKgHa += required;
-      nutrients[entry.key] = {
-        'need': need, 'avail': avail, 'deficit': deficit, 'required': required, 'ok': deficit <= 3,
-      };
-    }
-
-    List<FertilizerRec> ferts = [];
-    final nDef = nutrients['N']!['deficit'] as double;
-    final pDef = nutrients['P']!['deficit'] as double;
-    final kDef = nutrients['K']!['deficit'] as double;
-    final caDef = nutrients['Ca']!['deficit'] as double;
-    final mgDef = nutrients['Mg']!['deficit'] as double;
-
-    if (nDef > 5) ferts.add(FertilizerRec(name:'يوريا (46% N)', icon:'🧪', kgHa:(nDef/0.46).roundToDouble(),
-      how:'ينثر على السطح ثم يُروى فوراً أو يُخلط بالتربة', when:'مطلع المرحلة الحالية - صباحاً أو مساءً'));
-    if (pDef > 4) ferts.add(FertilizerRec(name:'سوبر فوسفات ثلاثي (46% P₂O₅)', icon:'⚪', kgHa:(pDef/0.46).roundToDouble(),
-      how:'يُخلط مع التربة قبل الزراعة أو عند الحرثة', when:'قبل الزراعة أو بداية الموسم'));
-    if (kDef > 5) ferts.add(FertilizerRec(name:'سلفات البوتاسيوم (50% K₂O)', icon:'🧂', kgHa:(kDef/0.50).roundToDouble(),
-      how:'يُذاب في ماء الري أو ينثر ويُروى', when:'خلال مرحلة الإزهار أو تكوين الثمار'));
-    if (caDef > 3) ferts.add(FertilizerRec(name:'نترات الكالسيوم (19% Ca)', icon:'🔬', kgHa:(caDef/0.19).roundToDouble(),
-      how:'رش ورقي أو إضافة للري التقطيري', when:'خلال مراحل النمو السريع'));
-    if (mgDef > 3) ferts.add(FertilizerRec(name:'سلفات المغنيسيوم (16% Mg)', icon:'💎', kgHa:(mgDef/0.16).roundToDouble(),
-      how:'رش ورقي بتركيز 1-2% أو ري تقطيري', when:'عند ظهور علامات الإصفرار البيني'));
-    if (ferts.isEmpty) ferts.add(FertilizerRec(name:'سماد عضوي كمبوست', icon:'🌿', kgHa:200,
-      how:'يُنثر بالتساوي على السطح ويُحرث', when:'قبل الزراعة أو مطلع الموسم'));
-
-    List<String> alerts = [], warnings = [];
-    if (totalKgHa < 20) alerts.add('⚠️ كمية السماد منخفضة جداً — قد يؤثر على الإنتاج');
-    if (_irrigation == 'بعلية' && crop.waterMm > 500)
-      alerts.add('🌧️ المحصول يحتاج ري إضافي — لا يكفي المطر وحده');
-    if (_weatherData != null) {
-      final temp = _weatherData!['temp'] as int;
-      if (temp > crop.tempMax) alerts.add('🌡️ درجة الحرارة ${temp}°C تتجاوز الحد الأقصى للمحصول (${crop.tempMax}°C)');
-      else if (temp < crop.tempMin) alerts.add('❄️ درجة الحرارة ${temp}°C أقل من الحد الأدنى للمحصول (${crop.tempMin}°C)');
-    }
-    if (nBonus > 0) warnings.add('✅ المحصول السابق (${_prevCrop}) أضاف نيتروجين للتربة — خُفِّضت جرعة N');
-    if (soil.phMin > 7.5) warnings.add('⚠️ تربة قلوية — قد يقل امتصاص الحديد والزنك');
-
-    final irrFactor = _irrigation == 'ري_تقطير' ? 0.7 : (_irrigation == 'ري_كامل' ? 1.0 : 1.3);
-    final daily = crop.waterMm / crop.cycleDays * irrFactor;
-
-    final result = AnalysisResult(
-      wilayaName: _selectedWilaya!.name, area: area, cropName: crop.name,
-      soilType: _selectedWilaya!.soilType, stageName: curStage.name,
-      stageProgress: progress, daysElapsed: daysElapsed, totalDays: crop.cycleDays,
-      daysRemaining: remaining, totalKgHa: totalKgHa, nutrients: nutrients,
-      fertilizers: ferts, alerts: alerts, warnings: warnings,
-      plantDate: DateFormat('yyyy-MM-dd').format(_plantDate),
-      analysisDate: DateFormat('yyyy-MM-dd').format(DateTime.now()),
-      weather: _weatherData,
-      irrigation: {
-        'type': _irrigation, 'daily': daily.toStringAsFixed(1),
-        'freq': _irrigation == 'ري_تقطير' ? 'يومياً أو كل يومين' :
-                _irrigation == 'ري_كامل' ? 'كل 2-4 أيام' : 'أسبوعياً أو حسب الأمطار',
-      },
-    );
-
-    setState(() {
-      _result = result;
-      _isLoading = false;
-      _currentTab = 1;
-      _tabController.animateTo(1);
-    });
-    _fabCtrl.forward(from: 0);
-  }
-
-  void _snack(String msg) => ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(msg, style: const TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w600)),
-      backgroundColor: AppColors.primaryDark,
-      behavior: SnackBarBehavior.floating,
-      margin: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-    ));
-
-  Future<void> _loadRecords() async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString('agri_records_v3');
-    if (raw != null) {
-      final list = json.decode(raw) as List;
-      setState(() => _savedRecords = list.map((e) => _resultFromJson(e)).toList());
-    }
-  }
-
-  AnalysisResult _resultFromJson(Map<String, dynamic> j) => AnalysisResult(
-    wilayaName: j['wilayaName'] ?? '', area: (j['area'] as num?)?.toDouble() ?? 0,
-    cropName: j['cropName'] ?? '', soilType: j['soilType'] ?? 'Sols bruns calcaires',
-    stageName: j['stageName'] ?? '', stageProgress: (j['stageProgress'] as num?)?.toDouble() ?? 0,
-    daysElapsed: j['daysElapsed'] ?? 0, totalDays: j['totalDays'] ?? 0, daysRemaining: j['daysRemaining'] ?? 0,
-    totalKgHa: (j['totalKgHa'] as num?)?.toDouble() ?? 0,
-    nutrients: (j['nutrients'] as Map?)?.map((k, v) => MapEntry(k.toString(), Map<String, dynamic>.from(v))) ?? {},
-    fertilizers: (j['fertilizers'] as List?)?.map((f) => FertilizerRec(
-      name: f['name'] ?? '', icon: f['icon'] ?? '🌿',
-      kgHa: (f['kgHa'] as num?)?.toDouble() ?? 0, how: f['how'] ?? '', when: f['when'] ?? '',
-    )).toList() ?? [],
-    alerts: List<String>.from(j['alerts'] ?? []), warnings: List<String>.from(j['warnings'] ?? []),
-    plantDate: j['plantDate'] ?? '', analysisDate: j['analysisDate'] ?? '',
-    weather: j['weather'] != null ? Map<String, dynamic>.from(j['weather']) : null,
-    irrigation: Map<String, dynamic>.from(j['irrigation'] ?? {}),
-  );
-
-  Future<void> _saveRecord() async {
-    if (_result == null) return;
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString('agri_records_v3');
-    final records = raw != null ? json.decode(raw) as List : [];
-    records.insert(0, _result!.toJson());
-    if (records.length > 50) records.removeRange(50, records.length);
-    await prefs.setString('agri_records_v3', json.encode(records));
-    _loadRecords();
-    _snack('✅ تم حفظ الخطة بنجاح');
-  }
-
-  Future<void> _deleteRecord(int idx) async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString('agri_records_v3');
-    if (raw != null) {
-      final records = json.decode(raw) as List;
-      records.removeAt(idx);
-      await prefs.setString('agri_records_v3', json.encode(records));
-      _loadRecords();
-    }
-  }
-
-  // ==================== BUILD ====================
   @override
   Widget build(BuildContext context) {
-    final isDark = _isDark;
-    return Theme(
-      data: isDark ? buildDarkTheme() : buildLightTheme(),
-      child: Directionality(
-        textDirection: ui.TextDirection.rtl,
-        child: Scaffold(
-          backgroundColor: isDark ? AppColors.darkBg : AppColors.backgroundSoft,
-          appBar: _buildAppBar(isDark),
-          body: Stack(children: [
-            IndexedStack(index: _currentTab, children: [
-              _buildFormTab(isDark),
-              _buildResultTab(isDark),
-              _buildRecordsTab(isDark),
-            ]),
-            if (_isLoading) _buildLoadingOverlay(isDark),
-          ]),
-          floatingActionButton: _currentTab == 1 && _result != null
-            ? ScaleTransition(
-                scale: _fabScale,
-                child: FloatingActionButton.extended(
-                  onPressed: _saveRecord,
-                  backgroundColor: AppColors.primary,
-                  elevation: 8,
-                  icon: const Icon(Icons.bookmark_add_rounded, color: Colors.white),
-                  label: const Text('حفظ الخطة',
-                    style: TextStyle(color: Colors.white, fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 15)),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          widget.text,
+          style: TextStyle(
+            fontSize: 14,
+            color: widget.color,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.3,
+          ),
+        ),
+        const SizedBox(width: 2),
+        ...List.generate(
+          3,
+          (i) => AnimatedBuilder(
+            animation: _anim[i],
+            builder: (_, __) => Opacity(
+              opacity: _anim[i].value,
+              child: Text(
+                '.',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: widget.color,
+                  fontWeight: FontWeight.w700,
                 ),
-              )
-            : null,
-        ),
-      ),
-    );
-  }
-
-  // ==================== APP BAR ====================
-  PreferredSizeWidget _buildAppBar(bool isDark) {
-    return AppBar(
-      backgroundColor: isDark ? AppColors.darkSurface : AppColors.primaryDark,
-      elevation: 0,
-      systemOverlayStyle: SystemUiOverlayStyle.light,
-      title: Row(children: [
-        // Logo badge
-        Container(
-          width: 40, height: 40,
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: const Center(child: Text('🌾', style: TextStyle(fontSize: 20))),
-        ),
-        const SizedBox(width: 12),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('نظام التسميد الذكي',
-            style: TextStyle(
-              fontSize: 15, fontWeight: FontWeight.w800, color: Colors.white,
-              fontFamily: 'Cairo', letterSpacing: -0.3,
-            )),
-          Text('AI Fertilization System',
-            style: TextStyle(fontSize: 10, color: Colors.white.withOpacity(0.5), letterSpacing: 0.5)),
-        ]),
-        const Spacer(),
-        // Dark mode toggle
-        GestureDetector(
-          onTap: () => setState(() => _isDark = !_isDark),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white.withOpacity(0.2)),
-            ),
-            child: Row(children: [
-              Icon(isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded, size: 16, color: Colors.white70),
-              const SizedBox(width: 4),
-              Text(isDark ? 'فاتح' : 'داكن',
-                style: const TextStyle(fontFamily: 'Cairo', fontSize: 11, color: Colors.white70)),
-            ]),
-          ),
-        ),
-      ]),
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(52),
-        child: Container(
-          color: isDark ? AppColors.darkSurface : AppColors.primaryDark,
-          padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
-          child: Container(
-            height: 44,
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: TabBar(
-              controller: _tabController,
-              indicator: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(11),
               ),
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicatorPadding: const EdgeInsets.all(3),
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.white.withOpacity(0.45),
-              labelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12, fontFamily: 'Cairo'),
-              dividerColor: Colors.transparent,
-              tabs: const [
-                Tab(text: '📋 النموذج'),
-                Tab(text: '📊 النتائج'),
-                Tab(text: '📁 السجل'),
-              ],
             ),
           ),
         ),
-      ),
+      ],
     );
   }
+}
 
-  // ==================== LOADING OVERLAY ====================
-  Widget _buildLoadingOverlay(bool isDark) {
-    return Container(
-      color: Colors.black.withOpacity(0.5),
-      child: Center(
-        child: Container(
-          margin: const EdgeInsets.all(40),
-          padding: const EdgeInsets.all(32),
-          decoration: BoxDecoration(
-            color: isDark ? AppColors.darkCard : Colors.white,
-            borderRadius: BorderRadius.circular(28),
-            boxShadow: [
-              BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 30, offset: const Offset(0, 10)),
+// ============================================================
+// 🎨 BACKGROUND TEXTURE
+// ============================================================
+class _BgTexturePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = AppColors.sage.withOpacity(0.025)
+      ..style = PaintingStyle.fill;
+    final rng = Random(99);
+    for (int i = 0; i < 18; i++) {
+      final x = rng.nextDouble() * size.width;
+      final y = rng.nextDouble() * size.height;
+      final r = 20.0 + rng.nextDouble() * 80;
+      canvas.drawCircle(Offset(x, y), r, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_) => false;
+}
+
+// ============================================================
+// 🏗️ FERTILIZATION SCREEN
+// ============================================================
+class FertilizationScreen extends StatefulWidget {
+  const FertilizationScreen({super.key});
+  @override
+  State<FertilizationScreen> createState() => _FertilizationScreenState();
+}
+
+class _FertilizationScreenState extends State<FertilizationScreen>
+    with TickerProviderStateMixin {
+
+  int _tabIndex = 0;
+
+  // -- Form --
+  String   _selectedWilaya          = 'الجزائر';
+  String   _selectedPreviousCulture = 'قمح صلب';
+  String   _selectedCurrentCulture  = 'طماطم';
+  DateTime _datePlantation          = DateTime.now().subtract(const Duration(days: 30));
+  final    _superficieCtrl          = TextEditingController(text: '1.0');
+  final    _superficieFocus         = FocusNode();
+
+  // -- API --
+  static const String _apiBase = 'https://fertilizer-api-a5j7.onrender.com';
+  FertilizationResult? _result;
+  bool   _loading = false;
+  String _error   = '';
+
+  // -- Firebase --
+  final _firestore = FirebaseFirestore.instance;
+  final _auth      = FirebaseAuth.instance;
+  List<FertilizationRecord> _history = [];
+  bool _loadingHistory = false;
+
+  // -- Entrance animations --
+  late AnimationController _entranceCtrl;
+  late AnimationController _resultCtrl;
+  late Animation<double>   _entranceFade;
+  late Animation<Offset>   _entranceSlide;
+  late Animation<double>   _resultFade;
+
+  // -- Tractor loading animations (FIXED - same as IrrigationPage) --
+  late AnimationController _floatCtrl;
+  late AnimationController _wheelCtrl;
+  late AnimationController _smokeCtrl;
+  late AnimationController _progressCtrl;
+  late Animation<double>   _floatAnim;
+  late Animation<double>   _wheelAnim;
+  late Animation<double>   _smokeAnim;
+  late Animation<double>   _progressAnim;
+
+  String? get _farmerId => _auth.currentUser?.uid;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Entrance animations
+    _entranceCtrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 600));
+    _resultCtrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 500));
+    _entranceFade  = CurvedAnimation(parent: _entranceCtrl, curve: Curves.easeOut);
+    _entranceSlide = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
+        .animate(CurvedAnimation(parent: _entranceCtrl, curve: Curves.easeOut));
+    _resultFade = CurvedAnimation(parent: _resultCtrl, curve: Curves.easeOut);
+    _entranceCtrl.forward();
+
+    // ✅ TRACTOR ANIMATIONS (FIXED - same as IrrigationPage)
+    _floatCtrl = AnimationController(
+        vsync: this, 
+        duration: const Duration(milliseconds: 1800)
+      )..repeat(reverse: true);
+      
+    _wheelCtrl = AnimationController(
+        vsync: this, 
+        duration: const Duration(milliseconds: 900)
+      )..repeat();
+    
+    _smokeCtrl = AnimationController(
+        vsync: this, 
+        duration: const Duration(milliseconds: 1000)
+      )..repeat();
+      
+    _progressCtrl = AnimationController(
+        vsync: this, 
+        duration: const Duration(seconds: 22)
+      );
+
+    _floatAnim = Tween<double>(begin: 0, end: -12)
+        .animate(CurvedAnimation(parent: _floatCtrl, curve: Curves.easeInOut));
+        
+    _wheelAnim = Tween<double>(begin: 0, end: 2 * pi)
+        .animate(CurvedAnimation(parent: _wheelCtrl, curve: Curves.linear));
+        
+    _smokeAnim = Tween<double>(begin: 0, end: 1)
+        .animate(CurvedAnimation(parent: _smokeCtrl, curve: Curves.easeOut));
+        
+    _progressAnim = Tween<double>(begin: 0, end: 0.9)
+        .animate(CurvedAnimation(parent: _progressCtrl, curve: Curves.easeOut));
+
+    _loadHistory();
+  }
+
+  @override
+  void dispose() {
+    _entranceCtrl.dispose();
+    _resultCtrl.dispose();
+    // ✅ Dispose tractor controllers
+    _floatCtrl.dispose();
+    _wheelCtrl.dispose();
+    _smokeCtrl.dispose();
+    _progressCtrl.dispose();
+    _superficieCtrl.dispose();
+    _superficieFocus.dispose();
+    super.dispose();
+  }
+
+  // ---- Firestore: load history ----
+  Future<void> _loadHistory() async {
+    if (_farmerId == null) return;
+    setState(() => _loadingHistory = true);
+    try {
+      final snap = await _firestore
+          .collection('farmers')
+          .doc(_farmerId)
+          .collection('fertilization_history')
+          .orderBy('date_calcul', descending: true)
+          .limit(50)
+          .get();
+      setState(() =>
+          _history = snap.docs.map(FertilizationRecord.fromFirestore).toList());
+    } catch (e) {
+      debugPrint('Firestore load error: $e');
+    }
+    setState(() => _loadingHistory = false);
+  }
+
+  // ---- Firestore: save ----
+  Future<void> _saveToFirestore(FertilizationResult res) async {
+    if (_farmerId == null || res.totalKg == null) return;
+    try {
+      await _firestore
+          .collection('farmers')
+          .doc(_farmerId)
+          .collection('fertilization_history')
+          .add({
+        'wilaya':            _selectedWilaya,
+        'culture':           _selectedCurrentCulture,
+        'previous_culture':  _selectedPreviousCulture,
+        'date_plantation':   _datePlantation,
+        'superficie':        double.tryParse(_superficieCtrl.text) ?? 0,
+        'date_calcul':       FieldValue.serverTimestamp(),
+        'total_kg':          res.totalKg,
+        'total_kg_ha':       res.totalKgHa,
+        'stage_name':        res.stageName,
+        'progression':       res.stageProgress?.round() ?? 0,
+        'risk_level':        res.riskLevel,
+        'raw_data':          res.raw,
+      });
+      await _loadHistory();
+    } catch (e) {
+      debugPrint('Firestore save error: $e');
+    }
+  }
+
+  // ---- API Call ----
+  Future<void> _calculate() async {
+    if (_loading) return;
+    final superficie = double.tryParse(_superficieCtrl.text);
+    if (superficie == null || superficie <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('الرجاء إدخال مساحة صحيحة'),
+        backgroundColor: AppColors.warning,
+      ));
+      return;
+    }
+
+    setState(() { _loading = true; _error = ''; _result = null; });
+    _resultCtrl.reset();
+    _progressCtrl.reset();
+    _progressCtrl.forward();
+
+    final dateStr = DateFormat('yyyy-MM-dd').format(_datePlantation);
+    final payload = {
+      'wilaya':       _selectedWilaya,
+      'area':         superficie,
+      'crop':         _selectedCurrentCulture,
+      'plantDate':    dateStr,
+      'previousCrop': _selectedPreviousCulture,
+    };
+
+    try {
+      final res = await http
+          .post(
+            Uri.parse('$_apiBase/api/fertilizer/calculate'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode(payload),
+          )
+          .timeout(const Duration(seconds: 60));
+
+      final data = jsonDecode(res.body) as Map<String, dynamic>;
+
+      if (data['success'] == false) {
+        setState(() { _error = data['error'] ?? 'حدث خطأ غير معروف'; });
+      } else {
+        final result = FertilizationResult.fromJson(data);
+        setState(() { _result = result; });
+        _resultCtrl.forward();
+        await _saveToFirestore(result);
+        setState(() => _tabIndex = 1);
+      }
+    } catch (e) {
+      String errMsg = e.toString();
+      if (errMsg.contains('Timeout'))
+        errMsg = 'الخادم بطيء (Cold Start). انتظر دقيقة وأعد المحاولة.';
+      else if (errMsg.contains('SocketException'))
+        errMsg = 'لا يوجد اتصال بالإنترنت.';
+      setState(() => _error = errMsg);
+    }
+
+    _progressCtrl.animateTo(1.0,
+        duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+    setState(() => _loading = false);
+  }
+
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _datePlantation,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+      builder: (ctx, child) => Theme(
+        data: Theme.of(ctx).copyWith(
+          colorScheme: const ColorScheme.light(
+            primary: AppColors.sage,
+            onPrimary: Colors.white,
+            surface: AppColors.cream,
+            onSurface: AppColors.textPrimary,
+          ),
+          dialogBackgroundColor: AppColors.cream,
+        ),
+        child: child!,
+      ),
+    );
+    if (picked != null) setState(() => _datePlantation = picked);
+  }
+
+  Future<void> _pickCulture(bool isCurrent) async {
+    final current =
+        isCurrent ? _selectedCurrentCulture : _selectedPreviousCulture;
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _CulturePickerSheet(
+        selected: current,
+        categories: _kCulturesByCategory,
+      ),
+    );
+    if (result != null) {
+      setState(() {
+        if (isCurrent) _selectedCurrentCulture = result;
+        else _selectedPreviousCulture = result;
+      });
+    }
+  }
+
+  // ============================================================
+  // 🏗️ BUILD
+  // ============================================================
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.backgroundSoft,
+      body: Stack(
+        children: [
+          Positioned.fill(child: CustomPaint(painter: _BgTexturePainter())),
+          Column(
+            children: [
+              _buildHeader(),
+              _buildTabBar(),
+              Expanded(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 280),
+                  child: _buildCurrentTab(),
+                ),
+              ),
             ],
           ),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            // Animated leaves ring
-            SizedBox(
-              width: 72, height: 72,
-              child: _LoadingRing(),
-            ),
-            const SizedBox(height: 20),
-            Text(_loadingMsg,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 14,
-                color: isDark ? AppColors.darkText : AppColors.textDark,
-              )),
-            const SizedBox(height: 8),
-            Text('يُرجى الانتظار...',
-              style: TextStyle(fontFamily: 'Cairo', fontSize: 12, color: isDark ? AppColors.darkTextMuted : AppColors.textMuted)),
-          ]),
-        ),
-      ),
-    );
-  }
-
-  // ==================== FORM TAB ====================
-  Widget _buildFormTab(bool isDark) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
-      child: Column(children: [
-
-        // === SECTION 1: LOCATION ===
-        FadeSlideIn(
-          delay: const Duration(milliseconds: 50),
-          child: _buildSectionCard(
-            isDark: isDark,
-            icon: '📍',
-            title: 'الولاية والموقع',
-            child: Column(children: [
-              // Search
-              _buildTextField(
-                controller: _searchCtrl,
-                hint: 'ابحث عن ولاية بالاسم أو الرقم...',
-                icon: Icons.search_rounded,
-                isDark: isDark,
-                onChanged: _filterWilayas,
-              ),
-              const SizedBox(height: 12),
-              // Wilaya list
-              Container(
-                height: 180,
-                decoration: BoxDecoration(
-                  color: isDark ? AppColors.darkBg : AppColors.backgroundSoft,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.accent.withOpacity(0.6)),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: ListView.builder(
-                    itemCount: _filteredWilayas.length,
-                    itemBuilder: (ctx, i) {
-                      final w = _filteredWilayas[i];
-                      final selected = _selectedWilaya?.code == w.code;
-                      return _buildWilayaItem(w, selected, isDark);
-                    },
-                  ),
-                ),
-              ),
-              // Weather
-              if (_weatherData != null && _selectedWilaya != null) ...[
-                const SizedBox(height: 12),
-                _buildWeatherCard(isDark),
-              ],
-              // Soil preview
-              if (_selectedWilaya != null) ...[
-                const SizedBox(height: 12),
-                _buildSoilPreview(isDark),
-              ],
-            ]),
-          ),
-        ),
-        const SizedBox(height: 14),
-
-        // === SECTION 2: FIELD INFO ===
-        FadeSlideIn(
-          delay: const Duration(milliseconds: 100),
-          child: _buildSectionCard(
-            isDark: isDark,
-            icon: '🏡',
-            title: 'معلومات الحقل',
-            child: Column(children: [
-              // Area + pH
-              Row(children: [
-                Expanded(child: _buildTextField(
-                  controller: _areaCtrl,
-                  hint: 'المساحة (هكتار)',
-                  icon: Icons.crop_square_rounded,
-                  isDark: isDark,
-                  keyboardType: TextInputType.number,
-                )),
-                const SizedBox(width: 12),
-                Expanded(child: _buildTextField(
-                  controller: _phCtrl,
-                  hint: 'درجة pH (اختياري)',
-                  icon: Icons.science_rounded,
-                  isDark: isDark,
-                  keyboardType: TextInputType.number,
-                )),
-              ]),
-              const SizedBox(height: 16),
-              // Previous crop
-              _buildDropdown(
-                label: 'المحصول السابق',
-                value: _prevCrop.isEmpty ? null : _prevCrop,
-                icon: Icons.history_rounded,
-                items: ['', 'حمص', 'عدس', 'فول', 'برسيم', 'قمح صلب', 'شعير', 'ذرة', 'طماطم', 'بطاطس', 'بصل', 'ثوم', 'بطيخ أحمر', 'عباد الشمس', 'أرض بور'],
-                onChanged: (v) => setState(() => _prevCrop = v ?? ''),
-                isDark: isDark,
-              ),
-              const SizedBox(height: 16),
-              // Irrigation
-              _buildLabel('💧 نظام الري', isDark),
-              const SizedBox(height: 8),
-              Row(children: [
-                _buildOptionChip('ري_تقطير', '💧', 'تقطير', isDark),
-                const SizedBox(width: 8),
-                _buildOptionChip('ري_كامل', '💦', 'ري كامل', isDark),
-                const SizedBox(width: 8),
-                _buildOptionChip('بعلية', '🌧️', 'بعلية', isDark),
-              ]),
-              const SizedBox(height: 16),
-              // Season
-              _buildLabel('📅 الموسم الزراعي', isDark),
-              const SizedBox(height: 8),
-              Row(children: [
-                _buildSeasonChip('ربيع', '🌸', isDark),
-                const SizedBox(width: 6),
-                _buildSeasonChip('صيف', '☀️', isDark),
-                const SizedBox(width: 6),
-                _buildSeasonChip('خريف', '🍂', isDark),
-                const SizedBox(width: 6),
-                _buildSeasonChip('شتاء', '❄️', isDark),
-              ]),
-            ]),
-          ),
-        ),
-        const SizedBox(height: 14),
-
-        // === SECTION 3: CROP ===
-        FadeSlideIn(
-          delay: const Duration(milliseconds: 150),
-          child: _buildSectionCard(
-            isDark: isDark,
-            icon: '🌱',
-            title: 'المحصول والتاريخ',
-            child: Column(children: [
-              // Categories
-              ...(['حبوب', 'خضروات', 'بقوليات', 'أشجار مثمرة', 'أعشاب عطرية', 'محاصيل صناعية', 'أعلاف']).map((cat) {
-                final catCrops = allCrops.where((c) => c.category == cat).toList();
-                if (catCrops.isEmpty) return const SizedBox.shrink();
-                return _buildCropCategory(cat, catCrops, isDark);
-              }),
-              const SizedBox(height: 4),
-              Divider(color: isDark ? AppColors.darkBorder : AppColors.accent.withOpacity(0.5), height: 24),
-              // Plant date
-              _buildDatePicker(isDark),
-              if (_selectedCrop != null) ...[
-                const SizedBox(height: 12),
-                _buildCropStats(isDark),
-              ],
-            ]),
-          ),
-        ),
-        const SizedBox(height: 24),
-
-        // === CALCULATE BUTTON ===
-        FadeSlideIn(
-          delay: const Duration(milliseconds: 200),
-          child: _buildCalculateButton(isDark),
-        ),
-      ]),
-    );
-  }
-
-  // ==================== RESULT TAB ====================
-  Widget _buildResultTab(bool isDark) {
-    if (_result == null) {
-      return _buildEmptyState(
-        '📊', 'لا توجد نتائج بعد',
-        'قم بملء النموذج واضغط على زر الحساب', isDark,
-      );
-    }
-    final r = _result!;
-    final cropIcon = allCrops.firstWhere((c) => c.name == r.cropName, orElse: () => allCrops.first).icon;
-
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
-      child: Column(children: [
-
-        // --- Hero Card ---
-        FadeSlideIn(
-          child: _buildHeroResultCard(r, cropIcon, isDark),
-        ),
-        const SizedBox(height: 14),
-
-        // --- Quick stats row ---
-        FadeSlideIn(
-          delay: const Duration(milliseconds: 80),
-          child: Row(children: [
-            _buildMiniStat('🏜️', 'التربة', _soilShortName(r.soilType), isDark),
-            const SizedBox(width: 8),
-            _buildMiniStat('⏳', 'المتبقي', '${r.daysRemaining} يوم', isDark),
-            const SizedBox(width: 8),
-            _buildMiniStat('📅', 'تاريخ الزراعة', r.plantDate.substring(5), isDark),
-          ]),
-        ),
-        const SizedBox(height: 14),
-
-        // --- Weather ---
-        if (r.weather != null) ...[
-          FadeSlideIn(
-            delay: const Duration(milliseconds: 120),
-            child: _buildSectionCard(
-              isDark: isDark, icon: '☀️', title: 'الطقس الحالي',
-              child: Row(children: [
-                _buildWeatherStat('🌡️', '${r.weather!['temp']}°C', 'الحرارة', isDark),
-                _buildWeatherStat('↕️', '${r.weather!['tempMax']}°/${r.weather!['tempMin']}°', 'نطاق', isDark),
-                _buildWeatherStat('🌧️', '${r.weather!['rain']}مم', 'أمطار', isDark),
-                _buildWeatherStat('💧', '${r.weather!['humidity']}%', 'رطوبة', isDark),
-              ]),
-            ),
-          ),
-          const SizedBox(height: 14),
+          if (_loading) _buildTractorOverlay(),
         ],
-
-        // --- Nutrients ---
-        FadeSlideIn(
-          delay: const Duration(milliseconds: 160),
-          child: _buildSectionCard(
-            isDark: isDark, icon: '🧪', title: 'تحليل العناصر الغذائية',
-            child: Column(children: [
-              ...r.nutrients.entries.map((e) => _buildNutrientRow(e.key, e.value, isDark)),
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppColors.primary.withOpacity(0.3)),
-                ),
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('إجمالي ما يُضاف',
-                    style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700,
-                      color: isDark ? AppColors.darkText : AppColors.textDark)),
-                  AnimatedCounter(
-                    value: r.totalKgHa,
-                    suffix: ' كغ/هـ',
-                    style: const TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w800,
-                      fontSize: 18, color: AppColors.primary),
-                  ),
-                ]),
-              ),
-            ]),
-          ),
-        ),
-        const SizedBox(height: 14),
-
-        // --- Fertilizers ---
-        FadeSlideIn(
-          delay: const Duration(milliseconds: 200),
-          child: _buildSectionCard(
-            isDark: isDark, icon: '📦', title: 'الأسمدة الموصى بها',
-            child: Column(
-              children: r.fertilizers.asMap().entries.map((entry) =>
-                FadeSlideIn(
-                  delay: Duration(milliseconds: 80 * entry.key),
-                  child: _buildFertCard(entry.value, r.area, isDark),
-                )
-              ).toList(),
-            ),
-          ),
-        ),
-        const SizedBox(height: 14),
-
-        // --- Alerts ---
-        if (r.alerts.isNotEmpty || r.warnings.isNotEmpty)
-          FadeSlideIn(
-            delay: const Duration(milliseconds: 240),
-            child: _buildSectionCard(
-              isDark: isDark, icon: '⚠️', title: 'تحذيرات وملاحظات',
-              child: Column(children: [
-                ...r.alerts.map((a) => _buildAlertItem(a, true, isDark)),
-                ...r.warnings.map((w) => _buildAlertItem(w, false, isDark)),
-              ]),
-            ),
-          )
-        else
-          FadeSlideIn(
-            delay: const Duration(milliseconds: 240),
-            child: _buildSuccessBox(isDark),
-          ),
-        const SizedBox(height: 14),
-
-        // --- Irrigation ---
-        FadeSlideIn(
-          delay: const Duration(milliseconds: 280),
-          child: _buildSectionCard(
-            isDark: isDark, icon: '💧', title: 'توصيات الري',
-            child: Column(children: [
-              _buildInfoRow('💧', 'الكمية اليومية', '${r.irrigation['daily']} مم', isDark),
-              _buildInfoRow('🔁', 'تكرار الري', '${r.irrigation['freq']}', isDark),
-              _buildInfoRow('🌿', 'نظام الري', '${r.irrigation['type']}', isDark),
-            ]),
-          ),
-        ),
-        const SizedBox(height: 90),
-      ]),
+      ),
     );
   }
 
-  // ==================== RECORDS TAB ====================
-  Widget _buildRecordsTab(bool isDark) {
-    if (_savedRecords.isEmpty) {
-      return _buildEmptyState('📁', 'لا توجد خطط محفوظة', 'قم بحساب خطة وحفظها', isDark);
-    }
-    return Column(children: [
-      Padding(
-        padding: const EdgeInsets.fromLTRB(18, 16, 16, 8),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text('${_savedRecords.length} خطة محفوظة',
-            style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 15,
-              color: isDark ? AppColors.darkText : AppColors.textDark)),
-          TextButton.icon(
-            onPressed: () async {
-              final ok = await showDialog<bool>(context: context, builder: (ctx) => AlertDialog(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                title: const Text('حذف الكل', style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700)),
-                content: const Text('هل تريد حذف جميع السجلات؟', style: TextStyle(fontFamily: 'Cairo')),
-                actions: [
-                  TextButton(onPressed: () => Navigator.pop(ctx, false),
-                    child: const Text('إلغاء', style: TextStyle(fontFamily: 'Cairo'))),
-                  TextButton(onPressed: () => Navigator.pop(ctx, true),
-                    child: const Text('حذف', style: TextStyle(color: Colors.red, fontFamily: 'Cairo', fontWeight: FontWeight.w700))),
+  // ============================================================
+  // 🚜 TRACTOR LOADING OVERLAY (FIXED - same as IrrigationPage)
+  // ============================================================
+  Widget _buildTractorOverlay() {
+    return Positioned.fill(
+      child: Container(
+        color: const Color(0xFF0F1A0F).withOpacity(0.88),
+        child: Stack(
+          children: [
+            Positioned(
+              top: -80, right: -80,
+              child: Container(
+                width: 300, height: 300,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0x0F55833D),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -60, left: -60,
+              child: Container(
+                width: 200, height: 200,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0x0D55833D),
+                ),
+              ),
+            ),
+            Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // ✅ Moving tractor with float animation
+                  AnimatedBuilder(
+                    animation: _floatCtrl,
+                    builder: (_, child) => Transform.translate(
+                      offset: Offset(0, _floatAnim.value), 
+                      child: child,
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: 200, 
+                          height: 130,
+                          child: AnimatedBuilder(
+                            animation: Listenable.merge([_wheelCtrl, _smokeCtrl]),
+                            builder: (_, __) => CustomPaint(
+                              painter: TractorPainter(
+                                wheelAngle: _wheelAnim.value,
+                                smokeProgress: _smokeAnim.value,
+                              ),
+                            ),
+                          ),
+                        ),
+                        // Animated shadow
+                        AnimatedBuilder(
+                          animation: _floatCtrl,
+                          builder: (_, __) {
+                            final t = _floatCtrl.value;
+                            return Transform.scale(
+                              scaleX: 1.0 - t * 0.25,
+                              child: Opacity(
+                                opacity: (0.5 - t * 0.25).clamp(0.1, 0.5),
+                                child: Container(
+                                  width: 130, 
+                                  height: 10,
+                                  margin: const EdgeInsets.only(top: 2),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF55833D),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  SizedBox(
+                    width: 220,
+                    child: Column(
+                      children: [
+                        _AnimatedDotsText(
+                          text: 'جاري التحليل',
+                          color: AppColors.sage,
+                        ),
+                        const SizedBox(height: 14),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: AnimatedBuilder(
+                            animation: _progressCtrl,
+                            builder: (_, __) => LinearProgressIndicator(
+                              value: _progressAnim.value,
+                              minHeight: 6,
+                              backgroundColor: const Color(0x2655833D),
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                  AppColors.sage),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
-              ));
-              if (ok == true) {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.remove('agri_records_v3');
-                _loadRecords();
-              }
-            },
-            icon: const Icon(Icons.delete_sweep_rounded, color: Colors.red, size: 18),
-            label: const Text('حذف الكل', style: TextStyle(color: Colors.red, fontFamily: 'Cairo', fontSize: 13)),
-          ),
-        ]),
+              ),
+            ),
+          ],
+        ),
       ),
-      Expanded(child: ListView.builder(
-        padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
-        itemCount: _savedRecords.length,
-        itemBuilder: (ctx, i) {
-          final r = _savedRecords[i];
-          final cropIcon = allCrops.firstWhere((c) => c.name == r.cropName, orElse: () => allCrops.first).icon;
-          return FadeSlideIn(
-            delay: Duration(milliseconds: 40 * i),
-            child: _buildRecordCard(r, cropIcon, i, isDark),
-          );
-        },
-      )),
-    ]);
+    );
   }
 
-  // ==================== WIDGET BUILDERS ====================
-
-  Widget _buildSectionCard({
-    required bool isDark, required String icon, required String title, required Widget child,
-  }) {
+  // ============================================================
+  // 🔷 HEADER
+  // ============================================================
+  Widget _buildHeader() {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkCard : Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.backgroundSoft.withOpacity(0), width: 0),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.sage, AppColors.primaryDark],
+        ),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(32),
+          bottomRight: Radius.circular(32),
+        ),
         boxShadow: [
           BoxShadow(
-            color: isDark ? Colors.black.withOpacity(0.3) : AppColors.primary.withOpacity(0.06),
-            blurRadius: 20, offset: const Offset(0, 6),
+            color: Color(0x30000000),
+            blurRadius: 16,
+            offset: Offset(0, 6),
+          )
+        ],
+      ),
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: AppColors.mint.withOpacity(0.18),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.mint.withOpacity(0.3)),
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_rounded,
+                      color: AppColors.textLight),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+              const SizedBox(width: 14),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'التسميد',
+                    style: TextStyle(
+                      fontFamily: 'Georgia',
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textLight,
+                    ),
+                  ),
+                  Text(
+                    'مستشار التسميد الذكي',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.mint.withOpacity(0.85),
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ============================================================
+  // 🔘 TAB BAR
+  // ============================================================
+  Widget _buildTabBar() {
+    final tabs = [
+      (Icons.edit_note_rounded,    'الإدخال'),
+      (Icons.science_outlined,     'النتيجة'),
+      (Icons.history_rounded,      'السجل'),
+    ];
+
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 251, 251, 251),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.primary.withOpacity(0.15)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.12),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(icon, style: const TextStyle(fontSize: 16)),
-          ),
-          const SizedBox(width: 10),
-          Text(title, style: TextStyle(
-            fontFamily: 'Cairo', fontWeight: FontWeight.w800, fontSize: 15,
-            color: isDark ? AppColors.darkText : AppColors.textDark,
-          )),
-        ]),
-        const SizedBox(height: 16),
-        child,
-      ]),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String hint,
-    required IconData icon,
-    required bool isDark,
-    TextInputType? keyboardType,
-    void Function(String)? onChanged,
-  }) {
-    return TextField(
-      controller: controller,
-      keyboardType: keyboardType,
-      onChanged: onChanged,
-      style: TextStyle(fontFamily: 'Cairo', fontSize: 14,
-        color: isDark ? AppColors.darkText : AppColors.textDark),
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: TextStyle(fontFamily: 'Cairo', fontSize: 13,
-          color: isDark ? AppColors.darkTextMuted : AppColors.textMuted),
-        prefixIcon: Icon(icon, size: 18, color: isDark ? AppColors.darkTextMuted : AppColors.primary),
-        filled: true,
-        fillColor: isDark ? AppColors.darkSurface : AppColors.backgroundSoft,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: isDark ? AppColors.darkBorder : AppColors.accent.withOpacity(0.5), width: 1),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-      ),
-    );
-  }
-
-  Widget _buildDropdown({
-    required String label, required String? value, required IconData icon,
-    required List<String> items, required void Function(String?) onChanged, required bool isDark,
-  }) {
-    return DropdownButtonFormField<String>(
-      value: value,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(fontFamily: 'Cairo', fontSize: 13,
-          color: isDark ? AppColors.darkTextMuted : AppColors.textMuted),
-        prefixIcon: Icon(icon, size: 18, color: isDark ? AppColors.darkTextMuted : AppColors.primary),
-        filled: true,
-        fillColor: isDark ? AppColors.darkSurface : AppColors.backgroundSoft,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: isDark ? AppColors.darkBorder : AppColors.accent.withOpacity(0.5)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-      ),
-      style: TextStyle(fontFamily: 'Cairo', color: isDark ? AppColors.darkText : AppColors.textDark),
-      dropdownColor: isDark ? AppColors.darkCard : Colors.white,
-      borderRadius: BorderRadius.circular(14),
-      items: items.map((i) => DropdownMenuItem(
-        value: i.isEmpty ? null : i,
-        child: Text(i.isEmpty ? '— بدون محصول سابق —' : i,
-          style: const TextStyle(fontFamily: 'Cairo', fontSize: 13)),
-      )).toList(),
-      onChanged: onChanged,
-    );
-  }
-
-  Widget _buildLabel(String text, bool isDark) => Text(text,
-    style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 13,
-      color: isDark ? AppColors.darkText : AppColors.textDark));
-
-  Widget _buildOptionChip(String value, String emoji, String label, bool isDark) {
-    final sel = _irrigation == value;
-    return Expanded(child: GestureDetector(
-      onTap: () => setState(() => _irrigation = value),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          color: sel ? AppColors.primary : (isDark ? AppColors.darkSurface : AppColors.backgroundSoft),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: sel ? AppColors.primary : (isDark ? AppColors.darkBorder : AppColors.accent.withOpacity(0.6)),
-            width: sel ? 2 : 1,
-          ),
-        ),
-        child: Column(children: [
-          Text(emoji, style: const TextStyle(fontSize: 18)),
-          const SizedBox(height: 3),
-          Text(label, style: TextStyle(
-            fontFamily: 'Cairo', fontSize: 10, fontWeight: FontWeight.w700,
-            color: sel ? Colors.white : (isDark ? AppColors.darkText : AppColors.textDark),
-          )),
-        ]),
-      ),
-    ));
-  }
-
-  Widget _buildSeasonChip(String season, String emoji, bool isDark) {
-    final sel = _season == season;
-    return Expanded(child: GestureDetector(
-      onTap: () => setState(() => _season = season),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 9),
-        decoration: BoxDecoration(
-          color: sel ? AppColors.primaryDark : (isDark ? AppColors.darkSurface : AppColors.backgroundSoft),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: sel ? AppColors.primaryDark : (isDark ? AppColors.darkBorder : AppColors.accent.withOpacity(0.6)),
-            width: sel ? 2 : 1,
-          ),
-        ),
-        child: Column(children: [
-          Text(emoji, style: const TextStyle(fontSize: 15)),
-          const SizedBox(height: 2),
-          Text(season, style: TextStyle(
-            fontFamily: 'Cairo', fontSize: 10, fontWeight: FontWeight.w700,
-            color: sel ? Colors.white : (isDark ? AppColors.darkText : AppColors.textDark),
-          )),
-        ]),
-      ),
-    ));
-  }
-
-  Widget _buildCropCategory(String cat, List<CropModel> crops, bool isDark) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(
-        margin: const EdgeInsets.only(bottom: 8, top: 4),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(
-          color: AppColors.primary.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(cat, style: TextStyle(
-          fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 11,
-          color: isDark ? AppColors.primaryGlow : AppColors.primary,
-        )),
-      ),
-      Wrap(spacing: 6, runSpacing: 6, children: crops.map((crop) {
-        final selected = _selectedCrop?.name == crop.name;
-        return GestureDetector(
-          onTap: () => setState(() => _selectedCrop = crop),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
-            decoration: BoxDecoration(
-              color: selected ? AppColors.primary : (isDark ? AppColors.darkSurface : AppColors.backgroundSoft),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: selected ? AppColors.primary : (isDark ? AppColors.darkBorder : AppColors.accent.withOpacity(0.7)),
-                width: selected ? 2 : 1,
+      child: Row(
+        children: List.generate(tabs.length, (i) {
+          final active = _tabIndex == i;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () {
+                if (i == 2 && _farmerId != null) _loadHistory();
+                setState(() => _tabIndex = i);
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 220),
+                curve: Curves.easeOut,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: active ? AppColors.primary : Colors.transparent,
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: active
+                      ? [
+                          BoxShadow(
+                            color: AppColors.primary.withOpacity(0.25),
+                            blurRadius: 8,
+                            offset: const Offset(0, 3),
+                          )
+                        ]
+                      : null,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      tabs[i].$1,
+                      size: 17,
+                      color: active ? AppColors.textLight : AppColors.primary,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      tabs[i].$2,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight:
+                            active ? FontWeight.w700 : FontWeight.w500,
+                        color:
+                            active ? AppColors.textLight : AppColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              boxShadow: selected ? [BoxShadow(color: AppColors.primary.withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 3))] : [],
             ),
-            child: Text('${crop.icon} ${crop.name}', style: TextStyle(
-              fontFamily: 'Cairo', fontSize: 12, fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-              color: selected ? Colors.white : (isDark ? AppColors.darkText : AppColors.textDark),
-            )),
-          ),
-        );
-      }).toList()),
-      const SizedBox(height: 10),
-    ]);
+          );
+        }),
+      ),
+    );
   }
 
-  Widget _buildDatePicker(bool isDark) {
-    return GestureDetector(
-      onTap: () async {
-        final d = await showDatePicker(
-          context: context, initialDate: _plantDate,
-          firstDate: DateTime(2020), lastDate: DateTime.now(),
-          builder: (ctx, child) => Theme(
-            data: ThemeData.light().copyWith(
-              colorScheme: const ColorScheme.light(primary: AppColors.primary, onPrimary: Colors.white),
-              dialogBackgroundColor: Colors.white,
-            ),
-            child: child!,
-          ),
-        );
-        if (d != null) setState(() => _plantDate = d);
-      },
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: isDark ? AppColors.darkSurface : AppColors.backgroundSoft,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.accent.withOpacity(0.5)),
+  Widget _buildCurrentTab() {
+    switch (_tabIndex) {
+      case 0:  return _buildInputTab();
+      case 1:  return _buildResultTab();
+      case 2:  return _buildHistoryTab();
+      default: return _buildInputTab();
+    }
+  }
+
+  // ============================================================
+  // 📋 TAB 1 – Input
+  // ============================================================
+  Widget _buildInputTab() {
+    return SlideTransition(
+      position: _entranceSlide,
+      child: FadeTransition(
+        opacity: _entranceFade,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 40),
+          children: [
+            _buildWelcomeCard(),
+            const SizedBox(height: 20),
+            _buildInputGroup(),
+            const SizedBox(height: 24),
+            _buildMainButton(),
+            if (_error.isNotEmpty) ...[
+              const SizedBox(height: 14),
+              _buildErrorBanner(),
+            ],
+          ],
         ),
-        child: Row(children: [
-          Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.12), borderRadius: BorderRadius.circular(8)),
-            child: const Icon(Icons.calendar_month_rounded, color: AppColors.primary, size: 18),
-          ),
-          const SizedBox(width: 12),
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('تاريخ الزراعة', style: TextStyle(fontFamily: 'Cairo', fontSize: 11,
-              color: isDark ? AppColors.darkTextMuted : AppColors.textMuted)),
-            Text(DateFormat('yyyy/MM/dd').format(_plantDate),
-              style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 14,
-                color: isDark ? AppColors.darkText : AppColors.textDark)),
-          ]),
-          const Spacer(),
-          Icon(Icons.edit_rounded, size: 16, color: isDark ? AppColors.darkTextMuted : AppColors.textMuted),
-        ]),
       ),
     );
   }
 
-  Widget _buildCropStats(bool isDark) {
-    final c = _selectedCrop!;
+  Widget _buildWelcomeCard() {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
-      ),
-      child: Row(children: [
-        _buildCropStat('⏱️', '${c.cycleDays}', 'يوم', isDark),
-        _buildCropStat('🌡️', '${c.tempMin}-${c.tempMax}', '°C', isDark),
-        _buildCropStat('💧', '${c.waterMm}', 'مم', isDark),
-        _buildCropStat('📊', '${c.stages.length}', 'مراحل', isDark),
-      ]),
-    );
-  }
-
-  Widget _buildCropStat(String emoji, String val, String unit, bool isDark) => Expanded(child: Column(children: [
-    Text(emoji, style: const TextStyle(fontSize: 16)),
-    const SizedBox(height: 2),
-    Text(val, style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w800, fontSize: 13,
-      color: isDark ? AppColors.darkText : AppColors.primary)),
-    Text(unit, style: TextStyle(fontFamily: 'Cairo', fontSize: 9,
-      color: isDark ? AppColors.darkTextMuted : AppColors.textMuted)),
-  ]));
-
-  Widget _buildCalculateButton(bool isDark) {
-    return Container(
-      width: double.infinity,
-      height: 60,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
         gradient: const LinearGradient(
-          colors: [AppColors.primaryDark, AppColors.primary],
-          begin: Alignment.centerRight, end: Alignment.centerLeft,
+          colors: [AppColors.sage, AppColors.primaryDark],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
-          BoxShadow(color: AppColors.primary.withOpacity(0.45), blurRadius: 20, offset: const Offset(0, 8)),
+          BoxShadow(
+            color: AppColors.sage.withOpacity(0.25),
+            blurRadius: 16,
+            offset: const Offset(0, 5),
+          )
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'مرحباً بك، فلاح',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  'أدخل معلومات قطعتك\nلنحسب لك خطة التسميد المثلى',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: 12,
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInputGroup() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12, right: 4),
+          child: const Text(
+            'معلومات القطعة',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
+            ),
+          ),
+        ),
+
+        // Wilaya
+        _buildFormCard(
+          label: 'الولاية',
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: _selectedWilaya,
+              isExpanded: true,
+              style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
+              dropdownColor: AppColors.surface,
+              borderRadius: BorderRadius.circular(16),
+              icon: const Icon(Icons.expand_more_rounded, color: AppColors.sage),
+              items: _kWilayas
+                  .map((w) => DropdownMenuItem(value: w, child: Text(w)))
+                  .toList(),
+              onChanged: (v) => setState(() => _selectedWilaya = v!),
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+
+        // Previous crop
+        _buildFormCard(
+          label: 'المحصول السابق',
+          child: InkWell(
+            onTap: () => _pickCulture(false),
+            child: Row(children: [
+              Expanded(
+                child: Text(
+                  _selectedPreviousCulture,
+                  style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
+                ),
+              ),
+              const Icon(Icons.expand_more_rounded, color: AppColors.sage),
+            ]),
+          ),
+        ),
+        const SizedBox(height: 10),
+
+        // Current crop
+        _buildFormCard(
+          label: 'المحصول المراد زراعته',
+          child: InkWell(
+            onTap: () => _pickCulture(true),
+            child: Row(children: [
+              Expanded(
+                child: Text(
+                  _selectedCurrentCulture,
+                  style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
+                ),
+              ),
+              const Icon(Icons.expand_more_rounded, color: AppColors.sage),
+            ]),
+          ),
+        ),
+        const SizedBox(height: 10),
+
+        // Date
+        _buildFormCard(
+          label: 'تاريخ الزراعة',
+          child: InkWell(
+            onTap: _pickDate,
+            child: Row(children: [
+              Expanded(
+                child: Text(
+                  DateFormat('dd MMMM yyyy', 'fr').format(_datePlantation),
+                  style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
+                ),
+              ),
+              const Icon(Icons.calendar_month_outlined,
+                  color: AppColors.sage, size: 18),
+            ]),
+          ),
+        ),
+        const SizedBox(height: 10),
+
+        // Area
+        _buildFormCard(
+          label: 'المساحة',
+          trailing: _buildAreaBadge(),
+          child: Row(children: [
+            Expanded(
+              child: TextField(
+                controller: _superficieCtrl,
+                focusNode: _superficieFocus,
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                style: const TextStyle(fontSize: 14, color: AppColors.textPrimary),
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  isDense: true,
+                  contentPadding: EdgeInsets.zero,
+                  hintText: 'مثال: 2.5',
+                  hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 14),
+                ),
+                onChanged: (_) => setState(() {}),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.sage.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Text(
+                'هكتار',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: AppColors.sage,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ]),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAreaBadge() {
+    final ha = double.tryParse(_superficieCtrl.text) ?? 0;
+    return Text(
+      '${(ha * 10000).toStringAsFixed(0)} م²',
+      style: const TextStyle(
+        fontSize: 11,
+        color: AppColors.sage,
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+
+  Widget _buildFormCard({
+    required String label,
+    required Widget child,
+    Widget? trailing,
+  }) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.backgroundSoft),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.forest.withOpacity(0.04),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textMuted,
+                letterSpacing: 0.8,
+              ),
+            ),
+            if (trailing != null) ...[const Spacer(), trailing],
+          ]),
+          const SizedBox(height: 6),
+          child,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMainButton() {
+    return Container(
+      height: 58,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [AppColors.sage, AppColors.primaryDark],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.forest.withOpacity(0.35),
+            blurRadius: 14,
+            offset: const Offset(0, 5),
+          )
         ],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: _calculate,
-          borderRadius: BorderRadius.circular(20),
+          onTap: _loading ? null : _calculate,
+          borderRadius: BorderRadius.circular(18),
           child: const Center(
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text('🤖', style: TextStyle(fontSize: 22)),
-              SizedBox(width: 10),
-              Text('احسب خطة التسميد الذكية',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, fontFamily: 'Cairo', color: Colors.white, letterSpacing: -0.3)),
-            ]),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.science_outlined, color: Colors.white, size: 22),
+                SizedBox(width: 10),
+                Text(
+                  'احسب توصية التسميد',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildWilayaItem(WilayaModel w, bool selected, bool isDark) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 180),
-      color: selected
-        ? AppColors.primary.withOpacity(isDark ? 0.25 : 0.12)
-        : Colors.transparent,
-      child: InkWell(
-        onTap: () {
-          setState(() => _selectedWilaya = w);
-          _fetchWeather(w);
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Row(children: [
-            Container(
-              width: 34, height: 34,
-              decoration: BoxDecoration(
-                color: selected ? AppColors.primary : (isDark ? AppColors.darkBorder : AppColors.accent.withOpacity(0.4)),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(child: Text('${w.code}', style: TextStyle(
-                fontSize: 11, fontWeight: FontWeight.w800,
-                color: selected ? Colors.white : (isDark ? AppColors.darkText : AppColors.textDark),
-                fontFamily: 'Cairo',
-              ))),
-            ),
-            const SizedBox(width: 10),
-            Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(w.name, style: TextStyle(
-                fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 13,
-                color: selected ? AppColors.primary : (isDark ? AppColors.darkText : AppColors.textDark),
-              )),
-              Text(_soilShortName(w.soilType), style: TextStyle(
-                fontSize: 10, fontFamily: 'Cairo',
-                color: isDark ? AppColors.darkTextMuted : AppColors.textMuted,
-              )),
-            ])),
-            if (selected) const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 18),
-          ]),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildWeatherCard(bool isDark) {
-    final wd = _weatherData!;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : const Color(0xFFE8F5E0),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.primary.withOpacity(0.3)),
-      ),
-      child: Row(children: [
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('${wd['temp']}°C',
-            style: TextStyle(fontFamily: 'Cairo', fontSize: 28, fontWeight: FontWeight.w900,
-              color: isDark ? AppColors.darkText : AppColors.primary)),
-          Text('↑${wd['tempMax']}° ↓${wd['tempMin']}°',
-            style: TextStyle(fontFamily: 'Cairo', fontSize: 11, color: isDark ? AppColors.darkTextMuted : AppColors.textMuted)),
-        ]),
-        const SizedBox(width: 20),
-        Expanded(child: Row(children: [
-          _buildWeatherBadge('🌧️', '${wd['rain']}مم', 'أمطار', isDark),
-          const SizedBox(width: 8),
-          _buildWeatherBadge('💧', '${wd['humidity']}%', 'رطوبة', isDark),
-        ])),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.15), borderRadius: BorderRadius.circular(10)),
-          child: const Text('اليوم', style: TextStyle(fontFamily: 'Cairo', fontSize: 11, color: AppColors.primary, fontWeight: FontWeight.w700)),
-        ),
-      ]),
-    );
-  }
-
-  Widget _buildWeatherBadge(String emoji, String val, String label, bool isDark) => Expanded(child: Container(
-    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
-    decoration: BoxDecoration(
-      color: isDark ? AppColors.darkCard : Colors.white.withOpacity(0.7),
-      borderRadius: BorderRadius.circular(10),
-    ),
-    child: Column(children: [
-      Text(emoji, style: const TextStyle(fontSize: 14)),
-      Text(val, style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 12,
-        color: isDark ? AppColors.darkText : AppColors.textDark)),
-      Text(label, style: TextStyle(fontFamily: 'Cairo', fontSize: 9, color: isDark ? AppColors.darkTextMuted : AppColors.textMuted)),
-    ]),
-  ));
-
-  Widget _buildSoilPreview(bool isDark) {
-    final soil = soilDb[_selectedWilaya!.soilType];
-    if (soil == null) return const SizedBox.shrink();
+  Widget _buildErrorBanner() {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : AppColors.accentWarm.withOpacity(0.4),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.accentGold.withOpacity(0.4)),
+        color: AppColors.danger.withOpacity(0.07),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.danger.withOpacity(0.2)),
       ),
       child: Row(children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(color: AppColors.accentGold.withOpacity(0.2), borderRadius: BorderRadius.circular(10)),
-          child: const Text('🏜️', style: TextStyle(fontSize: 18)),
+        const Icon(Icons.error_outline, color: AppColors.danger, size: 18),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            _error,
+            style: const TextStyle(fontSize: 12, color: AppColors.danger),
+          ),
         ),
-        const SizedBox(width: 12),
-        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(_soilShortName(_selectedWilaya!.soilType),
-            style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 13,
-              color: isDark ? AppColors.darkText : AppColors.textDark)),
-          Text('pH ${soil.phMin}–${soil.phMax} | كفاءة ${(soil.efficacite * 100).toInt()}%',
-            style: TextStyle(fontFamily: 'Cairo', fontSize: 11, color: isDark ? AppColors.darkTextMuted : AppColors.textMuted)),
-        ])),
       ]),
     );
   }
 
-  // Result tab helpers
-
-  Widget _buildHeroResultCard(AnalysisResult r, String cropIcon, bool isDark) {
-    return Container(
-      padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF2D5A1B), Color(0xFF4A7A32), Color(0xFF3D2F1E)],
-          begin: Alignment.topRight, end: Alignment.bottomLeft,
-          stops: [0.0, 0.5, 1.0],
+  // ============================================================
+  // 🌿 TAB 2 – Result
+  // ============================================================
+  Widget _buildResultTab() {
+    if (_result == null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 88,
+              height: 88,
+              decoration: BoxDecoration(
+                color: AppColors.mint.withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                  child: Icon(Icons.science_outlined,
+                      size: 40, color: AppColors.sage)),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'لا توجد نتائج بعد',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textSecond,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'أدخل معلوماتك واضغط احسب',
+              style: TextStyle(fontSize: 12, color: AppColors.textMuted),
+            ),
+            const SizedBox(height: 24),
+            TextButton.icon(
+              onPressed: () => setState(() => _tabIndex = 0),
+              icon: const Icon(Icons.edit_note_rounded, color: AppColors.sage),
+              label: const Text(
+                'اذهب للإدخال',
+                style: TextStyle(
+                    color: AppColors.sage, fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
         ),
-        borderRadius: BorderRadius.circular(26),
-        boxShadow: [
-          BoxShadow(color: const Color(0xFF2D5A1B).withOpacity(0.4), blurRadius: 24, offset: const Offset(0, 10)),
+      );
+    }
+
+    final r          = _result!;
+    final riskColor  = AppColors.riskColor(r.riskLevel ?? '');
+    final superficie = double.tryParse(_superficieCtrl.text) ?? 1.0;
+
+    return FadeTransition(
+      opacity: _resultFade,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 20, 16, 40),
+        children: [
+          _buildResultBanner(r, riskColor),
+          const SizedBox(height: 14),
+          _buildQuantityCard(r, riskColor, superficie),
+          const SizedBox(height: 12),
+          _buildStageCard(r),
+          const SizedBox(height: 12),
+          if (r.nutrients != null && r.nutrients!.isNotEmpty) ...[
+            _buildNutrientsCard(r),
+            const SizedBox(height: 12),
+          ],
+          if (r.fertilizers != null && r.fertilizers!.isNotEmpty) ...[
+            _buildFertilizersCard(r),
+            const SizedBox(height: 12),
+          ],
+          if (r.irrigationAmount != null) ...[
+            _buildIrrigationCard(r),
+            const SizedBox(height: 12),
+          ],
+          if (r.alerts != null && r.alerts!.isNotEmpty) ...[
+            _buildAlertsCard(r),
+            const SizedBox(height: 12),
+          ],
+          if (r.tips != null && r.tips!.isNotEmpty) ...[
+            _buildTipsCard(r),
+          ],
         ],
       ),
-      child: Column(children: [
-        Row(children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: Colors.white.withOpacity(0.15), borderRadius: BorderRadius.circular(16)),
-            child: Text(cropIcon, style: const TextStyle(fontSize: 32)),
-          ),
-          const SizedBox(width: 14),
-          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(r.cropName, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 22, fontFamily: 'Cairo')),
-            Text('${r.wilayaName} • ${r.area} هكتار',
-              style: TextStyle(color: Colors.white.withOpacity(0.65), fontSize: 12, fontFamily: 'Cairo')),
-          ])),
-          Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-            AnimatedCounter(
-              value: r.totalKgHa,
-              style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w900, fontFamily: 'Cairo'),
+    );
+  }
+
+  Widget _buildResultBanner(FertilizationResult r, Color riskColor) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [AppColors.primary, AppColors.primary.withOpacity(0.7)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.3),
+            blurRadius: 14,
+            offset: const Offset(0, 5),
+          )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.22),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                r.riskLevel?.isEmpty ?? true ? 'تحليل مكتمل' : r.riskLevel!,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.5,
+                ),
+              ),
             ),
-            const Text('كغ/هكتار', style: TextStyle(color: Colors.white60, fontSize: 11, fontFamily: 'Cairo')),
+            const Spacer(),
+            Text(
+              DateFormat('dd MMM yyyy', 'fr').format(DateTime.now()),
+              style: const TextStyle(color: Colors.white70, fontSize: 11),
+            ),
           ]),
-        ]),
-        const SizedBox(height: 18),
-        // Stage progress
+          const SizedBox(height: 14),
+          Text(
+            r.crop ?? _selectedCurrentCulture,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              fontFamily: 'Georgia',
+            ),
+          ),
+          const SizedBox(height: 5),
+          Row(children: [
+            const Icon(Icons.location_on, color: Colors.white60, size: 14),
+            const SizedBox(width: 3),
+            Text(
+              r.wilaya ?? _selectedWilaya,
+              style: const TextStyle(color: Colors.white70, fontSize: 13),
+            ),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuantityCard(
+      FertilizationResult r, Color riskColor, double superficie) {
+    return _ResultCard(
+      title: 'الكمية الموصى بها',
+      icon: Icons.science_outlined,
+      child: Column(children: [
         Container(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), borderRadius: BorderRadius.circular(16)),
-          child: Column(children: [
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Row(children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text('المرحلة', style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 10, fontFamily: 'Cairo')),
-                ),
-                const SizedBox(width: 8),
-                Text(r.stageName, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontFamily: 'Cairo', fontSize: 14)),
-              ]),
-              Text('${r.stageProgress.toStringAsFixed(0)}%',
-                style: const TextStyle(color: Color(0xFFA8E87A), fontWeight: FontWeight.w900, fontSize: 16)),
-            ]),
-            const SizedBox(height: 10),
-            AnimatedProgressBar(value: r.stageProgress / 100, color: const Color(0xFFA8E87A)),
-            const SizedBox(height: 8),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('اليوم ${r.daysElapsed} من ${r.totalDays}',
-                style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 11, fontFamily: 'Cairo')),
-              Text('المجموع: ${(r.totalKgHa * r.area).toStringAsFixed(0)} كغ',
-                style: const TextStyle(color: Color(0xFFA8E87A), fontSize: 11, fontFamily: 'Cairo', fontWeight: FontWeight.w700)),
-            ]),
-          ]),
-        ),
-      ]),
-    );
-  }
-
-  Widget _buildMiniStat(String emoji, String label, String value, bool isDark) => Expanded(
-    child: Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkCard : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(isDark ? 0.2 : 0.05), blurRadius: 8)],
-      ),
-      child: Column(children: [
-        Text(emoji, style: const TextStyle(fontSize: 18)),
-        const SizedBox(height: 4),
-        Text(value, style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w800, fontSize: 11,
-          color: isDark ? AppColors.darkText : AppColors.textDark), textAlign: TextAlign.center),
-        const SizedBox(height: 2),
-        Text(label, style: TextStyle(fontFamily: 'Cairo', fontSize: 9,
-          color: isDark ? AppColors.darkTextMuted : AppColors.textMuted)),
-      ]),
-    ),
-  );
-
-  Widget _buildWeatherStat(String emoji, String value, String label, bool isDark) => Expanded(
-    child: Column(children: [
-      Text(emoji, style: const TextStyle(fontSize: 18)),
-      const SizedBox(height: 4),
-      Text(value, style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 12,
-        color: isDark ? AppColors.darkText : AppColors.textDark), textAlign: TextAlign.center),
-      Text(label, style: TextStyle(fontFamily: 'Cairo', fontSize: 9,
-        color: isDark ? AppColors.darkTextMuted : AppColors.textMuted)),
-    ]),
-  );
-
-  Widget _buildNutrientRow(String nut, Map<String, dynamic> d, bool isDark) {
-    final ok = d['ok'] as bool;
-    final deficit = (d['deficit'] as num).toDouble();
-    final required = (d['required'] as num).toDouble();
-    final need = (d['need'] as num).toDouble();
-    final avail = (d['avail'] as num).toDouble();
-    final pct = need > 0 ? (avail / need).clamp(0.0, 1.0) : 1.0;
-    final color = ok ? AppColors.success : AppColors.warning;
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : (ok ? AppColors.backgroundSoft : const Color(0xFFFFF8F0)),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: ok
-          ? (isDark ? AppColors.darkBorder : AppColors.accent.withOpacity(0.4))
-          : AppColors.warning.withOpacity(0.3)),
-      ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          Container(
-            width: 36, height: 36,
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Center(child: Text(nut, style: TextStyle(
-              fontWeight: FontWeight.w900, fontSize: 13, color: color))),
-          ),
-          const SizedBox(width: 10),
-          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(children: [
-              Text('الحاجة: ${need.toStringAsFixed(0)}',
-                style: TextStyle(fontFamily: 'Cairo', fontSize: 11,
-                  color: isDark ? AppColors.darkTextMuted : AppColors.textMuted)),
-              const SizedBox(width: 12),
-              Text('المتاح: ${avail.toStringAsFixed(0)}',
-                style: TextStyle(fontFamily: 'Cairo', fontSize: 11,
-                  color: isDark ? AppColors.darkTextMuted : AppColors.textMuted)),
-            ]),
-            if (!ok)
-              Text('نقص: ${deficit.toStringAsFixed(0)} ← يضاف: ${required.toStringAsFixed(0)} كغ/هـ',
-                style: const TextStyle(fontFamily: 'Cairo', fontSize: 11,
-                  color: AppColors.warning, fontWeight: FontWeight.w700)),
-          ])),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(color: color.withOpacity(0.15), borderRadius: BorderRadius.circular(10)),
-            child: Text(ok ? '✓ كافٍ' : '+ أضف',
-              style: TextStyle(fontFamily: 'Cairo', fontSize: 11, fontWeight: FontWeight.w700, color: color)),
-          ),
-        ]),
-        const SizedBox(height: 8),
-        AnimatedProgressBar(value: pct, color: color, height: 5),
-      ]),
-    );
-  }
-
-  Widget _buildFertCard(FertilizerRec f, double area, bool isDark) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : AppColors.backgroundSoft,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.accent.withOpacity(0.5)),
-      ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          Text(f.icon, style: const TextStyle(fontSize: 24)),
-          const SizedBox(width: 10),
-          Expanded(child: Text(f.name, style: TextStyle(
-            fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 13,
-            color: isDark ? AppColors.darkText : AppColors.textDark))),
-          Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-            Text('${(f.kgHa * area).toStringAsFixed(0)} كغ',
-              style: const TextStyle(fontFamily: 'Cairo', fontSize: 22, fontWeight: FontWeight.w900, color: AppColors.primary)),
-            Text('(${f.kgHa.toStringAsFixed(0)} كغ/هـ)',
-              style: const TextStyle(fontFamily: 'Cairo', fontSize: 10, color: AppColors.textMuted)),
-          ]),
-        ]),
-        const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: isDark ? AppColors.darkCard : Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            color: riskColor.withOpacity(0.07),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: riskColor.withOpacity(0.15)),
           ),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Icon(Icons.construction_rounded, size: 14, color: AppColors.primary),
-              const SizedBox(width: 6),
-              Expanded(child: Text(f.how, style: TextStyle(fontFamily: 'Cairo', fontSize: 11,
-                color: isDark ? AppColors.darkTextMuted : AppColors.textMuted))),
-            ]),
-            const SizedBox(height: 6),
-            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Icon(Icons.access_time_rounded, size: 14, color: AppColors.accentGold),
-              const SizedBox(width: 6),
-              Expanded(child: Text(f.when, style: const TextStyle(fontFamily: 'Cairo', fontSize: 11,
-                color: AppColors.accentGold, fontWeight: FontWeight.w600))),
-            ]),
+          child: Row(children: [
+            Expanded(
+              child: Column(children: [
+                Text(
+                  r.totalKgHa?.toStringAsFixed(1) ?? '—',
+                  style: TextStyle(
+                    fontSize: 38,
+                    fontWeight: FontWeight.w800,
+                    color: riskColor,
+                    fontFamily: 'Georgia',
+                    height: 1,
+                  ),
+                ),
+                Text(
+                  'كغ/هكتار',
+                  style: TextStyle(
+                      fontSize: 12, color: riskColor.withOpacity(0.7)),
+                ),
+              ]),
+            ),
+            Container(
+                width: 1, height: 55, color: riskColor.withOpacity(0.2)),
+            Expanded(
+              child: Column(children: [
+                Text(
+                  '${r.totalKg?.toStringAsFixed(1) ?? '—'} كغ',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    color: riskColor,
+                    fontFamily: 'Georgia',
+                    height: 1,
+                  ),
+                ),
+                Text(
+                  'المجموع (${superficie.toStringAsFixed(1)} هك)',
+                  style: TextStyle(
+                      fontSize: 11, color: riskColor.withOpacity(0.7)),
+                ),
+              ]),
+            ),
           ]),
         ),
       ]),
     );
   }
 
-  Widget _buildAlertItem(String text, bool isAlert, bool isDark) {
-    final color = isAlert ? Colors.red : Colors.orange;
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.07),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.25)),
-      ),
-      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Icon(isAlert ? Icons.warning_amber_rounded : Icons.info_outline_rounded, color: color, size: 18),
-        const SizedBox(width: 8),
-        Expanded(child: Text(text, style: TextStyle(fontFamily: 'Cairo', fontSize: 12,
-          color: isDark ? AppColors.darkText : AppColors.textDark))),
+  Widget _buildStageCard(FertilizationResult r) {
+    final prog = r.stageProgress ?? 0;
+    return _ResultCard(
+      title: 'مرحلة النمو',
+      icon: Icons.grass_outlined,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          Expanded(
+            child: Text(
+              r.stageName ?? '—',
+              style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary),
+            ),
+          ),
+          Text(
+            '${prog.toStringAsFixed(0)}%',
+            style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: AppColors.sage),
+          ),
+        ]),
+        const SizedBox(height: 10),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: LinearProgressIndicator(
+            value: prog / 100,
+            minHeight: 9,
+            backgroundColor: AppColors.backgroundSoft,
+            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.sage),
+          ),
+        ),
+        const SizedBox(height: 12),
+        if (r.daysElapsed != null)
+          _InfoRow(
+              label: 'الأيام المنقضية',
+              value: '${r.daysElapsed} يوم',
+              icon: Icons.calendar_today_outlined),
+        if (r.daysRemaining != null)
+          _InfoRow(
+              label: 'الأيام المتبقية',
+              value: '${r.daysRemaining} يوم',
+              icon: Icons.hourglass_bottom_rounded),
+        if (r.soilType != null)
+          _InfoRow(
+              label: 'نوع التربة',
+              value: r.soilType!,
+              icon: Icons.layers_outlined),
       ]),
     );
   }
 
-  Widget _buildSuccessBox(bool isDark) {
+  Widget _buildNutrientsCard(FertilizationResult r) {
+    return _ResultCard(
+      title: 'الاحتياجات الغذائية',
+      icon: Icons.biotech_outlined,
+      child: Column(
+        children: r.nutrients!.entries.map((e) {
+          final val       = e.value as Map;
+          final need      = val['need'] ?? 0;
+          final available = val['available'] ?? 0;
+          final isOk      = val['ok'] ?? false;
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(children: [
+              Expanded(
+                  flex: 2,
+                  child: Text(e.key,
+                      style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary))),
+              Expanded(
+                  child: Text('${(need as num).toInt()}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 12, color: AppColors.textSecond))),
+              Expanded(
+                  child: Text('${(available as num).toInt()}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: isOk ? AppColors.success : AppColors.warning))),
+              Icon(
+                isOk ? Icons.check_circle_outline : Icons.warning_amber_rounded,
+                color: isOk ? AppColors.success : AppColors.warning,
+                size: 16,
+              ),
+            ]),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildFertilizersCard(FertilizationResult r) {
+    return _ResultCard(
+      title: 'الأسمدة المقترحة',
+      icon: Icons.opacity_outlined,
+      child: Column(
+        children: r.fertilizers!.map((f) {
+          return Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: AppColors.backgroundSoft,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppColors.border),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(children: [
+                  Expanded(
+                    child: Text(f['name'] ?? '',
+                        style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textPrimary)),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.sage.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      '${f['kgHa']} كغ/هك',
+                      style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.sage),
+                    ),
+                  ),
+                ]),
+                if (f['how'] != null) ...[
+                  const SizedBox(height: 6),
+                  _InfoRow(
+                      label: 'الطريقة',
+                      value: f['how'].toString(),
+                      icon: Icons.water_drop_outlined),
+                ],
+                if (f['when'] != null)
+                  _InfoRow(
+                      label: 'التوقيت',
+                      value: f['when'].toString(),
+                      icon: Icons.schedule_outlined),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildIrrigationCard(FertilizationResult r) {
+    return _ResultCard(
+      title: 'توصية الري',
+      icon: Icons.water_drop_rounded,
+      child: _InfoRow(
+        label: 'الكمية اليومية',
+        value: '${r.irrigationAmount} مم/يوم',
+        icon: Icons.water_drop_outlined,
+      ),
+    );
+  }
+
+  Widget _buildAlertsCard(FertilizationResult r) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.success.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.success.withOpacity(0.3)),
+        color: AppColors.danger.withOpacity(0.06),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.danger.withOpacity(0.2)),
       ),
-      child: Row(children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(color: AppColors.success.withOpacity(0.15), shape: BoxShape.circle),
-          child: const Icon(Icons.check_circle_rounded, color: AppColors.success, size: 22),
-        ),
-        const SizedBox(width: 12),
-        const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('التسميد متوازن ومثالي', style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w800, fontSize: 14, color: AppColors.success)),
-          Text('لا توجد نقائص أو تحذيرات في هذه المرحلة', style: TextStyle(fontFamily: 'Cairo', fontSize: 11, color: AppColors.success)),
-        ])),
-      ]),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            const Icon(Icons.warning_amber_rounded,
+                color: AppColors.danger, size: 18),
+            const SizedBox(width: 8),
+            const Text('تنبيهات',
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.danger)),
+          ]),
+          const SizedBox(height: 10),
+          ...r.alerts!.map((a) => Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  Container(
+                      margin: const EdgeInsets.only(top: 5),
+                      width: 6,
+                      height: 6,
+                      decoration: const BoxDecoration(
+                          color: AppColors.danger, shape: BoxShape.circle)),
+                  const SizedBox(width: 10),
+                  Expanded(
+                      child: Text(a,
+                          style: const TextStyle(
+                              fontSize: 13,
+                              color: AppColors.textPrimary,
+                              height: 1.5))),
+                ]),
+              )),
+        ],
+      ),
     );
   }
 
-  Widget _buildInfoRow(String emoji, String label, String value, bool isDark) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 7),
-      child: Row(children: [
-        Text(emoji, style: const TextStyle(fontSize: 16)),
-        const SizedBox(width: 10),
-        Text(label, style: TextStyle(fontFamily: 'Cairo', fontSize: 13,
-          color: isDark ? AppColors.darkTextMuted : AppColors.textMuted)),
-        const Spacer(),
-        Text(value, style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 13,
-          color: isDark ? AppColors.darkText : AppColors.textDark)),
-      ]),
+  Widget _buildTipsCard(FertilizationResult r) {
+    return _ResultCard(
+      title: 'نصائح زراعية',
+      icon: Icons.lightbulb_outline_rounded,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: r.tips!.map((tip) {
+          final title = tip['title']?.toString() ?? 'نصيحة';
+          final desc  = tip['description']?.toString() ?? tip.toString();
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Container(
+                  margin: const EdgeInsets.only(top: 5),
+                  width: 7,
+                  height: 7,
+                  decoration: const BoxDecoration(
+                      color: AppColors.mint, shape: BoxShape.circle)),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  Text(title,
+                      style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary)),
+                  if (desc.isNotEmpty)
+                    Text(desc,
+                        style: const TextStyle(
+                            fontSize: 12,
+                            color: AppColors.textSecond,
+                            fontStyle: FontStyle.italic,
+                            height: 1.5)),
+                ]),
+              ),
+            ]),
+          );
+        }).toList(),
+      ),
     );
   }
 
-  Widget _buildRecordCard(AnalysisResult r, String cropIcon, int idx, bool isDark) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkCard : Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(isDark ? 0.2 : 0.05), blurRadius: 12, offset: const Offset(0, 4))],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(children: [
-          Container(
-            width: 52, height: 52,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.12),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Center(child: Text(cropIcon, style: const TextStyle(fontSize: 26))),
-          ),
-          const SizedBox(width: 12),
-          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(r.cropName, style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w800, fontSize: 14,
-              color: isDark ? AppColors.darkText : AppColors.textDark)),
-            const SizedBox(height: 2),
-            Text('📍 ${r.wilayaName} • ${r.area} هكتار',
-              style: TextStyle(fontFamily: 'Cairo', fontSize: 11, color: isDark ? AppColors.darkTextMuted : AppColors.textMuted)),
-            Text('🌱 ${r.stageName} • ${r.totalKgHa.toStringAsFixed(1)} كغ/هـ',
-              style: const TextStyle(fontFamily: 'Cairo', fontSize: 11, color: AppColors.primary, fontWeight: FontWeight.w700)),
-            Text('📅 ${r.analysisDate}',
-              style: TextStyle(fontFamily: 'Cairo', fontSize: 10, color: isDark ? AppColors.darkTextMuted : AppColors.textMuted)),
-          ])),
-          IconButton(
-            icon: const Icon(Icons.delete_outline_rounded, color: Colors.red, size: 22),
-            onPressed: () => _deleteRecord(idx),
-          ),
+  // ============================================================
+  // 📜 TAB 3 – History
+  // ============================================================
+  Widget _buildHistoryTab() {
+    if (_farmerId == null) {
+      return const Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Icon(Icons.lock_outline_rounded, size: 52, color: AppColors.textMuted),
+          SizedBox(height: 16),
+          Text('تسجيل الدخول مطلوب',
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textSecond)),
+          SizedBox(height: 8),
+          Text('سجّل دخولك لرؤية السجل',
+              style: TextStyle(fontSize: 12, color: AppColors.textMuted)),
         ]),
-      ),
+      );
+    }
+
+    return RefreshIndicator(
+      color: AppColors.sage,
+      onRefresh: _loadHistory,
+      child: _loadingHistory
+          ? const Center(
+              child: CircularProgressIndicator(color: AppColors.sage))
+          : _history.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 88,
+                        height: 88,
+                        decoration: const BoxDecoration(
+                            color: AppColors.sand, shape: BoxShape.circle),
+                        child: const Center(
+                            child: Icon(Icons.history_rounded,
+                                size: 40, color: AppColors.textMuted)),
+                      ),
+                      const SizedBox(height: 18),
+                      const Text('لا يوجد سجل بعد',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textSecond)),
+                      const SizedBox(height: 8),
+                      const Text('سيتم الحفظ تلقائياً بعد كل حساب',
+                          style: TextStyle(
+                              fontSize: 12, color: AppColors.textMuted)),
+                    ],
+                  ),
+                )
+              : ListView(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
+                  children: [
+                    const SizedBox(height: 8),
+                    ..._history.map((r) => _HistoryCard(
+                          record: r,
+                          onTap: () => _showHistoryDetail(r),
+                          onDelete: () => _deleteHistoryRecord(r.id),
+                        )),
+                  ],
+                ),
     );
   }
 
-  Widget _buildEmptyState(String emoji, String title, String sub, bool isDark) {
-    return Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Container(
-        padding: const EdgeInsets.all(28),
-        decoration: BoxDecoration(
-          color: AppColors.primary.withOpacity(0.1),
-          shape: BoxShape.circle,
-        ),
-        child: Text(emoji, style: const TextStyle(fontSize: 44)),
-      ),
-      const SizedBox(height: 20),
-      Text(title, style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w800, fontSize: 17,
-        color: isDark ? AppColors.darkText : AppColors.textDark)),
-      const SizedBox(height: 8),
-      Text(sub, style: TextStyle(fontFamily: 'Cairo', fontSize: 13,
-        color: isDark ? AppColors.darkTextMuted : AppColors.textMuted)),
-    ]));
+  void _showHistoryDetail(FertilizationRecord record) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _HistoryDetailSheet(record: record),
+    );
   }
 
-  String _soilShortName(String soilType) {
-    const map = {
-      'Sols alluviaux': 'طمي (جيد جداً)',
-      'Sols bruns calcaires': 'بني جيري',
-      'Vertisols': 'فيرتيسول (طيني)',
-      "Sols peu évolués d'érosion": 'هش منحوت',
-      'Sols sableux (Erg)': 'رملي (ارج)',
-      'Sols minéraux bruts (Reg)': 'معدني (رڤ)',
-      'Sols hydromorphes (Oasis)': 'هيدرومورف (واحة)',
-    };
-    return map[soilType] ?? soilType;
-  }
-}
-
-// ==================== LOADING RING ANIMATION ====================
-class _LoadingRing extends StatefulWidget {
-  @override State<_LoadingRing> createState() => _LoadingRingState();
-}
-class _LoadingRingState extends State<_LoadingRing> with SingleTickerProviderStateMixin {
-  late AnimationController _ctrl;
-  @override void initState() {
-    super.initState();
-    _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 1800))..repeat();
-  }
-  @override void dispose() { _ctrl.dispose(); super.dispose(); }
-  @override Widget build(BuildContext context) => AnimatedBuilder(
-    animation: _ctrl,
-    builder: (_, __) => CustomPaint(
-      painter: _RingPainter(_ctrl.value),
-      size: const Size(72, 72),
-    ),
-  );
-}
-
-class _RingPainter extends CustomPainter {
-  final double progress;
-  _RingPainter(this.progress);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width / 2 - 4;
-
-    // Background ring
-    canvas.drawCircle(center, radius,
-      Paint()..color = AppColors.primary.withOpacity(0.15)
-        ..style = PaintingStyle.stroke..strokeWidth = 4);
-
-    // Arc
-    final rect = Rect.fromCircle(center: center, radius: radius);
-    canvas.drawArc(rect, -math.pi / 2 + progress * 2 * math.pi, math.pi * 1.2,
-      false,
-      Paint()..color = AppColors.primary
-        ..style = PaintingStyle.stroke..strokeWidth = 4
-        ..strokeCap = StrokeCap.round);
-
-    // Leaf dots
-    for (int i = 0; i < 6; i++) {
-      final angle = i * math.pi / 3 + progress * 2 * math.pi;
-      final x = center.dx + (radius + 6) * math.cos(angle);
-      final y = center.dy + (radius + 6) * math.sin(angle);
-      canvas.drawCircle(Offset(x, y), 2.5,
-        Paint()..color = AppColors.primaryGlow.withOpacity(0.5 + 0.5 * math.sin(angle + progress * math.pi)));
+  Future<void> _deleteHistoryRecord(String recordId) async {
+    if (_farmerId == null) return;
+    try {
+      await _firestore
+          .collection('farmers')
+          .doc(_farmerId)
+          .collection('fertilization_history')
+          .doc(recordId)
+          .delete();
+      if (!mounted) return;
+      setState(() => _history.removeWhere((r) => r.id == recordId));
+    } catch (e) {
+      debugPrint('Firestore delete error: $e');
     }
   }
+}
 
-  @override bool shouldRepaint(_RingPainter old) => true;
+// ============================================================
+// 🔷 SHARED WIDGETS
+// ============================================================
+class _ResultCard extends StatelessWidget {
+  final String   title;
+  final IconData icon;
+  final Widget   child;
+  const _ResultCard(
+      {required this.title, required this.icon, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.backgroundSoft),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.forest.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          )
+        ],
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: AppColors.sage.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child:
+                Icon(icon, size: 16, color: AppColors.sage),
+          ),
+          const SizedBox(width: 10),
+          Text(title,
+              style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary)),
+        ]),
+        const SizedBox(height: 14),
+        child,
+      ]),
+    );
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  final String  label;
+  final String  value;
+  final IconData icon;
+  const _InfoRow(
+      {required this.label, required this.value, required this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(children: [
+        Icon(icon, size: 14, color: AppColors.sage),
+        const SizedBox(width: 8),
+        Text(label,
+            style: const TextStyle(fontSize: 12, color: AppColors.textSecond)),
+        const Spacer(),
+        Text(value,
+            style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary)),
+      ]),
+    );
+  }
+}
+
+// ============================================================
+// 📜 HISTORY CARD
+// ============================================================
+class _HistoryCard extends StatelessWidget {
+  final FertilizationRecord record;
+  final VoidCallback onTap;
+  final VoidCallback onDelete;
+  const _HistoryCard(
+      {required this.record, required this.onTap, required this.onDelete});
+
+  @override
+  Widget build(BuildContext context) {
+    final riskColor =
+        AppColors.riskColor(record.riskLevel);
+    final dateStr =
+        DateFormat('dd MMM yyyy – HH:mm', 'fr').format(record.dateCalcul);
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.backgroundSoft),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.forest.withOpacity(0.04),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            )
+          ],
+        ),
+        child: Row(children: [
+          Container(
+            width: 4,
+            height: 60,
+            decoration: BoxDecoration(
+              color: riskColor,
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(children: [
+                  Text(
+                    record.culture,
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary),
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      '${record.totalKg.toStringAsFixed(1)} كغ',
+                      style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.primary),
+                    ),
+                  ),
+                ]),
+                const SizedBox(height: 5),
+                Row(children: [
+                  const Icon(Icons.location_on_outlined,
+                      size: 11, color: AppColors.textMuted),
+                  const SizedBox(width: 2),
+                  Text(record.wilaya,
+                      style: const TextStyle(
+                          fontSize: 11, color: AppColors.textMuted)),
+                  const SizedBox(width: 10),
+                  const Icon(Icons.crop_square_outlined,
+                      size: 11, color: AppColors.textMuted),
+                  const SizedBox(width: 2),
+                  Text('${record.superficie.toStringAsFixed(1)} هك',
+                      style: const TextStyle(
+                          fontSize: 11, color: AppColors.textMuted)),
+                ]),
+                const SizedBox(height: 4),
+                Text(dateStr,
+                    style: const TextStyle(
+                        fontSize: 10, color: AppColors.textMuted)),
+              ],
+            ),
+          ),
+          const SizedBox(width: 6),
+          IconButton(
+            icon: const Icon(Icons.delete_outline_rounded,
+                color: Colors.redAccent, size: 18),
+            onPressed: onDelete,
+          ),
+          const Icon(Icons.chevron_right,
+              color: AppColors.textMuted, size: 18),
+        ]),
+      ),
+    );
+  }
+}
+
+// ============================================================
+// 📋 HISTORY DETAIL SHEET
+// ============================================================
+class _HistoryDetailSheet extends StatelessWidget {
+  final FertilizationRecord record;
+  const _HistoryDetailSheet({required this.record});
+
+  @override
+  Widget build(BuildContext context) {
+    final riskColor = AppColors.riskColor(record.riskLevel);
+
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.86,
+      decoration: const BoxDecoration(
+        color: AppColors.backgroundSoft,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+      ),
+      child: Column(children: [
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 12),
+          width: 38,
+          height: 4,
+          decoration: BoxDecoration(
+            color: AppColors.primary,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(18, 0, 18, 32),
+            children: [
+              Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.primary,
+                      AppColors.primary.withOpacity(0.75)
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withOpacity(0.28),
+                      blurRadius: 14,
+                      offset: const Offset(0, 5),
+                    )
+                  ],
+                ),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  Text(record.culture,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          fontFamily: 'Georgia')),
+                  const SizedBox(height: 5),
+                  Text(
+                    record.riskLevel.isEmpty ? '—' : record.riskLevel,
+                    style: const TextStyle(color: Colors.white70, fontSize: 12),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    DateFormat('dd MMMM yyyy – HH:mm', 'fr')
+                        .format(record.dateCalcul),
+                    style: const TextStyle(
+                        color: Colors.white54, fontSize: 11),
+                  ),
+                ]),
+              ),
+              const SizedBox(height: 14),
+              _DetailSection(title: 'الكمية الموصى بها', rows: [
+                ('الكمية الإجمالية',
+                    '${record.totalKg.toStringAsFixed(1)} كغ'),
+                ('كغ لكل هكتار',
+                    '${record.totalKgHa.toStringAsFixed(1)} كغ/هك'),
+              ]),
+              const SizedBox(height: 10),
+              _DetailSection(title: 'معلومات القطعة', rows: [
+                ('الولاية', record.wilaya),
+                ('المحصول الحالي', record.culture),
+                ('المحصول السابق', record.previousCulture),
+                ('المساحة',
+                    '${record.superficie.toStringAsFixed(2)} هكتار'),
+                ('تاريخ الزراعة',
+                    DateFormat('dd/MM/yyyy').format(record.datePlantation)),
+              ]),
+              const SizedBox(height: 10),
+              _DetailSection(title: 'مرحلة النمو', rows: [
+                ('المرحلة', record.stageName),
+                ('التقدم', '${record.progression}%'),
+              ]),
+            ],
+          ),
+        ),
+      ]),
+    );
+  }
+}
+
+class _DetailSection extends StatelessWidget {
+  final String                   title;
+  final List<(String, String)>   rows;
+  const _DetailSection({required this.title, required this.rows});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.backgroundSoft),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(title,
+            style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary)),
+        const SizedBox(height: 10),
+        ...rows.map((r) => Padding(
+              padding: const EdgeInsets.only(bottom: 7),
+              child: Row(children: [
+                Expanded(
+                    child: Text(r.$1,
+                        style: const TextStyle(
+                            fontSize: 12, color: AppColors.textSecond))),
+                Text(r.$2,
+                    style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary)),
+              ]),
+            )),
+      ]),
+    );
+  }
+}
+
+// ============================================================
+// 🌿 CULTURE PICKER SHEET
+// ============================================================
+class _CulturePickerSheet extends StatefulWidget {
+  final String                    selected;
+  final Map<String, List<String>> categories;
+  const _CulturePickerSheet(
+      {required this.selected, required this.categories});
+  @override
+  State<_CulturePickerSheet> createState() => _CulturePickerSheetState();
+}
+
+class _CulturePickerSheetState extends State<_CulturePickerSheet> {
+  String _search = '';
+
+  @override
+  Widget build(BuildContext context) {
+    final filtered = <String, List<String>>{};
+    for (final e in widget.categories.entries) {
+      final items = e.value
+          .where((c) => c.toLowerCase().contains(_search.toLowerCase()))
+          .toList();
+      if (items.isNotEmpty) filtered[e.key] = items;
+    }
+
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.8,
+      decoration: const BoxDecoration(
+        color: AppColors.backgroundSoft,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+      ),
+      child: Column(children: [
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 12),
+          width: 38,
+          height: 4,
+          decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(2)),
+        ),
+        const Text('اختر المحصول',
+            style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary)),
+        const SizedBox(height: 14),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppColors.backgroundSoft),
+            ),
+            child: TextField(
+              autofocus: true,
+              decoration: const InputDecoration(
+                hintText: 'ابحث عن محصول...',
+                hintStyle: TextStyle(color: AppColors.textMuted),
+                prefixIcon:
+                    Icon(Icons.search, color: AppColors.sage, size: 20),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(vertical: 12),
+              ),
+              onChanged: (v) => setState(() => _search = v),
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            children: filtered.entries.map((e) {
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(e.key,
+                          style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.sage,
+                              letterSpacing: 0.5)),
+                    ),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: e.value.map((c) {
+                        final isSelected = c == widget.selected;
+                        return GestureDetector(
+                          onTap: () => Navigator.pop(context, c),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 150),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14, vertical: 8),
+                            decoration: BoxDecoration(
+                              gradient: isSelected
+                                  ? const LinearGradient(
+                                      colors: [
+                                        AppColors.sage,
+                                        AppColors.primaryDark,
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    )
+                                  : null,
+                              color: isSelected ? null : AppColors.surface,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: isSelected
+                                    ? AppColors.sage
+                                    : AppColors.backgroundSoft,
+                              ),
+                              boxShadow: isSelected
+                                  ? [
+                                      BoxShadow(
+                                        color: AppColors.sage.withOpacity(0.3),
+                                        blurRadius: 6,
+                                        offset: const Offset(0, 2),
+                                      )
+                                    ]
+                                  : null,
+                            ),
+                            child: Text(
+                              c,
+                              style: TextStyle(
+                                color: isSelected
+                                    ? Colors.white
+                                    : AppColors.textPrimary,
+                                fontSize: 13,
+                                fontWeight: isSelected
+                                    ? FontWeight.w700
+                                    : FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 6),
+                  ]);
+            }).toList(),
+          ),
+        ),
+      ]),
+    );
+  }
 }

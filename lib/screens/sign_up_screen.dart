@@ -79,28 +79,28 @@ class _SignUpScreenState extends State<SignUpScreen>
   }
 
   String? _validateName(String? v) {
-    if (v == null || v.trim().isEmpty) return 'Full name is required';
+    if (v == null || v.trim().isEmpty) return 'الاسم الكامل مطلوب';
     return null;
   }
 
   String? _validateEmail(String? v) {
-    if (v == null || v.trim().isEmpty) return 'Email is required';
+    if (v == null || v.trim().isEmpty) return 'البريد الإلكتروني مطلوب';
     final r = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (!r.hasMatch(v.trim())) return 'Enter a valid email address';
+    if (!r.hasMatch(v.trim())) return 'أدخل بريداً إلكترونياً صالحاً';
     return null;
   }
 
   String? _validatePassword(String? v) {
-    if (v == null || v.isEmpty) return 'Password is required';
-    if (v.length < 8) return 'Minimum 8 characters';
-    if (!v.contains(RegExp(r'[A-Z]'))) return 'Must contain an uppercase letter';
-    if (!v.contains(RegExp(r'[a-z]'))) return 'Must contain a lowercase letter';
-    if (!v.contains(RegExp(r'[0-9]'))) return 'Must contain a number';
+    if (v == null || v.isEmpty) return 'كلمة المرور مطلوبة';
+    if (v.length < 8) return 'الحد الأدنى 8 أحرف';
+    if (!v.contains(RegExp(r'[A-Z]'))) return 'يجب أن تحتوي على حرف كبير';
+    if (!v.contains(RegExp(r'[a-z]'))) return 'يجب أن تحتوي على حرف صغير';
+    if (!v.contains(RegExp(r'[0-9]'))) return 'يجب أن تحتوي على رقم';
     return null;
   }
 
   String? _validateConfirm(String? v) {
-    if (v != _passwordController.text) return 'Passwords do not match';
+    if (v != _passwordController.text) return 'كلمتا المرور غير متطابقتين';
     return null;
   }
 
@@ -179,7 +179,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                     children: [
                       const SizedBox(height: 20),
 
-                      // Back button
+                      // زر الرجوع
                       IconButton(
                         onPressed: () => Navigator.pop(context),
                         icon: Container(
@@ -202,7 +202,7 @@ class _SignUpScreenState extends State<SignUpScreen>
 
                       const SizedBox(height: 16),
 
-                      // Logo + Title
+                      // الشعار + العنوان
                       Center(
                         child: AnimatedBuilder(
                           animation: _float,
@@ -219,7 +219,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                       const SizedBox(height: 12),
                       const Center(
                         child: Text(
-                          'Create Account',
+                          'إنشاء حساب',
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
@@ -231,7 +231,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                       const SizedBox(height: 6),
                       Center(
                         child: Text(
-                          'Sign up to access exclusive features',
+                          'سجّل للوصول إلى الميزات الحصرية',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey.shade600,
@@ -241,18 +241,18 @@ class _SignUpScreenState extends State<SignUpScreen>
 
                       const SizedBox(height: 32),
 
-                      // Fields
+                      // الحقول
                       AuthTextField(
                         controller: _nameController,
-                        label: 'Full Name',
-                        hint: 'Your Name',
+                        label: 'الاسم الكامل',
+                        hint: 'اسمك',
                         prefixIcon: Icons.person_outline,
                         validator: _validateName,
                       ),
                       const SizedBox(height: 14),
                       AuthTextField(
                         controller: _emailController,
-                        label: 'Email',
+                        label: 'البريد الإلكتروني',
                         hint: 'you@example.com',
                         keyboardType: TextInputType.emailAddress,
                         prefixIcon: Icons.email_outlined,
@@ -261,7 +261,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                       const SizedBox(height: 14),
                       AuthTextField(
                         controller: _passwordController,
-                        label: 'Password',
+                        label: 'كلمة المرور',
                         hint: '••••••••',
                         obscureText: _obscurePassword,
                         prefixIcon: Icons.lock_outline,
@@ -281,7 +281,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                       const SizedBox(height: 14),
                       AuthTextField(
                         controller: _confirmController,
-                        label: 'Confirm Password',
+                        label: 'تأكيد كلمة المرور',
                         hint: '••••••••',
                         obscureText: _obscureConfirm,
                         prefixIcon: Icons.lock_outline,
@@ -301,7 +301,7 @@ class _SignUpScreenState extends State<SignUpScreen>
 
                       const SizedBox(height: 28),
 
-                      // Create Account button
+                      // زر إنشاء حساب
                       AnimatedBuilder(
                         animation: _glow,
                         builder: (_, __) => GestureDetector(
@@ -337,7 +337,7 @@ class _SignUpScreenState extends State<SignUpScreen>
                                   )
                                 : const Center(
                                     child: Text(
-                                      'Create Account',
+                                      'إنشاء حساب',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 17,
@@ -352,20 +352,20 @@ class _SignUpScreenState extends State<SignUpScreen>
 
                       const SizedBox(height: 18),
 
-                      // Sign In link
+                      // رابط تسجيل الدخول
                       Center(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'Already have an account? ',
+                              'هل لديك حساب بالفعل؟ ',
                               style: TextStyle(
                                   fontSize: 14, color: Colors.grey.shade600),
                             ),
                             GestureDetector(
                               onTap: () => Navigator.pop(context),
                               child: const Text(
-                                'Sign In',
+                                'تسجيل الدخول',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: AppColors.primary,
@@ -379,14 +379,14 @@ class _SignUpScreenState extends State<SignUpScreen>
 
                       const SizedBox(height: 24),
 
-                      // OR divider
+                      // فاصل OR
                       Row(
                         children: [
                           Expanded(child: Divider(color: Colors.grey.shade300)),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             child: Text(
-                              'OR',
+                              'أو',
                               style: TextStyle(
                                   color: Colors.grey.shade400, fontSize: 12),
                             ),
@@ -397,7 +397,7 @@ class _SignUpScreenState extends State<SignUpScreen>
 
                       const SizedBox(height: 20),
 
-                      // Google
+                      // جوجل
                       Center(child: _buildGoogleButton()),
 
                       const SizedBox(height: 32),

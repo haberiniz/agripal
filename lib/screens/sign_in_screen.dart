@@ -77,15 +77,15 @@ class _SignInScreenState extends State<SignInScreen>
   }
 
   String? _validateEmail(String? value) {
-    if (value == null || value.trim().isEmpty) return 'Email is required';
+    if (value == null || value.trim().isEmpty) return 'البريد الإلكتروني مطلوب';
     final emailRegex = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (!emailRegex.hasMatch(value.trim())) return 'Enter a valid email address';
+    if (!emailRegex.hasMatch(value.trim())) return 'أدخل بريداً إلكترونياً صالحاً';
     return null;
   }
 
   String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) return 'Password is required';
-    if (value.length < 8) return 'Password must be at least 8 characters';
+    if (value == null || value.isEmpty) return 'كلمة المرور مطلوبة';
+    if (value.length < 8) return 'يجب أن تكون كلمة المرور 8 أحرف على الأقل';
     return null;
   }
 
@@ -174,7 +174,7 @@ class _SignInScreenState extends State<SignInScreen>
                     children: [
                       const SizedBox(height: 48),
 
-                      // Logo
+                      // الشعار
                       AnimatedBuilder(
                         animation: _float,
                         builder: (_, child) => Transform.translate(
@@ -189,7 +189,7 @@ class _SignInScreenState extends State<SignInScreen>
                       const SizedBox(height: 14),
 
                       const Text(
-                        'AgriPal',
+                        'أجري بال',
                         style: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
@@ -206,7 +206,7 @@ class _SignInScreenState extends State<SignInScreen>
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Text(
-                          'Your Smart Farming Assistant',
+                          'مساعدك الزراعي الذكي',
                           style: TextStyle(
                             fontSize: 13,
                             color: AppColors.primary,
@@ -217,10 +217,10 @@ class _SignInScreenState extends State<SignInScreen>
 
                       const SizedBox(height: 36),
 
-                      // Fields
+                      // الحقول
                       AuthTextField(
                         controller: _emailController,
-                        label: 'Email',
+                        label: 'البريد الإلكتروني',
                         hint: 'you@example.com',
                         keyboardType: TextInputType.emailAddress,
                         prefixIcon: Icons.email_outlined,
@@ -229,7 +229,7 @@ class _SignInScreenState extends State<SignInScreen>
                       const SizedBox(height: 16),
                       AuthTextField(
                         controller: _passwordController,
-                        label: 'Password',
+                        label: 'كلمة المرور',
                         hint: '••••••••',
                         obscureText: _obscurePassword,
                         prefixIcon: Icons.lock_outline,
@@ -249,21 +249,21 @@ class _SignInScreenState extends State<SignInScreen>
 
                       const SizedBox(height: 28),
 
-                      // Sign In Button
+                      // زر تسجيل الدخول
                       _buildPrimaryButton(
-                        label: 'Sign In',
+                        label: 'تسجيل الدخول',
                         isLoading: _isLoading,
                         onTap: _handleSignIn,
                       ),
 
                       const SizedBox(height: 18),
 
-                      // Sign Up link
+                      // رابط إنشاء حساب
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Don't have an account? ",
+                            "ليس لديك حساب؟ ",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey.shade600,
@@ -275,7 +275,7 @@ class _SignInScreenState extends State<SignInScreen>
                               _fadeRoute(const SignUpScreen()),
                             ),
                             child: const Text(
-                              'Sign Up',
+                              'إنشاء حساب',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: AppColors.primary,
@@ -288,7 +288,7 @@ class _SignInScreenState extends State<SignInScreen>
 
                       const SizedBox(height: 28),
 
-                      // Divider
+                      // فاصل
                       Row(
                         children: [
                           Expanded(
@@ -297,7 +297,7 @@ class _SignInScreenState extends State<SignInScreen>
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 12),
                             child: Text(
-                              'OR',
+                              'أو',
                               style: TextStyle(
                                 color: Colors.grey.shade400,
                                 fontSize: 12,
@@ -312,13 +312,13 @@ class _SignInScreenState extends State<SignInScreen>
 
                       const SizedBox(height: 24),
 
-                      // Google button
+                      // زر جوجل
                       _buildGoogleButton(),
 
                       const SizedBox(height: 32),
 
                       Text(
-                        'By signing in, you agree to our Terms & Conditions',
+                        'بتسجيل الدخول، فإنك توافق على الشروط والأحكام',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 11,

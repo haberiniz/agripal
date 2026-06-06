@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:agripal/main.dart';
 import 'package:agripal/screens/profile_screen.dart';
+import 'package:agripal/screens/agri-market-app.dart' hide AppColors;
 import 'package:agripal/screens/settings_screen.dart';
 
 class HomeDrawer extends StatelessWidget {
@@ -110,7 +111,10 @@ class HomeDrawer extends StatelessWidget {
         break;
 
       case 5: // مشاركة التطبيق
-        _shareApp(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const AgriMarketApp()),
+        );
         break;
     }
   }

@@ -34,6 +34,15 @@ dependencies:
   webview_flutter: ^4.0.0
   flutter_riverpod: ^2.5.1   # نُقل من dev_dependencies
 
+  sqflite: ^2.3.0
+  path: ^1.9.0
+  path_provider: ^2.1.0
+
+  firebase_messaging: ^15.0.0
+  flutter_local_notifications: ^17.0.0
+  timezone: ^0.9.2
+  google_fonts: ^8.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
