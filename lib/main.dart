@@ -34,6 +34,9 @@ void main() async {
   
   // تهيئة Firebase
   await Firebase.initializeApp();
+
+  await NotificationService.initialize();
+  await NotificationService.scheduleDailyReminder();
   
   // تهيئة Hive للتخزين المحلي
   await Hive.initFlutter();
@@ -47,6 +50,8 @@ void main() async {
   // استرجاع إعدادات الثيم
   final prefs = await SharedPreferences.getInstance();
   final themeIndex = prefs.getInt('themeMode') ?? 0;
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.initialize();
   
   runApp(MyApp(initialTheme: AppTheme.values[themeIndex]));
 }

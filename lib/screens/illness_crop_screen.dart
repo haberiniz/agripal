@@ -276,7 +276,7 @@ class _IllnessCropScreenState extends State<IllnessCropScreen>
   @override
   void initState() {
     super.initState();
-
+                                                                 
     _entranceCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
     _resultCtrl   = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
     _entranceFade  = CurvedAnimation(parent: _entranceCtrl, curve: Curves.easeOut);
