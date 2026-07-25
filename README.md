@@ -76,8 +76,35 @@ Agripal/
 
 ## 📸 Screenshots
 
-> Screenshots will be added soon.
-
+### splash Screen
+![splash](screenshots/splash.png)
+![splash](screenshots/splash1.png)
+![splash](screenshots/splash2.png)
+### acount Screen
+![acount](screenshots/acount.png)
+![acount](screenshots/acount1.png)
+### payment Screen
+![payment](screenshots/payment.png)
+![payment](screenshots/payment1.png)
+### home Screen
+![home](screenshots/home.png)
+![home](screenshots/home1.png)
+### recommandation Screen
+![recommandation](screenshots/recommandation.png)
+![recommandation](screenshots/recommandation1.png)
+![recommandation](screenshots/recommandation2.png)
+![recommandation](screenshots/recommandation3.png)
+### suppplier Screen
+![supplier](screenshots/supplier.png)
+![supplier](screenshots/supplier1.png)
+![supplier](screenshots/supplier2.png)
+### chatbot Screen
+![chatbot](screenshots/chatbot.png)
+![chatbot](screenshots/chatbot1.png)
+![chatbot](screenshots/chatbot2.png)
+### illness Screen
+![illness](screenshots/illness.png)
+![illness](screenshots/illness1.png)
 ---
 
 ## 📄 Research Publication
