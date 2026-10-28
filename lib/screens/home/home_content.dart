@@ -24,7 +24,7 @@ class HomeContent extends StatefulWidget {
 }
 
 class _HomeContentState extends State<HomeContent> {
-  static const _apiKey = '3bd015115660091719e9545a0d7f5202';
+  static const _apiKey = 'your api key';
 
   int _selectedDrawerIndex = 0;
   double? _farmLat;
