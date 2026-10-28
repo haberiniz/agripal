@@ -9,7 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:agripal/core/constants/app_colors.dart';
 import 'package:agripal/services/smart_recommendation_service.dart';
 
-const String _kOpenWeatherKey = '3bd015115660091719e9545a0d7f5202';
+const String _kOpenWeatherKey = 'your api key';
 
 enum SoilType {
   clay('طينية', Icons.layers_rounded, 'ثقيلة، تحتفظ بالماء جيداً'),
