@@ -12,7 +12,7 @@ import 'package:path/path.dart' as path_lib;
 // ============================================================
 // 🔑 مفتاح API الخاص بك - ضع مفتاحك الحقيقي هنا
 // ============================================================
-const String DEEPSEEK_API_KEY = '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'; // مفتاحك التجريبي
+const String DEEPSEEK_API_KEY = 'your api key'; // مفتاحك التجريبي
 const String API_BASE_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const String API_MODEL = 'deepseek/deepseek-chat'; // أو 'deepseek/deepseek-r1'
 
