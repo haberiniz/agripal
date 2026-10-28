@@ -23,8 +23,8 @@ class _RecommendationDetailScreenState
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  static const _owmApiKey = '3bd015115660091719e9545a0d7f5202';
-  static const _claudeApiKey = 'YOUR_ANTHROPIC_API_KEY';
+  static const _owmApiKey = 'your api key';
+ 
 
   // ── بيانات المزرعة ────────────────────────────────────────────
   double _farmLat = 36.9, _farmLng = 7.76;
