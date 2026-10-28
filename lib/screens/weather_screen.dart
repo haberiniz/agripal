@@ -21,7 +21,7 @@ class WeatherScreen extends StatefulWidget {
 
 class _WeatherScreenState extends State<WeatherScreen>
     with SingleTickerProviderStateMixin {
-  static const _apiKey = '3bd015115660091719e9545a0d7f5202';
+  static const _apiKey = 'your api key';
 
   Map<String, dynamic>? _current;
   List<Map<String, dynamic>> _forecast = [];
